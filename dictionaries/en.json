@@ -1,11 +1,10 @@
 {
   "meta": {
-    "title": "Bulgarian DJ Community",
     "description": "The home for Bulgarian DJs, clubs, and fans — mixes, events, and profiles in one place."
   },
   "nav": {
     "home": "Home",
-    "djs": "DJs",
+    "djs": "Dee Jays",
     "clubs": "Clubs",
     "events": "Events",
     "login": "Log in",
@@ -24,7 +23,7 @@
     "events": "Upcoming Events"
   },
   "djsPage": {
-    "title": "DJs",
+    "title": "Dee Jays",
     "subtitle": "Browse the DJs in the Bulgarian community.",
     "empty": "No DJs yet.",
     "noResults": "No DJs match your search.",
@@ -52,6 +51,7 @@
   "auth": {
     "login": {
       "title": "Log in",
+      "metaDescription": "Log in to your BGDj's account to manage your DJ or club profile.",
       "emailPlaceholder": "Email",
       "passwordPlaceholder": "Password",
       "submit": "Log in",
@@ -61,6 +61,7 @@
     },
     "signup": {
       "title": "Sign up",
+      "metaDescription": "Create your BGDj's account as a DJ, club, or fan and join the Bulgarian DJ community.",
       "displayNamePlaceholder": "Display name",
       "emailPlaceholder": "Email",
       "passwordPlaceholder": "Password",

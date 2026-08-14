@@ -46,6 +46,14 @@ function pageHref(locale, { page, q, genre }) {
   return `/${locale}/clubs${qs ? `?${qs}` : ""}`;
 }
 
+export async function generateMetadata({ params }) {
+  const { locale } = await params;
+  if (!hasLocale(locale)) notFound();
+  const dict = await getDictionary(locale);
+
+  return { title: dict.clubsPage.title, description: dict.clubsPage.subtitle };
+}
+
 export default async function ClubsPage({ params, searchParams }) {
   const { locale } = await params;
   if (!hasLocale(locale)) notFound();
@@ -101,8 +109,8 @@ export default async function ClubsPage({ params, searchParams }) {
         <div className="absolute bottom-0 left-[20%] h-104 w-104 rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent)_26%,transparent),transparent_70%)] blur-3xl" />
       </div>
 
-      <div className="relative mx-auto max-w-6xl px-6 py-16">
-        <h1 className="bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display text-6xl font-semibold tracking-tight text-transparent sm:text-8xl md:text-9xl">
+      <div className="relative mx-auto max-w-7xl px-6 py-16">
+        <h1 className="bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display text-6xl font-semibold tracking-tight text-transparent sm:text-8xl">
           {t.title}
         </h1>
         <p className="mt-4 text-foreground-muted">{t.subtitle}</p>

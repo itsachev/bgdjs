@@ -3,33 +3,19 @@ import { getCurrentProfile } from "@/lib/auth";
 import { ThemeToggle } from "./theme-toggle";
 import { LocaleSwitcher } from "./locale-switcher";
 import { UserMenu } from "./user-menu";
+import { NavLinks } from "./nav-links";
 
 export async function SiteHeader({ locale, dict }) {
   const profile = await getCurrentProfile();
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/80 bg-background/80 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
         <Link href={`/${locale}`} className="text-lg font-display font-semibold tracking-tight">
           BG<span className="text-accent">DJ</span>
         </Link>
 
-        <nav className="hidden items-center gap-8 text-sm font-medium text-foreground-muted md:flex">
-          <Link href={`/${locale}/djs`} className="transition-colors hover:text-foreground">
-            {dict.nav.djs}
-          </Link>
-          <Link href={`/${locale}/clubs`} className="transition-colors hover:text-foreground">
-            {dict.nav.clubs}
-          </Link>
-          <Link href={`/${locale}/events`} className="transition-colors hover:text-foreground">
-            {dict.nav.events}
-          </Link>
-          {profile?.role === "admin" && (
-            <Link href={`/${locale}/admin`} className="text-accent transition-colors hover:text-accent-2">
-              {dict.nav.admin}
-            </Link>
-          )}
-        </nav>
+        <NavLinks locale={locale} dict={dict} isAdmin={profile?.role === "admin"} />
 
         <div className="flex items-center gap-4">
           <LocaleSwitcher locale={locale} />

@@ -3,6 +3,11 @@ import { isAdmin } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { HeroEditor } from "@/components/hero-editor";
 
+export const metadata = {
+  title: "Admin",
+  robots: { index: false, follow: false },
+};
+
 export default async function AdminPage() {
   if (!(await isAdmin())) notFound();
 

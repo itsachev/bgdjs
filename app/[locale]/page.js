@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 
 function PlaceholderGrid({ title, count = 3 }) {
   return (
-    <section className="mx-auto max-w-6xl px-6 py-20">
+    <section className="mx-auto max-w-7xl px-6 py-20">
       <h2 className="mb-8 font-display text-2xl font-semibold tracking-tight sm:text-3xl">
         {title}
       </h2>

@@ -2,6 +2,14 @@ import { notFound } from "next/navigation";
 import { getDictionary, hasLocale } from "../dictionaries";
 import { LoginForm } from "@/components/login-form";
 
+export async function generateMetadata({ params }) {
+  const { locale } = await params;
+  if (!hasLocale(locale)) notFound();
+  const dict = await getDictionary(locale);
+
+  return { title: dict.auth.login.title, description: dict.auth.login.metaDescription };
+}
+
 export default async function LoginPage({ params }) {
   const { locale } = await params;
   if (!hasLocale(locale)) notFound();

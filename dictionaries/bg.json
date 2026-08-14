@@ -1,6 +1,5 @@
 {
   "meta": {
-    "title": "Българска DJ Общност",
     "description": "Дом за българските DJ-и, клубове и фенове — миксове, събития и профили на едно място."
   },
   "nav": {
@@ -52,6 +51,7 @@
   "auth": {
     "login": {
       "title": "Вход",
+      "metaDescription": "Влез в своя BGDj's акаунт, за да управляваш своя DJ или клубен профил.",
       "emailPlaceholder": "Имейл",
       "passwordPlaceholder": "Парола",
       "submit": "Вход",
@@ -61,6 +61,7 @@
     },
     "signup": {
       "title": "Регистрация",
+      "metaDescription": "Създай своя BGDj's акаунт като DJ, клуб или фен и се присъедини към българската DJ общност.",
       "displayNamePlaceholder": "Име за показване",
       "emailPlaceholder": "Имейл",
       "passwordPlaceholder": "Парола",

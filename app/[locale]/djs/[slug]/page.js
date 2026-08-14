@@ -3,6 +3,31 @@ import { createClient } from "@/lib/supabase/server";
 import { getDictionary, hasLocale } from "../../dictionaries";
 import { MapPinIcon, GlobeIcon, UserIcon, LinkIcon, ClockIcon } from "@/components/icons";
 
+export async function generateMetadata({ params }) {
+  const { locale, slug } = await params;
+  if (!hasLocale(locale)) notFound();
+
+  const supabase = await createClient();
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("id, display_name, bio, role")
+    .eq("display_name", decodeURIComponent(slug))
+    .single();
+
+  if (!profile || profile.role !== "dj") return {};
+
+  const { data: dj } = await supabase
+    .from("dj_profiles")
+    .select("stage_name")
+    .eq("id", profile.id)
+    .maybeSingle();
+
+  return {
+    title: dj?.stage_name || profile.display_name,
+    description: profile.bio || undefined,
+  };
+}
+
 export default async function DjProfilePage({ params }) {
   const { locale, slug } = await params;
   if (!hasLocale(locale)) notFound();
@@ -51,112 +76,116 @@ export default async function DjProfilePage({ params }) {
         </div>
       )}
 
-      <div className="relative mx-auto max-w-3xl px-6 py-16">
-      <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:items-start sm:text-left">
-        <div className="h-48 w-48 shrink-0 overflow-hidden rounded-full border border-border bg-background-elevated">
-          {profile.avatar_url ? (
-            <img src={profile.avatar_url} alt={profile.display_name} className="h-full w-full object-cover" />
-          ) : null}
-        </div>
+      <div className="relative mx-auto max-w-7xl px-6 py-16">
+        <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)] lg:items-start lg:gap-16">
+          <div className="flex flex-col items-center text-center lg:sticky lg:top-24 lg:items-start lg:text-left">
+            <div className="h-48 w-48 shrink-0 overflow-hidden rounded-full border border-border bg-background-elevated shadow-[0_0_40px_color-mix(in_oklch,var(--color-accent)_20%,transparent)] lg:h-56 lg:w-56">
+              {profile.avatar_url ? (
+                <img src={profile.avatar_url} alt={profile.display_name} className="h-full w-full object-cover" />
+              ) : null}
+            </div>
 
-        <div className="flex flex-1 flex-col gap-2">
-          <div className="flex flex-col items-center gap-2 sm:flex-row sm:items-center">
-            <h1 className="uppercase bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display font-semibold tracking-tight text-transparent sm:text-3xl md:text-6xl">
+            <h1 className="mt-6 uppercase bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display font-semibold tracking-tight text-transparent sm:text-3xl md:text-6xl">
               {dj?.stage_name || profile.display_name}
             </h1>
-            <span className="rounded-full bg-accent px-3 py-1.5 text-xs font-medium uppercase tracking-wide text-white">
-              {t.djBadge}
-            </span>
-          </div>
-          {profile.bio && <p className="text-foreground-muted">{profile.bio}</p>}
 
-          {isOwner && (
-            <a
-              href={`/${locale}/profile/complete`}
-              className="mt-1 inline-block self-center text-sm text-accent hover:text-accent-2 sm:self-start"
-            >
-              {t.editProfile}
-            </a>
-          )}
-        </div>
-      </div>
+            {profile.bio && (
+              <p className="mt-4 w-full text-left text-foreground-muted lg:max-w-md">{profile.bio}</p>
+            )}
 
-      {genres.length > 0 && (
-        <div className="mt-8 flex flex-wrap gap-2">
-          {genres.map((genre) => (
-            <span
-              key={genre}
-              className="rounded-full border border-border px-4 py-1.5 text-sm font-medium text-foreground-muted"
-            >
-              {genre}
-            </span>
-          ))}
-        </div>
-      )}
-
-      <dl className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
-        {profile.city && (
-          <div>
-            <dt className="flex items-center gap-1.5 text-sm text-foreground-muted">
-              <MapPinIcon /> {t.city}
-            </dt>
-            <dd className="mt-1">{profile.city}</dd>
-          </div>
-        )}
-        {dj?.gender && (
-          <div>
-            <dt className="flex items-center gap-1.5 text-sm text-foreground-muted">
-              <UserIcon /> {dict.profile.complete.fields.gender}
-            </dt>
-            <dd className="mt-1">{dj.gender}</dd>
-          </div>
-        )}
-        {dj?.location && (
-          <div>
-            <dt className="flex items-center gap-1.5 text-sm text-foreground-muted">
-              <MapPinIcon /> {t.location}
-            </dt>
-            <dd className="mt-1">{dj.location}</dd>
-          </div>
-        )}
-        {dj?.website && (
-          <div>
-            <dt className="flex items-center gap-1.5 text-sm text-foreground-muted">
-              <GlobeIcon /> {t.website}
-            </dt>
-            <dd className="mt-1">
-              <a href={dj.website} target="_blank" rel="noreferrer" className="text-accent hover:text-accent-2">
-                {dj.website}
+            {isOwner && (
+              <a
+                href={`/${locale}/profile/complete`}
+                className="mt-4 inline-block text-sm text-accent hover:text-accent-2"
+              >
+                {t.editProfile}
               </a>
-            </dd>
+            )}
           </div>
-        )}
-        {dj?.years_active != null && (
-          <div>
-            <dt className="flex items-center gap-1.5 text-sm text-foreground-muted">
-              <ClockIcon /> {t.yearsActive}
-            </dt>
-            <dd className="mt-1">{dj.years_active}</dd>
-          </div>
-        )}
-      </dl>
 
-      {socialLinks.length > 0 && (
-        <div className="mt-8">
-          <p className="flex items-center gap-1.5 text-sm text-foreground-muted">
-            <LinkIcon /> {t.social}
-          </p>
-          <ul className="mt-2 flex flex-col gap-1">
-            {socialLinks.map((link) => (
-              <li key={link}>
-                <a href={link} target="_blank" rel="noreferrer" className="text-accent hover:text-accent-2">
-                  {link}
-                </a>
-              </li>
-            ))}
-          </ul>
+          <div className="mt-10 lg:mt-0">
+            {genres.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {genres.map((genre) => (
+                  <span
+                    key={genre}
+                    className="rounded-full border border-border px-4 py-1.5 text-sm font-medium text-foreground-muted"
+                  >
+                    {genre}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            <dl className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              {profile.city && (
+                <div className="rounded-xl border border-border bg-background-elevated/40 p-4">
+                  <dt className="flex items-center gap-1.5 text-xs uppercase tracking-wide text-foreground-muted">
+                    <MapPinIcon className="h-3.5 w-3.5" /> {t.city}
+                  </dt>
+                  <dd className="mt-1.5 font-medium">{profile.city}</dd>
+                </div>
+              )}
+              {dj?.gender && (
+                <div className="rounded-xl border border-border bg-background-elevated/40 p-4">
+                  <dt className="flex items-center gap-1.5 text-xs uppercase tracking-wide text-foreground-muted">
+                    <UserIcon className="h-3.5 w-3.5" /> {dict.profile.complete.fields.gender}
+                  </dt>
+                  <dd className="mt-1.5 font-medium">{dj.gender}</dd>
+                </div>
+              )}
+              {dj?.location && (
+                <div className="rounded-xl border border-border bg-background-elevated/40 p-4">
+                  <dt className="flex items-center gap-1.5 text-xs uppercase tracking-wide text-foreground-muted">
+                    <MapPinIcon className="h-3.5 w-3.5" /> {t.location}
+                  </dt>
+                  <dd className="mt-1.5 font-medium">{dj.location}</dd>
+                </div>
+              )}
+              {dj?.website && (
+                <div className="rounded-xl border border-border bg-background-elevated/40 p-4">
+                  <dt className="flex items-center gap-1.5 text-xs uppercase tracking-wide text-foreground-muted">
+                    <GlobeIcon className="h-3.5 w-3.5" /> {t.website}
+                  </dt>
+                  <dd className="mt-1.5 font-medium">
+                    <a href={dj.website} target="_blank" rel="noreferrer" className="text-accent hover:text-accent-2">
+                      {dj.website}
+                    </a>
+                  </dd>
+                </div>
+              )}
+              {dj?.years_active != null && (
+                <div className="rounded-xl border border-border bg-background-elevated/40 p-4">
+                  <dt className="flex items-center gap-1.5 text-xs uppercase tracking-wide text-foreground-muted">
+                    <ClockIcon className="h-3.5 w-3.5" /> {t.yearsActive}
+                  </dt>
+                  <dd className="mt-1.5 font-medium">{dj.years_active}</dd>
+                </div>
+              )}
+            </dl>
+
+            {socialLinks.length > 0 && (
+              <div className="mt-6">
+                <p className="flex items-center gap-1.5 text-xs uppercase tracking-wide text-foreground-muted">
+                  <LinkIcon className="h-3.5 w-3.5" /> {t.social}
+                </p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {socialLinks.map((link) => (
+                    <a
+                      key={link}
+                      href={link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="rounded-full border border-border px-4 py-1.5 text-sm text-accent transition-colors hover:border-accent hover:text-accent-2"
+                    >
+                      {link}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-      )}
       </div>
     </div>
   );

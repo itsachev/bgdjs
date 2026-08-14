@@ -161,10 +161,10 @@ export function SignupForm({ dict, locale }) {
     emailStatus === "taken";
 
   return (
-    <div className="mx-auto flex max-w-sm flex-col px-6 py-24">
-      <h1 className="font-display text-2xl font-semibold tracking-tight">{t.title}</h1>
+    <div className="mx-auto flex max-w-3xl flex-col px-6 py-24">
+      <h1 className="font-display text-3xl md:text-5xl font-semibold tracking-tight">{t.title}</h1>
 
-      <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-4">
+      <form onSubmit={handleSubmit} className="mt-8 grid grid-cols-1 gap-x-6 gap-y-4 lg:grid-cols-2">
         <div className="flex flex-col gap-1.5">
           <label htmlFor="displayName" className="text-sm text-foreground-muted">
             {t.displayNamePlaceholder} <span className="text-red-500">*</span>
@@ -225,7 +225,7 @@ export function SignupForm({ dict, locale }) {
           />
         </div>
 
-        <fieldset className="flex flex-col gap-2">
+        <fieldset className="flex flex-col gap-2 lg:col-span-2">
           <legend className="mb-1 text-sm text-foreground-muted">
             {t.roleLabel} <span className="text-red-500">*</span>
           </legend>
@@ -254,12 +254,12 @@ export function SignupForm({ dict, locale }) {
           </div>
         </fieldset>
 
-        {error && <p className="text-sm text-red-500">{error}</p>}
+        {error && <p className="text-sm text-red-500 lg:col-span-2">{error}</p>}
 
         <button
           type="submit"
           disabled={blockingSubmit}
-          className="mt-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition-opacity disabled:opacity-60"
+          className="mt-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition-opacity disabled:opacity-60 lg:col-span-2 lg:justify-self-start"
         >
           {loading ? t.submitLoading : t.submit}
         </button>

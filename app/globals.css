@@ -52,3 +52,7 @@ button:not(:disabled) {
 button:disabled {
   cursor: not-allowed;
 }
+
+h1 {
+  line-height: 1.2;
+}

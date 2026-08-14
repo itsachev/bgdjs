@@ -35,10 +35,10 @@ export function LoginForm({ dict, locale }) {
   }
 
   return (
-    <div className="mx-auto flex max-w-sm flex-col px-6 py-24">
+    <div className="mx-auto flex max-w-xl flex-col px-6 py-24">
       <h1 className="font-display text-3xl md:text-5xl font-semibold tracking-tight">{t.title}</h1>
 
-      <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-4">
+      <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-5">
         <input
           type="email"
           required

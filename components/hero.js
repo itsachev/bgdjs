@@ -45,7 +45,7 @@ export function Hero({ dict, locale, hero }) {
             ) : (
               <img src={mediaUrl} alt="" className="h-full w-full object-cover" />
             )}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-background" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/90 to-background" />
           </>
         ) : (
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,color-mix(in_oklch,var(--color-accent)_22%,transparent),transparent_60%)]" />

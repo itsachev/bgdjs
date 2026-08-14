@@ -28,7 +28,10 @@ export async function generateMetadata({ params }) {
   const dict = await getDictionary(locale);
 
   return {
-    title: dict.meta.title,
+    title: {
+      default: "BGDj's",
+      template: "%s | BGDj's",
+    },
     description: dict.meta.description,
   };
 }

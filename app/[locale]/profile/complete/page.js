@@ -3,6 +3,17 @@ import { createClient } from "@/lib/supabase/server";
 import { getDictionary, hasLocale } from "../../dictionaries";
 import { ProfileCompleteForm } from "@/components/profile-complete-form";
 
+export async function generateMetadata({ params }) {
+  const { locale } = await params;
+  if (!hasLocale(locale)) notFound();
+  const dict = await getDictionary(locale);
+
+  return {
+    title: dict.profile.complete.title,
+    robots: { index: false, follow: false },
+  };
+}
+
 export default async function ProfileCompletePage({ params }) {
   const { locale } = await params;
   if (!hasLocale(locale)) notFound();

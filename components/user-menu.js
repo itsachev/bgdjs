@@ -25,17 +25,17 @@ export function UserMenu({ profile, logoutLabel, locale }) {
       {profileHref ? (
         <Link
           href={profileHref}
-          className="hidden text-sm font-medium transition-colors hover:text-accent sm:inline-block"
+          className="uppercase hidden text-sm font-medium transition-colors hover:text-accent sm:inline-block"
         >
           {profile.display_name}
         </Link>
       ) : (
-        <span className="hidden text-sm font-medium sm:inline-block">{profile.display_name}</span>
+        <span className="uppercase text-white hidden text-sm font-medium sm:inline-block">{profile.display_name}</span>
       )}
       <button
         type="button"
         onClick={handleLogout}
-        className="rounded-full bg-accent px-4 py-1.5 text-sm font-medium transition-colors hover:border-accent hover:text-accent"
+        className="rounded-full bg-accent px-4 py-1.5 text-sm font-bold uppercase text-white  transition-colors"
       >
         {logoutLabel}
       </button>

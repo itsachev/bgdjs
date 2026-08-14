@@ -193,6 +193,55 @@ create policy "Admins can delete login media"
     and exists (select 1 from public.profiles where id = auth.uid() and role = 'admin')
   );
 
+-- Signup page background content, editable via the admin CMS. Singleton row (id = 1).
+create table public.signup_content (
+  id smallint primary key default 1,
+  media_url text,
+  media_path text,
+  media_type text check (media_type in ('image', 'video')),
+  updated_at timestamptz not null default now(),
+  constraint signup_content_singleton check (id = 1)
+);
+
+insert into public.signup_content (id) values (1);
+
+alter table public.signup_content enable row level security;
+
+create policy "Signup content is viewable by everyone"
+  on public.signup_content for select
+  using (true);
+
+create policy "Admins can update signup content"
+  on public.signup_content for update
+  using (exists (select 1 from public.profiles where id = auth.uid() and role = 'admin'));
+
+-- Storage bucket for signup background image/video uploads. Public so the
+-- signup page can render the media directly without signed URLs.
+insert into storage.buckets (id, name, public)
+values ('signup', 'signup', true)
+on conflict (id) do nothing;
+
+create policy "Admins can upload signup media"
+  on storage.objects for insert
+  with check (
+    bucket_id = 'signup'
+    and exists (select 1 from public.profiles where id = auth.uid() and role = 'admin')
+  );
+
+create policy "Admins can update signup media"
+  on storage.objects for update
+  using (
+    bucket_id = 'signup'
+    and exists (select 1 from public.profiles where id = auth.uid() and role = 'admin')
+  );
+
+create policy "Admins can delete signup media"
+  on storage.objects for delete
+  using (
+    bucket_id = 'signup'
+    and exists (select 1 from public.profiles where id = auth.uid() and role = 'admin')
+  );
+
 -- Site-wide background audio track, editable via the admin CMS. Singleton row (id = 1).
 create table public.site_audio (
   id smallint primary key default 1,

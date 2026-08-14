@@ -3,9 +3,11 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { PasswordInput } from "@/components/password-input";
 import { resolvePostAuthPath } from "@/lib/post-auth-redirect";
+import { Waveform } from "@/components/waveform";
 
 const DEBOUNCE_MS = 500;
 
@@ -25,9 +27,11 @@ function FieldStatus({ status, t }) {
   return null;
 }
 
-export function SignupForm({ dict, locale, embedded = false }) {
+export function SignupForm({ dict, locale, embedded = false, background = null }) {
   const router = useRouter();
   const t = dict.auth.signup;
+  const mediaUrl = background?.media_url;
+  const mediaType = background?.media_type;
   const ROLES = [
     { value: "dj", label: t.roleDj },
     { value: "club", label: t.roleClub },
@@ -144,11 +148,50 @@ export function SignupForm({ dict, locale, embedded = false }) {
     setSubmitted(true);
   }
 
+  const backgroundLayer = (
+    <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
+      {mediaUrl ? (
+        <>
+          {mediaType === "video" ? (
+            <video
+              src={mediaUrl}
+              className="h-full w-full object-cover"
+              autoPlay
+              muted
+              loop
+              playsInline
+            />
+          ) : (
+            <Image src={mediaUrl} alt="" fill sizes="100vw" preload className="object-cover" />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/85 to-background" />
+        </>
+      ) : (
+        <>
+          <div className="absolute -top-40 left-[8%] h-112 w-md rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent)_38%,transparent),transparent_70%)] blur-3xl" />
+          <div className="absolute top-1/3 -right-32 h-128 w-lg rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent-2)_32%,transparent),transparent_70%)] blur-3xl" />
+          <div className="absolute bottom-0 left-1/2 h-72 w-full max-w-4xl -translate-x-1/2 opacity-[0.15]">
+            <Waveform className="h-full w-full justify-center" />
+          </div>
+        </>
+      )}
+    </div>
+  );
+
   if (submitted) {
-    return (
+    const content = (
       <div className={embedded ? "flex flex-col text-center" : "mx-auto flex max-w-sm flex-col px-6 py-24 text-center"}>
         <h1 className="font-display text-2xl font-semibold tracking-tight">{t.checkEmailTitle}</h1>
         <p className="mt-3 text-foreground-muted">{t.checkEmailBody}</p>
+      </div>
+    );
+
+    if (embedded) return content;
+
+    return (
+      <div className="relative flex-1 overflow-hidden">
+        {backgroundLayer}
+        <div className="relative">{content}</div>
       </div>
     );
   }
@@ -160,10 +203,8 @@ export function SignupForm({ dict, locale, embedded = false }) {
     emailStatus === "checking" ||
     emailStatus === "taken";
 
-  return (
-    <div className={embedded ? "flex flex-col" : "mx-auto flex max-w-3xl flex-col px-6 py-24"}>
-      <h1 className="font-display text-3xl md:text-5xl font-semibold tracking-tight">{t.title}</h1>
-
+  const formBody = (
+    <>
       <form
         onSubmit={handleSubmit}
         className={`mt-8 grid grid-cols-1 gap-x-6 gap-y-4 ${embedded ? "" : "lg:grid-cols-2"}`}
@@ -276,6 +317,27 @@ export function SignupForm({ dict, locale, embedded = false }) {
           {t.loginLink}
         </Link>
       </p>
+    </>
+  );
+
+  if (embedded) {
+    return (
+      <div className="flex flex-col">
+        <h1 className="font-display text-3xl md:text-5xl font-semibold tracking-tight">{t.title}</h1>
+        {formBody}
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative flex-1 overflow-hidden">
+      {backgroundLayer}
+      <div className="relative mx-auto flex max-w-3xl flex-col px-6 py-24">
+        <h1 className="bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display text-4xl font-semibold tracking-tight text-transparent sm:text-5xl">
+          {t.title}
+        </h1>
+        {formBody}
+      </div>
     </div>
   );
 }

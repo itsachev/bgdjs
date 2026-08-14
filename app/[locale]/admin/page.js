@@ -3,6 +3,7 @@ import { isAdmin } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { HeroEditor } from "@/components/hero-editor";
 import { LoginBackgroundEditor } from "@/components/login-background-editor";
+import { SignupBackgroundEditor } from "@/components/signup-background-editor";
 import { SiteAudioEditor } from "@/components/site-audio-editor";
 
 export const metadata = {
@@ -16,6 +17,7 @@ export default async function AdminPage() {
   const supabase = await createClient();
   const { data: hero } = await supabase.from("hero_content").select("*").eq("id", 1).maybeSingle();
   const { data: loginBackground } = await supabase.from("login_content").select("*").eq("id", 1).maybeSingle();
+  const { data: signupBackground } = await supabase.from("signup_content").select("*").eq("id", 1).maybeSingle();
   const { data: siteAudio } = await supabase.from("site_audio").select("*").eq("id", 1).maybeSingle();
 
   return (
@@ -33,6 +35,11 @@ export default async function AdminPage() {
       <section className="mt-12">
         <h2 className="font-display text-xl font-semibold tracking-tight">Login page background</h2>
         <LoginBackgroundEditor initial={loginBackground} />
+      </section>
+
+      <section className="mt-12">
+        <h2 className="font-display text-xl font-semibold tracking-tight">Signup page background</h2>
+        <SignupBackgroundEditor initial={signupBackground} />
       </section>
 
       <section className="mt-12">

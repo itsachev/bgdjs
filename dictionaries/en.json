@@ -31,7 +31,8 @@
     "next": "Next",
     "page": "Page",
     "searchPlaceholder": "Search by username, stage name, or city...",
-    "search": "Search"
+    "search": "Search",
+    "online": "Online now"
   },
   "clubsPage": {
     "title": "Clubs",

@@ -9,6 +9,14 @@ import { EntitySearch } from "@/components/entity-search";
 
 const PAGE_SIZE = 20;
 
+// Matches the presence heartbeat interval (60s) with buffer for network lag.
+const ONLINE_THRESHOLD_MS = 2 * 60 * 1000;
+
+function isOnline(lastSeenAt) {
+  if (!lastSeenAt) return false;
+  return Date.now() - new Date(lastSeenAt).getTime() < ONLINE_THRESHOLD_MS;
+}
+
 // Genre names are kept in Latin script for both locales, matching the
 // sound-profile pills on the profile-completion form.
 const QUICK_GENRES = ["House", "Commercial", "Pop Folk"];
@@ -75,7 +83,7 @@ export default async function DjsPage({ params, searchParams }) {
 
   const { data: profiles } = await supabase
     .from("profiles")
-    .select("id, display_name, avatar_url, avatar_position, bio")
+    .select("id, display_name, avatar_url, avatar_position, bio, last_seen_at")
     .eq("role", "dj");
 
   const { data: djProfiles } = await supabase
@@ -153,7 +161,7 @@ export default async function DjsPage({ params, searchParams }) {
           <p className="mt-16 text-foreground-muted">{query || genre ? t.noResults : t.empty}</p>
         ) : (
           <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {pageDjs.map(({ id, display_name, avatar_url, avatar_position, dj }) => {
+            {pageDjs.map(({ id, display_name, avatar_url, avatar_position, last_seen_at, dj }) => {
               const name = dj?.stage_name || display_name;
               const genres = dj?.sound_profile
                 ? dj.sound_profile.split(",").map((g) => g.trim()).filter(Boolean).slice(0, 3)
@@ -174,18 +182,28 @@ export default async function DjsPage({ params, searchParams }) {
                     className="pointer-events-none absolute -bottom-16 -left-16 -z-10 h-40 w-40 rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent-2)_25%,transparent),transparent_70%)] opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-80"
                   />
 
-                  <div className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-full border border-border bg-background-elevated font-display text-xl font-semibold text-accent">
-                    {avatar_url ? (
-                      <Image
-                        src={avatar_url}
-                        alt={name}
-                        fill
-                        sizes="80px"
-                        className="object-cover"
-                        style={{ objectPosition: avatar_position || "50% 50%" }}
-                      />
-                    ) : (
-                      name.slice(0, 2).toUpperCase()
+                  <div className="relative h-20 w-20 shrink-0">
+                    <div className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-full border border-border bg-background-elevated font-display text-xl font-semibold text-accent">
+                      {avatar_url ? (
+                        <Image
+                          src={avatar_url}
+                          alt={name}
+                          fill
+                          sizes="80px"
+                          className="object-cover"
+                          style={{ objectPosition: avatar_position || "50% 50%" }}
+                        />
+                      ) : (
+                        name.slice(0, 2).toUpperCase()
+                      )}
+                    </div>
+                    {isOnline(last_seen_at) && (
+                      <span className="group/status absolute bottom-0.5 right-0.5">
+                        <span className="block h-3.5 w-3.5 rounded-full border-2 border-background bg-green-500" />
+                        <span className="pointer-events-none absolute bottom-full right-0 mb-1.5 whitespace-nowrap rounded-md bg-background-elevated px-2 py-1 text-xs font-medium text-foreground opacity-0 shadow-lg ring-1 ring-border transition-opacity duration-150 group-hover/status:opacity-100">
+                          {t.online}
+                        </span>
+                      </span>
                     )}
                   </div>
 

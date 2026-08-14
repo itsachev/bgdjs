@@ -11,7 +11,8 @@ create table public.profiles (
   avatar_position text,
   bio text,
   city text,
-  created_at timestamptz not null default now()
+  created_at timestamptz not null default now(),
+  last_seen_at timestamptz
 );
 
 -- Keep in sync with auth.users on signup.

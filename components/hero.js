@@ -57,7 +57,7 @@ export function Hero({ dict, locale, hero }) {
       </p>
       <h1
         data-hero-title
-        className="max-w-3xl text-balance font-display text-5xl font-bold tracking-tight sm:text-6xl md:text-7xl"
+        className="max-w-3xl text-balance bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display text-5xl font-bold tracking-tight text-transparent sm:text-6xl md:text-7xl"
       >
         {title}
       </h1>
@@ -73,7 +73,7 @@ export function Hero({ dict, locale, hero }) {
         {dict.hero.cta}
       </a>
 
-      <div data-hero-waveform className="mt-16 h-16 w-full max-w-2xl">
+      <div data-hero-waveform className="mt-16 h-8 w-full max-w-2xl">
         <Waveform className="h-full w-full justify-center" />
       </div>
     </section>

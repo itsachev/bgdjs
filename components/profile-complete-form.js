@@ -37,17 +37,28 @@ const FIELD_KEYS = {
     { key: "gender", type: "pills", options: ["genderMan", "genderFemale"], mandatory: true },
     { key: "location", type: "select", mandatory: true },
     { key: "website", type: "text" },
-    { key: "hourly_rate", type: "number" },
+    { key: "years_active", type: "number" },
     { key: "social_links", type: "textarea" },
   ],
   club: [
     { key: "name", type: "text", mandatory: true },
     { key: "description", type: "textarea", mandatory: true },
-    { key: "city", type: "text", mandatory: true },
+    {
+      key: "venue_type",
+      type: "pills",
+      options: [
+        "venueNightclub",
+        "venueBar",
+        "venueLounge",
+        "venueRooftop",
+        "venueBeachClub",
+        "venueFestival",
+      ],
+      mandatory: true,
+    },
     { key: "location", type: "select", mandatory: true },
     { key: "website", type: "text" },
     { key: "resident_dj", type: "text", mandatory: true },
-    { key: "genre", type: "text", mandatory: true },
     { key: "capacity", type: "number", mandatory: true },
     { key: "reservation_contact", type: "text", mandatory: true },
     { key: "social_links", type: "textarea" },
@@ -96,7 +107,7 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, d
       }
     }
     setDraftLoaded(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [storageKey]);
 
   // Keep the draft in sync as the user types/selects.
@@ -179,15 +190,22 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, d
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mx-auto flex max-w-2xl flex-col gap-6 px-6 py-16">
-      <div>
-        <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
-          {t.title}
-        </h1>
-        <p className="mt-6 text-sm text-foreground-muted">
-          {role === "dj" ? t.subtitleDj : t.subtitleClub}
-        </p>
+    <div className="relative flex-1 overflow-hidden">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute -top-40 left-[10%] h-112 w-md rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent)_38%,transparent),transparent_70%)] blur-3xl" />
+        <div className="absolute top-1/3 -right-32 h-128 w-lg rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent-2)_32%,transparent),transparent_70%)] blur-3xl" />
+        <div className="absolute bottom-0 left-[20%] h-104 w-104 rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent)_26%,transparent),transparent_70%)] blur-3xl" />
       </div>
+
+      <form onSubmit={handleSubmit} className="relative mx-auto flex max-w-2xl flex-col gap-6 px-6 py-16">
+        <div>
+          <h1 className="bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display text-3xl font-semibold tracking-tight text-transparent sm:text-4xl md:text-5xl">
+            {t.title}
+          </h1>
+          <p className="mt-6 text-sm text-foreground-muted">
+            {role === "dj" ? t.subtitleDj : t.subtitleClub}
+          </p>
+        </div>
 
       <div className="mt-4 flex flex-col gap-2">
         <AvatarUpload userId={userId} initialUrl={avatarUrl} onChange={setAvatarUrl} t={t} />
@@ -198,7 +216,7 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, d
         )}
       </div>
 
-      <div className="grid grid-cols-1 gap-x-6 gap-y-6 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-2">
         <div className="flex flex-col gap-1.5">
           <label className="text-sm text-foreground-muted" htmlFor="displayName">
             {t.usernameLabel} <span className="text-red-500">*</span>
@@ -240,26 +258,28 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, d
           </div>
         )}
 
-        <div className="flex flex-col gap-1.5 md:col-span-2">
-          <label className="text-sm text-foreground-muted" htmlFor="bio">
-            {t.bioLabel} <span className="text-red-500">*</span>
-          </label>
-          <textarea
-            id="bio"
-            rows={3}
-            required
-            value={bio}
-            onChange={(e) => setBio(e.target.value)}
-            className="rounded-lg border border-border bg-background-elevated px-4 py-2.5 outline-none focus:border-accent"
-          />
-        </div>
+        {role === "dj" && (
+          <div className="flex flex-col gap-1.5 md:col-span-2">
+            <label className="text-sm text-foreground-muted" htmlFor="bio">
+              {t.bioLabel} <span className="text-red-500">*</span>
+            </label>
+            <textarea
+              id="bio"
+              rows={7}
+              required
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+              className="rounded-lg border border-border bg-background-elevated px-4 py-2.5 outline-none focus:border-accent"
+            />
+          </div>
+        )}
 
         {fields
           .filter((f) => f.key !== "gender")
           .map((f) => (
           <div
             key={f.key}
-            className={`flex flex-col gap-1.5 ${f.type === "textarea" ? "md:col-span-2" : ""}`}
+            className={`flex flex-col gap-1.5 ${f.type === "textarea" || f.type === "pills" ? "md:col-span-2" : ""}`}
           >
             <label className="text-sm text-foreground-muted" htmlFor={f.key}>
               {t.fields[f.key]} {f.mandatory && <span className="text-red-500">*</span>}
@@ -267,7 +287,7 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, d
             {f.type === "textarea" ? (
               <textarea
                 id={f.key}
-                rows={3}
+                rows={f.key === "social_links" ? 3 : 7}
                 required={f.mandatory}
                 value={values[f.key]}
                 onChange={(e) => setValue(f.key, e.target.value)}
@@ -329,7 +349,7 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, d
           {t.soundProfileLabel} <span className="text-red-500">*</span> — {t.soundProfileHint}
         </p>
         {GENRE_CATEGORIES.map((category) => (
-          <div key={category.label} className="flex flex-col gap-2">
+          <div key={category.label} className="flex flex-col gap-2 mt-4">
             <p className="text-sm font-medium text-foreground">
               <span aria-hidden="true">{category.icon}</span> {category.label}
             </p>
@@ -361,10 +381,11 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, d
       <button
         type="submit"
         disabled={saving}
-        className="self-start rounded-full bg-accent px-6 py-2.5 text-sm font-semibold text-white transition-opacity disabled:opacity-60"
+        className="self-start rounded-full bg-[linear-gradient(to_right,var(--color-accent),var(--color-accent-2))] px-6 py-2.5 text-sm font-semibold text-white shadow-[0_0_24px_color-mix(in_oklch,var(--color-accent)_35%,transparent)] transition-opacity hover:opacity-90 disabled:opacity-60"
       >
         {saving ? t.saving : t.save}
       </button>
-    </form>
+      </form>
+    </div>
   );
 }

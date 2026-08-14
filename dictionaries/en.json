@@ -23,6 +23,17 @@
     "clubs": "Featured Clubs",
     "events": "Upcoming Events"
   },
+  "djsPage": {
+    "title": "DJs",
+    "subtitle": "Browse the DJs in the Bulgarian community.",
+    "empty": "No DJs yet.",
+    "noResults": "No DJs match your search.",
+    "prev": "Previous",
+    "next": "Next",
+    "page": "Page",
+    "searchPlaceholder": "Search by username, stage name, or city...",
+    "search": "Search"
+  },
   "footer": {
     "tagline": "Built by the community, for the community.",
     "rights": "All rights reserved."
@@ -92,12 +103,18 @@
         "genderFemale": "Female",
         "location": "Location",
         "website": "Website",
-        "hourly_rate": "Hourly rate",
+        "years_active": "Years active",
         "social_links": "Social links",
         "social_links_hint": "One per line",
         "name": "Club name",
         "description": "Description",
-        "city": "City",
+        "venue_type": "Venue type",
+        "venueNightclub": "Nightclub",
+        "venueBar": "Bar",
+        "venueLounge": "Lounge",
+        "venueRooftop": "Rooftop",
+        "venueBeachClub": "Beach Club",
+        "venueFestival": "Festival ground",
         "resident_dj": "Resident DJ",
         "capacity": "Capacity",
         "reservation_contact": "Reservation contact"
@@ -110,8 +127,8 @@
       "city": "City",
       "genre": "Genre",
       "location": "Location",
-      "hourlyRate": "Hourly rate",
       "website": "Website",
+      "yearsActive": "Years active",
       "social": "Social"
     }
   }

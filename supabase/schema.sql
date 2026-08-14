@@ -153,7 +153,7 @@ create table public.dj_profiles (
   social_links text,
   website text,
   location text,
-  hourly_rate numeric,
+  years_active integer,
   sound_profile text not null,
   updated_at timestamptz not null default now()
 );
@@ -179,7 +179,7 @@ create table public.club_profiles (
   id uuid primary key references public.profiles (id) on delete cascade,
   name text,
   description text,
-  city text,
+  venue_type text,
   location text,
   website text,
   resident_dj text,

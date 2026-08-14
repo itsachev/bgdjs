@@ -23,6 +23,17 @@
     "clubs": "Препоръчани клубове",
     "events": "Предстоящи събития"
   },
+  "djsPage": {
+    "title": "DJ-и",
+    "subtitle": "Разгледай DJ-ите в българската общност.",
+    "empty": "Все още няма DJ-и.",
+    "noResults": "Няма DJ-и, отговарящи на търсенето.",
+    "prev": "Предишна",
+    "next": "Следваща",
+    "page": "Страница",
+    "searchPlaceholder": "Търси по потребителско, сценично име или град...",
+    "search": "Търси"
+  },
   "footer": {
     "tagline": "Създадено от общността, за общността.",
     "rights": "Всички права запазени."
@@ -92,12 +103,18 @@
         "genderFemale": "Жена",
         "location": "Локация",
         "website": "Уебсайт",
-        "hourly_rate": "ч",
+        "years_active": "Години опит",
         "social_links": "Социални мрежи",
         "social_links_hint": "По един на ред",
         "name": "Име на клуба",
         "description": "Описание",
-        "city": "Град",
+        "venue_type": "Тип заведение",
+        "venueNightclub": "Нощен клуб",
+        "venueBar": "Бар",
+        "venueLounge": "Лаундж",
+        "venueRooftop": "Rooftop",
+        "venueBeachClub": "Плажен клуб",
+        "venueFestival": "Фестивална зона",
         "resident_dj": "Резидентен DJ",
         "capacity": "Капацитет",
         "reservation_contact": "Контакт за резервации"
@@ -110,8 +127,8 @@
       "city": "Град",
       "genre": "Жанр",
       "location": "Локация",
-      "hourlyRate": "Часова ставка",
       "website": "Уебсайт",
+      "yearsActive": "Години опит",
       "social": "Социални мрежи"
     }
   }

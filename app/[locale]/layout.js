@@ -49,7 +49,7 @@ export default async function RootLayout({ children, params }) {
           <SmoothScrollProvider>
             <div className="flex min-h-screen flex-col">
               <SiteHeader locale={locale} dict={dict} />
-              <main className="flex-1">{children}</main>
+              <main className="flex flex-1 flex-col">{children}</main>
               <SiteFooter dict={dict} />
             </div>
           </SmoothScrollProvider>

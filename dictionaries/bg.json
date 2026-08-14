@@ -1,0 +1,118 @@
+{
+  "meta": {
+    "title": "Българска DJ Общност",
+    "description": "Дом за българските DJ-и, клубове и фенове — миксове, събития и профили на едно място."
+  },
+  "nav": {
+    "home": "Начало",
+    "djs": "DJ-и",
+    "clubs": "Клубове",
+    "events": "Събития",
+    "login": "Вход",
+    "logout": "Изход",
+    "admin": "Админ"
+  },
+  "hero": {
+    "eyebrow": "Българска DJ Общност",
+    "title": "Тук живее сцената",
+    "subtitle": "Открий DJ-и, клубове, миксове и събития от цяла България — всичко на едно място.",
+    "cta": "Разгледай общността"
+  },
+  "sections": {
+    "djs": "Препоръчани DJ-и",
+    "clubs": "Препоръчани клубове",
+    "events": "Предстоящи събития"
+  },
+  "footer": {
+    "tagline": "Създадено от общността, за общността.",
+    "rights": "Всички права запазени."
+  },
+  "auth": {
+    "login": {
+      "title": "Вход",
+      "emailPlaceholder": "Имейл",
+      "passwordPlaceholder": "Парола",
+      "submit": "Вход",
+      "submitLoading": "...",
+      "noAccount": "Нямаш профил?",
+      "signupLink": "Регистрация"
+    },
+    "signup": {
+      "title": "Регистрация",
+      "displayNamePlaceholder": "Име за показване",
+      "emailPlaceholder": "Имейл",
+      "passwordPlaceholder": "Парола",
+      "confirmPasswordPlaceholder": "Потвърди паролата",
+      "roleLabel": "Аз съм...",
+      "roleDj": "DJ",
+      "roleClub": "Клуб",
+      "roleFan": "Фен",
+      "submit": "Създай профил",
+      "submitLoading": "...",
+      "haveAccount": "Вече имаш профил?",
+      "loginLink": "Вход",
+      "passwordMismatch": "Паролите не съвпадат.",
+      "checking": "Проверка...",
+      "displayNameTaken": "Това име вече е заето.",
+      "displayNameAvailable": "Свободно",
+      "emailTaken": "Този имейл вече е регистриран.",
+      "emailAvailable": "Свободен",
+      "checkFailed": "Проверката не бе успешна.",
+      "checkEmailTitle": "Провери имейла си",
+      "checkEmailBody": "Потвърди адреса си, за да завършиш регистрацията, след което влез."
+    }
+  },
+  "profile": {
+    "complete": {
+      "title": "Довърши профила си",
+      "subtitleDj": "Още няколко детайла, преди да можеш да използваш сайта като DJ.",
+      "subtitleClub": "Още няколко детайла, преди да можеш да използваш сайта като клуб.",
+      "photoLabel": "Профилна снимка",
+      "photoRequired": "задължително",
+      "uploadPhoto": "Качи",
+      "uploadingPhoto": "Качване...",
+      "removePhoto": "Премахни",
+      "removingPhoto": "Премахване...",
+      "invalidImageFile": "Моля, избери файл със снимка.",
+      "usernameLabel": "Потребителско име",
+      "bioLabel": "Био",
+      "soundProfileLabel": "Музикален профил",
+      "soundProfileHint": "избери стиловете, които те описват",
+      "selectCity": "Избери град",
+      "save": "Запази и продължи",
+      "saving": "Запазване...",
+      "errorPhoto": "Профилна снимка е задължителна.",
+      "errorGenre": "Избери поне един стил за музикалния си профил.",
+      "errorRequired": "Моля, попълни всички задължителни полета.",
+      "fields": {
+        "stage_name": "Сценично име",
+        "genre": "Жанр",
+        "gender": "Пол",
+        "genderMan": "Мъж",
+        "genderFemale": "Жена",
+        "location": "Локация",
+        "website": "Уебсайт",
+        "hourly_rate": "ч",
+        "social_links": "Социални мрежи",
+        "social_links_hint": "По един на ред",
+        "name": "Име на клуба",
+        "description": "Описание",
+        "city": "Град",
+        "resident_dj": "Резидентен DJ",
+        "capacity": "Капацитет",
+        "reservation_contact": "Контакт за резервации"
+      }
+    },
+    "view": {
+      "editProfile": "Редактирай профила",
+      "djBadge": "DJ",
+      "clubBadge": "Клуб",
+      "city": "Град",
+      "genre": "Жанр",
+      "location": "Локация",
+      "hourlyRate": "Часова ставка",
+      "website": "Уебсайт",
+      "social": "Социални мрежи"
+    }
+  }
+}

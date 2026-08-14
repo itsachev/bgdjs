@@ -1,0 +1,118 @@
+{
+  "meta": {
+    "title": "Bulgarian DJ Community",
+    "description": "The home for Bulgarian DJs, clubs, and fans — mixes, events, and profiles in one place."
+  },
+  "nav": {
+    "home": "Home",
+    "djs": "DJs",
+    "clubs": "Clubs",
+    "events": "Events",
+    "login": "Log in",
+    "logout": "Log out",
+    "admin": "Admin"
+  },
+  "hero": {
+    "eyebrow": "Bulgarian DJ Community",
+    "title": "Where the scene lives",
+    "subtitle": "Discover DJs, clubs, mixes and events from across Bulgaria — all in one place.",
+    "cta": "Explore the community"
+  },
+  "sections": {
+    "djs": "Featured DJs",
+    "clubs": "Featured Clubs",
+    "events": "Upcoming Events"
+  },
+  "footer": {
+    "tagline": "Built by the community, for the community.",
+    "rights": "All rights reserved."
+  },
+  "auth": {
+    "login": {
+      "title": "Log in",
+      "emailPlaceholder": "Email",
+      "passwordPlaceholder": "Password",
+      "submit": "Log in",
+      "submitLoading": "...",
+      "noAccount": "No account?",
+      "signupLink": "Sign up"
+    },
+    "signup": {
+      "title": "Sign up",
+      "displayNamePlaceholder": "Display name",
+      "emailPlaceholder": "Email",
+      "passwordPlaceholder": "Password",
+      "confirmPasswordPlaceholder": "Confirm password",
+      "roleLabel": "I am a...",
+      "roleDj": "DJ",
+      "roleClub": "Club",
+      "roleFan": "Fan",
+      "submit": "Create account",
+      "submitLoading": "...",
+      "haveAccount": "Already have an account?",
+      "loginLink": "Log in",
+      "passwordMismatch": "Passwords don't match.",
+      "checking": "Checking...",
+      "displayNameTaken": "That name is already taken.",
+      "displayNameAvailable": "Available",
+      "emailTaken": "That email is already registered.",
+      "emailAvailable": "Available",
+      "checkFailed": "Couldn't check availability.",
+      "checkEmailTitle": "Check your email",
+      "checkEmailBody": "Confirm your address to finish creating your account, then log in."
+    }
+  },
+  "profile": {
+    "complete": {
+      "title": "Complete your profile",
+      "subtitleDj": "A few more details before you can use the site as a DJ.",
+      "subtitleClub": "A few more details before you can use the site as a club.",
+      "photoLabel": "Profile photo",
+      "photoRequired": "required",
+      "uploadPhoto": "Upload",
+      "uploadingPhoto": "Uploading...",
+      "removePhoto": "Remove",
+      "removingPhoto": "Removing...",
+      "invalidImageFile": "Please choose an image file.",
+      "usernameLabel": "Username",
+      "bioLabel": "Bio",
+      "soundProfileLabel": "Sound profile",
+      "soundProfileHint": "select the styles that fit",
+      "selectCity": "Select a city",
+      "save": "Save and continue",
+      "saving": "Saving...",
+      "errorPhoto": "A profile photo is required.",
+      "errorGenre": "Pick at least one genre for your sound profile.",
+      "errorRequired": "Please complete all required fields.",
+      "fields": {
+        "stage_name": "Stage name",
+        "genre": "Genre",
+        "gender": "Gender",
+        "genderMan": "Man",
+        "genderFemale": "Female",
+        "location": "Location",
+        "website": "Website",
+        "hourly_rate": "Hourly rate",
+        "social_links": "Social links",
+        "social_links_hint": "One per line",
+        "name": "Club name",
+        "description": "Description",
+        "city": "City",
+        "resident_dj": "Resident DJ",
+        "capacity": "Capacity",
+        "reservation_contact": "Reservation contact"
+      }
+    },
+    "view": {
+      "editProfile": "Edit profile",
+      "djBadge": "DJ",
+      "clubBadge": "Club",
+      "city": "City",
+      "genre": "Genre",
+      "location": "Location",
+      "hourlyRate": "Hourly rate",
+      "website": "Website",
+      "social": "Social"
+    }
+  }
+}

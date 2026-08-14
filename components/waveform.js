@@ -30,7 +30,7 @@ export function Waveform({ className = "" }) {
     <div
       ref={containerRef}
       aria-hidden="true"
-      className={`flex items-center gap-[3px] ${className}`}
+      className={`flex items-center gap-[5px] ${className}`}
     >
       {Array.from({ length: BAR_COUNT }).map((_, i) => (
         <span

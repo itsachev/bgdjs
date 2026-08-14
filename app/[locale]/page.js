@@ -32,9 +32,9 @@ export default async function HomePage({ params }) {
   return (
     <>
       <Hero dict={dict} locale={locale} hero={hero} />
+      <PlaceholderGrid title={dict.sections.events} />
       <PlaceholderGrid title={dict.sections.djs} />
       <PlaceholderGrid title={dict.sections.clubs} />
-      <PlaceholderGrid title={dict.sections.events} />
     </>
   );
 }

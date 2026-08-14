@@ -74,7 +74,7 @@ export function Hero({ dict, locale, hero }) {
         {dict.hero.cta}
       </a>
 
-      <div data-hero-waveform className="mt-16 h-8 w-full max-w-2xl">
+      <div data-hero-waveform className="mt-16 h-5 w-full max-w-2xl">
         <Waveform className="h-full w-full justify-center" />
       </div>
     </section>

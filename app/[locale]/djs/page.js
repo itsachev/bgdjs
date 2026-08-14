@@ -171,15 +171,15 @@ export default async function DjsPage({ params, searchParams }) {
                 <Link
                   key={id}
                   href={`/${locale}/djs/${encodeURIComponent(display_name)}`}
-                  className="group relative flex flex-col items-center gap-3 overflow-hidden rounded-2xl border border-border bg-[linear-gradient(135deg,color-mix(in_oklch,var(--color-accent)_7%,var(--color-background-elevated)),color-mix(in_oklch,var(--color-accent-2)_7%,var(--color-background-elevated)))] p-6 text-center transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:shadow-[0_0_32px_color-mix(in_oklch,var(--color-accent)_25%,transparent)]"
+                  className="group relative flex flex-col items-center gap-3 overflow-hidden rounded-2xl border border-border bg-[linear-gradient(135deg,color-mix(in_oklch,var(--color-accent)_7%,var(--color-background-elevated)),color-mix(in_oklch,var(--color-accent-2)_7%,var(--color-background-elevated)))] bg-size-[200%_200%] bg-top-left p-6 text-center transition-all duration-500 [@media(hover:hover)]:hover:-translate-y-1 [@media(hover:hover)]:hover:bg-bottom-right [@media(hover:hover)]:hover:shadow-[0_0_32px_color-mix(in_oklch,var(--color-accent)_25%,transparent)]"
                 >
                   <div
                     aria-hidden="true"
-                    className="pointer-events-none absolute -top-16 -right-16 -z-10 h-40 w-40 rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent)_30%,transparent),transparent_70%)] opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-100"
+                    className="pointer-events-none absolute -top-16 -right-16 -z-10 h-40 w-40 rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent)_30%,transparent),transparent_70%)] opacity-30 blur-2xl transition-all duration-500 [@media(hover:hover)]:group-hover:scale-125 [@media(hover:hover)]:group-hover:opacity-100"
                   />
                   <div
                     aria-hidden="true"
-                    className="pointer-events-none absolute -bottom-16 -left-16 -z-10 h-40 w-40 rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent-2)_25%,transparent),transparent_70%)] opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-80"
+                    className="pointer-events-none absolute -bottom-16 -left-16 -z-10 h-40 w-40 rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent-2)_25%,transparent),transparent_70%)] opacity-30 blur-2xl transition-all duration-500 [@media(hover:hover)]:group-hover:scale-125 [@media(hover:hover)]:group-hover:opacity-80"
                   />
 
                   <div className="relative h-20 w-20 shrink-0">

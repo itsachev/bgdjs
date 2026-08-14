@@ -25,12 +25,20 @@ export async function SiteHeader({ locale, dict }) {
           {profile ? (
             <UserMenu profile={profile} logoutLabel={dict.nav.logout} locale={locale} />
           ) : (
-            <Link
-              href={`/${locale}/login`}
-              className="hidden rounded-full border border-border px-4 py-1.5 text-sm font-medium transition-colors hover:border-accent hover:text-accent sm:inline-block"
-            >
-              {dict.nav.login}
-            </Link>
+            <div className="hidden items-center gap-2 sm:flex">
+              <Link
+                href={`/${locale}/login`}
+                className="uppercase font-bold rounded-full border border-border px-4 py-1.5 text-sm transition-colors hover:border-accent hover:text-accent"
+              >
+                {dict.nav.login}
+              </Link>
+              <Link
+                href={`/${locale}/signup`}
+                className="uppercase font-bold rounded-full bg-accent px-4 py-1.5 text-sm text-white transition-opacity hover:opacity-90"
+              >
+                {dict.nav.signup}
+              </Link>
+            </div>
           )}
         </div>
       </div>

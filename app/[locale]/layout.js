@@ -36,7 +36,7 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default async function RootLayout({ children, auth, params }) {
+export default async function RootLayout({ children, params }) {
   const { locale } = await params;
   if (!hasLocale(locale)) notFound();
   const dict = await getDictionary(locale);
@@ -55,7 +55,6 @@ export default async function RootLayout({ children, auth, params }) {
               <main className="flex flex-1 flex-col">{children}</main>
               <SiteFooter dict={dict} />
             </div>
-            {auth}
           </SmoothScrollProvider>
         </ThemeProvider>
       </body>

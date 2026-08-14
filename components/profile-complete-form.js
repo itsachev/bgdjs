@@ -197,6 +197,15 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, d
         <div className="absolute bottom-0 left-[20%] h-104 w-104 rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent)_26%,transparent),transparent_70%)] blur-3xl" />
       </div>
 
+      {avatarUrl && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 right-0 -z-10 hidden w-1/2 opacity-80 mask-[linear-gradient(to_left,black_40%,transparent)] md:block"
+        >
+          <img src={avatarUrl} alt="" className="h-full w-full object-cover" />
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} className="relative mx-auto flex max-w-2xl flex-col gap-6 px-6 py-16">
         <div>
           <h1 className="bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display text-3xl font-semibold tracking-tight text-transparent sm:text-4xl md:text-5xl">

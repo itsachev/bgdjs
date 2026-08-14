@@ -13,7 +13,7 @@ const PAGE_SIZE = 20;
 const QUICK_GENRES = ["House", "Commercial", "Pop Folk"];
 
 // Deterministic pseudo-random ordering — stable across requests/pagination
-// since it only depends on each DJ's id, without needing DB-level randomness.
+// since it only depends on each club's id, without needing DB-level randomness.
 function seedOf(id) {
   let hash = 0;
   for (let i = 0; i < id.length; i++) {
@@ -22,7 +22,7 @@ function seedOf(id) {
   return hash;
 }
 
-// Lets a search match a city regardless of which locale the DJ's stored
+// Lets a search match a city regardless of which locale the club's stored
 // canonical value ("Sofia") vs. the query ("София") happen to be in.
 const CITY_LABELS = new Map(
   BULGARIAN_CITIES.map((city) => [
@@ -43,14 +43,14 @@ function pageHref(locale, { page, q, genre }) {
   if (genre) search.set("genre", genre);
   if (page > 1) search.set("page", String(page));
   const qs = search.toString();
-  return `/${locale}/djs${qs ? `?${qs}` : ""}`;
+  return `/${locale}/clubs${qs ? `?${qs}` : ""}`;
 }
 
-export default async function DjsPage({ params, searchParams }) {
+export default async function ClubsPage({ params, searchParams }) {
   const { locale } = await params;
   if (!hasLocale(locale)) notFound();
   const dict = await getDictionary(locale);
-  const t = dict.djsPage;
+  const t = dict.clubsPage;
 
   const { page: pageParam, q: qParam, genre: genreParam } = await searchParams;
   const query = (qParam || "").trim();
@@ -61,37 +61,37 @@ export default async function DjsPage({ params, searchParams }) {
   const { data: profiles } = await supabase
     .from("profiles")
     .select("id, display_name, avatar_url")
-    .eq("role", "dj");
+    .eq("role", "club");
 
-  const { data: djProfiles } = await supabase
-    .from("dj_profiles")
-    .select("id, stage_name, location, sound_profile");
+  const { data: clubProfiles } = await supabase
+    .from("club_profiles")
+    .select("id, name, location, sound_profile");
 
-  const djById = new Map((djProfiles || []).map((d) => [d.id, d]));
+  const clubById = new Map((clubProfiles || []).map((c) => [c.id, c]));
 
-  let djs = (profiles || [])
-    .map((p) => ({ ...p, dj: djById.get(p.id) }))
+  let clubs = (profiles || [])
+    .map((p) => ({ ...p, club: clubById.get(p.id) }))
     .sort((a, b) => seedOf(a.id) - seedOf(b.id));
 
   if (query) {
     const needle = query.toLowerCase();
-    djs = djs.filter(({ display_name, dj }) =>
+    clubs = clubs.filter(({ display_name, club }) =>
       display_name.toLowerCase().includes(needle) ||
-      dj?.stage_name?.toLowerCase().includes(needle) ||
-      cityMatches(dj?.location, needle)
+      club?.name?.toLowerCase().includes(needle) ||
+      cityMatches(club?.location, needle)
     );
   }
 
   if (genre) {
-    djs = djs.filter(({ dj }) =>
-      dj?.sound_profile?.split(",").map((g) => g.trim()).includes(genre)
+    clubs = clubs.filter(({ club }) =>
+      club?.sound_profile?.split(",").map((g) => g.trim()).includes(genre)
     );
   }
 
-  const totalPages = Math.max(1, Math.ceil(djs.length / PAGE_SIZE));
+  const totalPages = Math.max(1, Math.ceil(clubs.length / PAGE_SIZE));
   const currentPage = Math.min(Math.max(1, Number(pageParam) || 1), totalPages);
   const start = (currentPage - 1) * PAGE_SIZE;
-  const pageDjs = djs.slice(start, start + PAGE_SIZE);
+  const pageClubs = clubs.slice(start, start + PAGE_SIZE);
 
   return (
     <div className="relative flex-1 overflow-hidden">
@@ -108,7 +108,7 @@ export default async function DjsPage({ params, searchParams }) {
         <p className="mt-4 text-foreground-muted">{t.subtitle}</p>
 
         <EntitySearch
-          basePath={`/${locale}/djs`}
+          basePath={`/${locale}/clubs`}
           initialQuery={query}
           initialGenre={genre}
           placeholder={t.searchPlaceholder}
@@ -134,20 +134,20 @@ export default async function DjsPage({ params, searchParams }) {
           })}
         </div>
 
-        {pageDjs.length === 0 ? (
+        {pageClubs.length === 0 ? (
           <p className="mt-16 text-foreground-muted">{query || genre ? t.noResults : t.empty}</p>
         ) : (
           <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {pageDjs.map(({ id, display_name, avatar_url, dj }) => {
-              const name = dj?.stage_name || display_name;
-              const genres = dj?.sound_profile
-                ? dj.sound_profile.split(",").map((g) => g.trim()).filter(Boolean).slice(0, 3)
+            {pageClubs.map(({ id, display_name, avatar_url, club }) => {
+              const name = club?.name || display_name;
+              const genres = club?.sound_profile
+                ? club.sound_profile.split(",").map((g) => g.trim()).filter(Boolean).slice(0, 3)
                 : [];
 
               return (
                 <Link
                   key={id}
-                  href={`/${locale}/djs/${encodeURIComponent(display_name)}`}
+                  href={`/${locale}/clubs/${encodeURIComponent(display_name)}`}
                   className="group relative flex flex-col items-center gap-3 overflow-hidden rounded-2xl border border-border bg-[linear-gradient(135deg,color-mix(in_oklch,var(--color-accent)_7%,var(--color-background-elevated)),color-mix(in_oklch,var(--color-accent-2)_7%,var(--color-background-elevated)))] p-6 text-center transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:shadow-[0_0_32px_color-mix(in_oklch,var(--color-accent)_25%,transparent)]"
                 >
                   <div
@@ -171,9 +171,9 @@ export default async function DjsPage({ params, searchParams }) {
                     {name}
                   </p>
 
-                  {dj?.location && (
+                  {club?.location && (
                     <p className="flex items-center gap-1 text-xs text-foreground-muted">
-                      <MapPinIcon className="h-3.5 w-3.5" /> {dj.location}
+                      <MapPinIcon className="h-3.5 w-3.5" /> {club.location}
                     </p>
                   )}
 

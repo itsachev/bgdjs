@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 
 const DEBOUNCE_MS = 500;
 
-export function DjSearch({ locale, initialQuery, initialGenre, placeholder, searchLabel }) {
+export function EntitySearch({ basePath, initialQuery, initialGenre, placeholder, searchLabel }) {
   const router = useRouter();
   const [value, setValue] = useState(initialQuery);
   const skipNextDebounce = useRef(true);
@@ -15,7 +15,7 @@ export function DjSearch({ locale, initialQuery, initialGenre, placeholder, sear
     if (q.trim()) params.set("q", q.trim());
     if (initialGenre) params.set("genre", initialGenre);
     const qs = params.toString();
-    router.push(`/${locale}/djs${qs ? `?${qs}` : ""}`);
+    router.push(`${basePath}${qs ? `?${qs}` : ""}`);
   }
 
   useEffect(() => {

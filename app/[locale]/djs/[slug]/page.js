@@ -42,6 +42,15 @@ export default async function DjProfilePage({ params }) {
         <div className="absolute bottom-0 left-[20%] h-104 w-104 rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent)_26%,transparent),transparent_70%)] blur-3xl" />
       </div>
 
+      {profile.avatar_url && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 right-0 -z-10 hidden w-1/2 opacity-30 mask-[linear-gradient(to_left,black_40%,transparent)] md:block"
+        >
+          <img src={profile.avatar_url} alt="" className="h-full w-full object-cover" />
+        </div>
+      )}
+
       <div className="relative mx-auto max-w-3xl px-6 py-16">
       <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:items-start sm:text-left">
         <div className="h-48 w-48 shrink-0 overflow-hidden rounded-full border border-border bg-background-elevated">
@@ -52,7 +61,7 @@ export default async function DjProfilePage({ params }) {
 
         <div className="flex flex-1 flex-col gap-2">
           <div className="flex flex-col items-center gap-2 sm:flex-row sm:items-center">
-            <h1 className="bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display font-semibold tracking-tight text-transparent sm:text-3xl md:text-6xl">
+            <h1 className="uppercase bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display font-semibold tracking-tight text-transparent sm:text-3xl md:text-6xl">
               {dj?.stage_name || profile.display_name}
             </h1>
             <span className="rounded-full bg-accent px-3 py-1.5 text-xs font-medium uppercase tracking-wide text-white">

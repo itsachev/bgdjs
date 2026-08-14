@@ -34,6 +34,17 @@
     "searchPlaceholder": "Search by username, stage name, or city...",
     "search": "Search"
   },
+  "clubsPage": {
+    "title": "Clubs",
+    "subtitle": "Browse the clubs in the Bulgarian community.",
+    "empty": "No clubs yet.",
+    "noResults": "No clubs match your search.",
+    "prev": "Previous",
+    "next": "Next",
+    "page": "Page",
+    "searchPlaceholder": "Search by username, club name, or city...",
+    "search": "Search"
+  },
   "footer": {
     "tagline": "Built by the community, for the community.",
     "rights": "All rights reserved."

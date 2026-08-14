@@ -111,7 +111,7 @@ export default async function ClubsPage({ params, searchParams }) {
       </div>
 
       <div className="relative mx-auto max-w-7xl px-6 py-16">
-        <h1 className="bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display text-4xl font-semibold tracking-tight text-transparent sm:text-5xl md:text-6xl xl:text-8xl">
+        <h1 className="bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display text-4xl font-semibold tracking-tight text-transparent sm:text-5xl xl:text-6xl">
           {t.title}
         </h1>
         <p className="mt-4 text-foreground-muted">{t.subtitle}</p>

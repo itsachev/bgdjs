@@ -2,8 +2,11 @@
 
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import { Waveform } from "./waveform";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export function Hero({ dict, locale, hero }) {
   const rootRef = useRef(null);
@@ -20,6 +23,20 @@ export function Hero({ dict, locale, hero }) {
         .from("[data-hero-subtitle]", { opacity: 0, y: 16, duration: 0.7 }, "-=0.5")
         .from("[data-hero-cta]", { opacity: 0, y: 16, duration: 0.6 }, "-=0.45")
         .from("[data-hero-waveform]", { opacity: 0, duration: 1 }, "-=0.4");
+
+      // Background drifts slower than the scroll (classic parallax); the
+      // 1.15 scale gives it enough bleed that the shift never exposes an edge.
+      gsap.set("[data-hero-bg]", { scale: 1.15 });
+      gsap.to("[data-hero-bg]", {
+        yPercent: 15,
+        ease: "none",
+        scrollTrigger: {
+          trigger: rootRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
     }, rootRef);
 
     return () => ctx.revert();
@@ -31,7 +48,7 @@ export function Hero({ dict, locale, hero }) {
       className="relative flex min-h-[85vh] flex-col items-center justify-center overflow-hidden px-6 text-center"
     >
       {/* -z-10 keeps this behind the (non-positioned) text below regardless of DOM order */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
+      <div data-hero-bg aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
         {mediaUrl ? (
           <>
             {mediaType === "video" ? (

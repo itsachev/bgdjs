@@ -23,6 +23,12 @@ function seedOf(id) {
   return hash;
 }
 
+// Profiles with a photo and the core fields filled in surface first; within
+// the same completeness tier, ordering stays stable via seedOf().
+function completenessOf({ avatar_url, bio, dj }) {
+  return [avatar_url, bio, dj?.stage_name, dj?.gender, dj?.location].filter(Boolean).length;
+}
+
 // Lets a search match a city regardless of which locale the DJ's stored
 // canonical value ("Sofia") vs. the query ("София") happen to be in.
 const CITY_LABELS = new Map(
@@ -69,18 +75,18 @@ export default async function DjsPage({ params, searchParams }) {
 
   const { data: profiles } = await supabase
     .from("profiles")
-    .select("id, display_name, avatar_url")
+    .select("id, display_name, avatar_url, avatar_position, bio")
     .eq("role", "dj");
 
   const { data: djProfiles } = await supabase
     .from("dj_profiles")
-    .select("id, stage_name, location, sound_profile");
+    .select("id, stage_name, gender, location, sound_profile");
 
   const djById = new Map((djProfiles || []).map((d) => [d.id, d]));
 
   let djs = (profiles || [])
     .map((p) => ({ ...p, dj: djById.get(p.id) }))
-    .sort((a, b) => seedOf(a.id) - seedOf(b.id));
+    .sort((a, b) => completenessOf(b) - completenessOf(a) || seedOf(a.id) - seedOf(b.id));
 
   if (query) {
     const needle = query.toLowerCase();
@@ -147,7 +153,7 @@ export default async function DjsPage({ params, searchParams }) {
           <p className="mt-16 text-foreground-muted">{query || genre ? t.noResults : t.empty}</p>
         ) : (
           <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {pageDjs.map(({ id, display_name, avatar_url, dj }) => {
+            {pageDjs.map(({ id, display_name, avatar_url, avatar_position, dj }) => {
               const name = dj?.stage_name || display_name;
               const genres = dj?.sound_profile
                 ? dj.sound_profile.split(",").map((g) => g.trim()).filter(Boolean).slice(0, 3)
@@ -170,7 +176,14 @@ export default async function DjsPage({ params, searchParams }) {
 
                   <div className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-full border border-border bg-background-elevated font-display text-xl font-semibold text-accent">
                     {avatar_url ? (
-                      <Image src={avatar_url} alt={name} fill sizes="80px" className="object-cover" />
+                      <Image
+                        src={avatar_url}
+                        alt={name}
+                        fill
+                        sizes="80px"
+                        className="object-cover"
+                        style={{ objectPosition: avatar_position || "50% 50%" }}
+                      />
                     ) : (
                       name.slice(0, 2).toUpperCase()
                     )}

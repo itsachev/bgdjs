@@ -29,7 +29,7 @@ export default async function ProfileCompletePage({ params }) {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("role, display_name, avatar_url, bio")
+    .select("role, display_name, avatar_url, avatar_position, bio")
     .eq("id", user.id)
     .single();
 

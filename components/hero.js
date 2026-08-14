@@ -53,9 +53,9 @@ export function Hero({ dict, locale, hero }) {
         )}
       </div>
 
-      <p data-hero-eyebrow className="mb-4 text-sm font-medium uppercase tracking-[0.25em] text-accent">
+      {/* <p data-hero-eyebrow className="mb-4 text-sm font-medium uppercase tracking-[0.25em] text-accent">
         {dict.hero.eyebrow}
-      </p>
+      </p> */}
       <h1
         data-hero-title
         className="text-balance bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display text-5xl font-bold tracking-tight text-transparent sm:text-6xl md:text-7xl"

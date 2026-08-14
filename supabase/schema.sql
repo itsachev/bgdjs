@@ -8,6 +8,7 @@ create table public.profiles (
   role public.user_role not null default 'fan',
   display_name text not null unique,
   avatar_url text,
+  avatar_position text,
   bio text,
   city text,
   created_at timestamptz not null default now()

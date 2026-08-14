@@ -44,7 +44,7 @@ export default async function ClubProfilePage({ params }) {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("id, role, display_name, avatar_url, bio")
+    .select("id, role, display_name, avatar_url, avatar_position, bio")
     .eq("display_name", decodeURIComponent(slug))
     .single();
 
@@ -74,7 +74,14 @@ export default async function ClubProfilePage({ params }) {
           aria-hidden="true"
           className="pointer-events-none absolute inset-y-0 right-0 -z-10 hidden w-1/2 opacity-30 mask-[linear-gradient(to_left,black_40%,transparent)] md:block"
         >
-          <Image src={profile.avatar_url} alt="" fill sizes="50vw" className="object-cover" />
+          <Image
+            src={profile.avatar_url}
+            alt=""
+            fill
+            sizes="50vw"
+            className="object-cover"
+            style={{ objectPosition: profile.avatar_position || "50% 50%" }}
+          />
         </div>
       )}
 

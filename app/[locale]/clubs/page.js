@@ -69,7 +69,7 @@ export default async function ClubsPage({ params, searchParams }) {
 
   const { data: profiles } = await supabase
     .from("profiles")
-    .select("id, display_name, avatar_url")
+    .select("id, display_name, avatar_url, avatar_position")
     .eq("role", "club");
 
   const { data: clubProfiles } = await supabase
@@ -147,7 +147,7 @@ export default async function ClubsPage({ params, searchParams }) {
           <p className="mt-16 text-foreground-muted">{query || genre ? t.noResults : t.empty}</p>
         ) : (
           <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {pageClubs.map(({ id, display_name, avatar_url, club }) => {
+            {pageClubs.map(({ id, display_name, avatar_url, avatar_position, club }) => {
               const name = club?.name || display_name;
               const genres = club?.sound_profile
                 ? club.sound_profile.split(",").map((g) => g.trim()).filter(Boolean).slice(0, 3)
@@ -170,7 +170,14 @@ export default async function ClubsPage({ params, searchParams }) {
 
                   <div className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-full border border-border bg-background-elevated font-display text-xl font-semibold text-accent">
                     {avatar_url ? (
-                      <Image src={avatar_url} alt={name} fill sizes="80px" className="object-cover" />
+                      <Image
+                        src={avatar_url}
+                        alt={name}
+                        fill
+                        sizes="80px"
+                        className="object-cover"
+                        style={{ objectPosition: avatar_position || "50% 50%" }}
+                      />
                     ) : (
                       name.slice(0, 2).toUpperCase()
                     )}

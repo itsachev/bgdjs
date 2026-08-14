@@ -110,7 +110,7 @@ export default async function ClubProfilePage({ params }) {
       <div className="relative mx-auto max-w-7xl px-6 py-16">
         <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)] lg:items-start lg:gap-16">
           <div className="flex flex-col items-center text-center lg:sticky lg:top-24 lg:items-start lg:text-left">
-            <h1 className="bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display font-semibold tracking-tight text-transparent sm:text-3xl md:text-6xl">
+            <h1 className="bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display text-3xl font-semibold tracking-tight text-transparent sm:text-4xl md:text-5xl xl:text-6xl">
               {club?.name || profile.display_name}
             </h1>
 

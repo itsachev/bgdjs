@@ -215,7 +215,7 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, d
 
       <form onSubmit={handleSubmit} className="relative mx-auto flex max-w-2xl flex-col gap-6 px-6 py-16">
         <div>
-          <h1 className="bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display text-3xl font-semibold tracking-tight text-transparent sm:text-4xl md:text-5xl">
+          <h1 className="bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display text-3xl font-semibold tracking-tight text-transparent sm:text-4xl xl:text-5xl">
             {t.title}
           </h1>
           <p className="mt-6 text-sm text-foreground-muted">

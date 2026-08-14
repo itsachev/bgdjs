@@ -58,7 +58,7 @@ export function Hero({ dict, locale, hero }) {
       </p> */}
       <h1
         data-hero-title
-        className="text-balance bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display text-5xl font-bold tracking-tight text-transparent sm:text-6xl md:text-7xl"
+        className="text-balance bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display text-4xl font-bold tracking-tight text-transparent sm:text-5xl md:text-6xl xl:text-7xl"
       >
         {title}
       </h1>

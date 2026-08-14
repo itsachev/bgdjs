@@ -3,6 +3,7 @@ import { isAdmin } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { HeroEditor } from "@/components/hero-editor";
 import { LoginBackgroundEditor } from "@/components/login-background-editor";
+import { SiteAudioEditor } from "@/components/site-audio-editor";
 
 export const metadata = {
   title: "Admin",
@@ -15,6 +16,7 @@ export default async function AdminPage() {
   const supabase = await createClient();
   const { data: hero } = await supabase.from("hero_content").select("*").eq("id", 1).maybeSingle();
   const { data: loginBackground } = await supabase.from("login_content").select("*").eq("id", 1).maybeSingle();
+  const { data: siteAudio } = await supabase.from("site_audio").select("*").eq("id", 1).maybeSingle();
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
@@ -31,6 +33,11 @@ export default async function AdminPage() {
       <section className="mt-12">
         <h2 className="font-display text-xl font-semibold tracking-tight">Login page background</h2>
         <LoginBackgroundEditor initial={loginBackground} />
+      </section>
+
+      <section className="mt-12">
+        <h2 className="font-display text-xl font-semibold tracking-tight">Site audio</h2>
+        <SiteAudioEditor initial={siteAudio} />
       </section>
     </div>
   );

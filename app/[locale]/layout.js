@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { SmoothScrollProvider } from "@/components/smooth-scroll-provider";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { SiteAudio } from "@/components/site-audio";
 import { getDictionary, hasLocale, locales } from "./dictionaries";
 import { notFound } from "next/navigation";
 
@@ -55,6 +56,7 @@ export default async function RootLayout({ children, params }) {
               <main className="flex flex-1 flex-col">{children}</main>
               <SiteFooter dict={dict} />
             </div>
+            <SiteAudio />
           </SmoothScrollProvider>
         </ThemeProvider>
       </body>

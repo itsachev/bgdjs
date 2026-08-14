@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 
-const BAR_COUNT = 48;
+const BAR_COUNT = 18;
 
 export function Waveform({ className = "" }) {
   const containerRef = useRef(null);

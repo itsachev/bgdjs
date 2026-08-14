@@ -193,6 +193,55 @@ create policy "Admins can delete login media"
     and exists (select 1 from public.profiles where id = auth.uid() and role = 'admin')
   );
 
+-- Site-wide background audio track, editable via the admin CMS. Singleton row (id = 1).
+create table public.site_audio (
+  id smallint primary key default 1,
+  title text,
+  media_url text,
+  media_path text,
+  updated_at timestamptz not null default now(),
+  constraint site_audio_singleton check (id = 1)
+);
+
+insert into public.site_audio (id) values (1);
+
+alter table public.site_audio enable row level security;
+
+create policy "Site audio is viewable by everyone"
+  on public.site_audio for select
+  using (true);
+
+create policy "Admins can update site audio"
+  on public.site_audio for update
+  using (exists (select 1 from public.profiles where id = auth.uid() and role = 'admin'));
+
+-- Storage bucket for the site audio track. Public so it can be streamed
+-- directly without signed URLs.
+insert into storage.buckets (id, name, public)
+values ('audio', 'audio', true)
+on conflict (id) do nothing;
+
+create policy "Admins can upload site audio"
+  on storage.objects for insert
+  with check (
+    bucket_id = 'audio'
+    and exists (select 1 from public.profiles where id = auth.uid() and role = 'admin')
+  );
+
+create policy "Admins can update site audio file"
+  on storage.objects for update
+  using (
+    bucket_id = 'audio'
+    and exists (select 1 from public.profiles where id = auth.uid() and role = 'admin')
+  );
+
+create policy "Admins can delete site audio file"
+  on storage.objects for delete
+  using (
+    bucket_id = 'audio'
+    and exists (select 1 from public.profiles where id = auth.uid() and role = 'admin')
+  );
+
 -- DJ- and club-specific profile fields. 1:1 extension of public.profiles,
 -- only populated for accounts with the matching role. A row's existence
 -- (with sound_profile set, its one required field) marks that profile as

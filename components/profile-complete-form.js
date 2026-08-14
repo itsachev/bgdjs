@@ -5,6 +5,14 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { AvatarUpload } from "@/components/avatar-upload";
 import { BULGARIAN_CITIES } from "@/lib/bulgarian-cities";
+import {
+  InstagramIcon,
+  FacebookIcon,
+  TiktokIcon,
+  SoundcloudIcon,
+  MixcloudIcon,
+  YoutubeIcon,
+} from "@/components/icons";
 
 // Genre names are kept in Latin script for both locales — these are used
 // internationally as-is, including in the Bulgarian club scene.
@@ -31,6 +39,15 @@ const GENRE_CATEGORIES = [
   },
 ];
 
+const SOCIAL_FIELDS = [
+  { key: "instagram_url", type: "text", icon: InstagramIcon, color: "text-pink-500" },
+  { key: "facebook_url", type: "text", icon: FacebookIcon, color: "text-blue-600" },
+  { key: "tiktok_url", type: "text", icon: TiktokIcon, color: "text-rose-500" },
+  { key: "soundcloud_url", type: "text", icon: SoundcloudIcon, color: "text-orange-500" },
+  { key: "mixcloud_url", type: "text", icon: MixcloudIcon, color: "text-sky-500" },
+  { key: "youtube_url", type: "text", icon: YoutubeIcon, color: "text-red-600" },
+];
+
 const FIELD_KEYS = {
   dj: [
     { key: "stage_name", type: "text", mandatory: true },
@@ -38,7 +55,6 @@ const FIELD_KEYS = {
     { key: "location", type: "select", mandatory: true },
     { key: "website", type: "text" },
     { key: "years_active", type: "number" },
-    { key: "social_links", type: "textarea" },
   ],
   club: [
     { key: "name", type: "text", mandatory: true },
@@ -61,7 +77,6 @@ const FIELD_KEYS = {
     { key: "resident_dj", type: "text", mandatory: true },
     { key: "capacity", type: "number", mandatory: true },
     { key: "reservation_contact", type: "text", mandatory: true },
-    { key: "social_links", type: "textarea" },
   ],
 };
 
@@ -69,6 +84,7 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, d
   const router = useRouter();
   const t = dict.profile.complete;
   const fields = FIELD_KEYS[role];
+  const allFields = [...fields, ...SOCIAL_FIELDS];
   const storageKey = `profile-draft:${userId}`;
 
   const [avatarUrl, setAvatarUrl] = useState(profile?.avatar_url ?? null);
@@ -76,7 +92,7 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, d
   const [bio, setBio] = useState(profile?.bio ?? "");
   const [values, setValues] = useState(() => {
     const initial = {};
-    fields.forEach((f) => {
+    allFields.forEach((f) => {
       initial[f.key] = roleData?.[f.key] ?? "";
     });
     return initial;
@@ -165,7 +181,7 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, d
     }
 
     const payload = { sound_profile: selectedGenres.join(", ") };
-    fields.forEach((f) => {
+    allFields.forEach((f) => {
       if (f.type === "number") {
         payload[f.key] = values[f.key] === "" ? null : Number(values[f.key]);
       } else {
@@ -222,7 +238,7 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, d
         )}
       </div>
 
-      <div className="grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-2">
+      <div className="mt-8 grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-2">
         <div className="flex flex-col gap-1.5">
           <label className="text-sm text-foreground-muted" htmlFor="displayName">
             {t.usernameLabel} <span className="text-red-500">*</span>
@@ -287,17 +303,17 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, d
             key={f.key}
             className={`flex flex-col gap-1.5 ${f.type === "textarea" || f.type === "pills" ? "md:col-span-2" : ""}`}
           >
-            <label className="text-sm text-foreground-muted" htmlFor={f.key}>
+            <label className="flex items-center gap-1.5 text-sm text-foreground-muted" htmlFor={f.key}>
+              {f.icon && <f.icon className={`h-3.5 w-3.5 ${f.color || ""}`} />}
               {t.fields[f.key]} {f.mandatory && <span className="text-red-500">*</span>}
             </label>
             {f.type === "textarea" ? (
               <textarea
                 id={f.key}
-                rows={f.key === "social_links" ? 3 : 7}
+                rows={7}
                 required={f.mandatory}
                 value={values[f.key]}
                 onChange={(e) => setValue(f.key, e.target.value)}
-                placeholder={f.key === "social_links" ? t.fields.social_links_hint : undefined}
                 className="rounded-lg border border-border bg-background-elevated px-4 py-2.5 outline-none focus:border-accent"
               />
             ) : f.type === "pills" ? (
@@ -350,9 +366,32 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, d
         ))}
       </div>
 
+      <div className="flex flex-col gap-4 rounded-2xl border border-border bg-background-elevated/40 p-5">
+        <p className="text-sm font-medium text-foreground">{t.socialLabel}</p>
+        <div className="grid grid-cols-1 gap-x-8 gap-y-5 md:grid-cols-2">
+          {SOCIAL_FIELDS.map((f) => (
+            <div key={f.key} className="flex flex-col gap-1.5">
+              <label className="flex items-center gap-1.5 text-sm text-foreground-muted" htmlFor={f.key}>
+                <f.icon className={`h-3.5 w-3.5 ${f.color}`} />
+                {t.fields[f.key]}
+              </label>
+              <input
+                id={f.key}
+                type="text"
+                value={values[f.key]}
+                onChange={(e) => setValue(f.key, e.target.value)}
+                className="rounded-lg border border-border bg-background-elevated px-4 py-2.5 outline-none focus:border-accent"
+              />
+            </div>
+          ))}
+        </div>
+        <p className="text-xs text-foreground-muted">{t.socialTip}</p>
+      </div>
+
       <div className="mt-4 flex flex-col gap-4">
-        <p className="text-sm text-foreground-muted">
-          {t.soundProfileLabel} <span className="text-red-500">*</span> — {t.soundProfileHint}
+        <p className="text-4xl font-semibold text-foreground">
+          {t.soundProfileLabel} <span className="text-red-500">*</span>{" "}
+          <span className="text-sm font-normal text-foreground-muted">— {t.soundProfileHint}</span>
         </p>
         {GENRE_CATEGORIES.map((category) => (
           <div key={category.label} className="flex flex-col gap-2 mt-4">

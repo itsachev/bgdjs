@@ -122,3 +122,58 @@ export function SpeakerOffIcon(props) {
     </Icon>
   );
 }
+
+export function InstagramIcon(props) {
+  return (
+    <Icon {...props}>
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17" cy="7" r="0.6" fill="currentColor" stroke="none" />
+    </Icon>
+  );
+}
+
+export function FacebookIcon(props) {
+  return (
+    <Icon {...props}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M14 8.5h-1.5A1.5 1.5 0 0 0 11 10v2h3l-.4 3H11v6" />
+    </Icon>
+  );
+}
+
+export function TiktokIcon(props) {
+  return (
+    <Icon {...props}>
+      <path d="M14 3v11.2a3.3 3.3 0 1 1-2.8-3.26" />
+      <path d="M14 3c.3 2.6 2 4.4 4.6 4.7v2.8A7 7 0 0 1 14 8.9" />
+    </Icon>
+  );
+}
+
+export function SoundcloudIcon(props) {
+  return (
+    <Icon {...props}>
+      <path d="M6 17h10.5a3.25 3.25 0 0 0 .4-6.48 5 5 0 0 0-9.4-2.02A3.5 3.5 0 0 0 6 17Z" />
+      <path d="M9 12.5v4.3M11.5 10.5v6.3" />
+    </Icon>
+  );
+}
+
+export function MixcloudIcon(props) {
+  return (
+    <Icon {...props}>
+      <path d="M4.5 16a3 3 0 0 1 .3-6 4.5 4.5 0 0 1 8.6-1.3 3.3 3.3 0 0 1 4.6 3 3 3 0 0 1-.3 4.3H4.5Z" />
+      <path d="M7 13.5l1.3-2 1.3 2 1.3-2 1.3 2 1.3-2 1.3 2" />
+    </Icon>
+  );
+}
+
+export function YoutubeIcon(props) {
+  return (
+    <Icon {...props}>
+      <rect x="3" y="6" width="18" height="12" rx="4" />
+      <path d="M10.5 9.5l4.5 2.5-4.5 2.5v-5Z" fill="currentColor" stroke="none" />
+    </Icon>
+  );
+}

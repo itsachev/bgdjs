@@ -2,7 +2,28 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 import { getDictionary, hasLocale } from "../../dictionaries";
-import { MapPinIcon, GlobeIcon, UserIcon, LinkIcon, ClockIcon } from "@/components/icons";
+import {
+  MapPinIcon,
+  GlobeIcon,
+  UserIcon,
+  LinkIcon,
+  ClockIcon,
+  InstagramIcon,
+  FacebookIcon,
+  TiktokIcon,
+  SoundcloudIcon,
+  MixcloudIcon,
+  YoutubeIcon,
+} from "@/components/icons";
+
+const SOCIAL_PLATFORMS = [
+  { key: "instagram_url", label: "Instagram", icon: InstagramIcon, color: "text-pink-500" },
+  { key: "facebook_url", label: "Facebook", icon: FacebookIcon, color: "text-blue-600" },
+  { key: "tiktok_url", label: "TikTok", icon: TiktokIcon, color: "text-rose-500" },
+  { key: "soundcloud_url", label: "SoundCloud", icon: SoundcloudIcon, color: "text-orange-500" },
+  { key: "mixcloud_url", label: "Mixcloud", icon: MixcloudIcon, color: "text-sky-500" },
+  { key: "youtube_url", label: "YouTube", icon: YoutubeIcon, color: "text-red-600" },
+];
 
 export async function generateMetadata({ params }) {
   const { locale, slug } = await params;
@@ -54,9 +75,7 @@ export default async function DjProfilePage({ params }) {
   const genres = dj?.sound_profile
     ? dj.sound_profile.split(",").map((g) => g.trim()).filter(Boolean)
     : [];
-  const socialLinks = dj?.social_links
-    ? dj.social_links.split("\n").map((l) => l.trim()).filter(Boolean)
-    : [];
+  const socialLinks = SOCIAL_PLATFORMS.filter((p) => dj?.[p.key]);
 
   const isOwner = user?.id === profile.id;
 
@@ -172,15 +191,15 @@ export default async function DjProfilePage({ params }) {
                   <LinkIcon className="h-3.5 w-3.5" /> {t.social}
                 </p>
                 <div className="mt-2 flex flex-wrap gap-2">
-                  {socialLinks.map((link) => (
+                  {socialLinks.map(({ key, label, icon: PlatformIcon, color }) => (
                     <a
-                      key={link}
-                      href={link}
+                      key={key}
+                      href={dj[key]}
                       target="_blank"
                       rel="noreferrer"
-                      className="rounded-full border border-border px-4 py-1.5 text-sm text-accent transition-colors hover:border-accent hover:text-accent-2"
+                      className="flex items-center gap-1.5 rounded-full border border-border px-4 py-1.5 text-sm text-accent transition-colors hover:border-accent hover:text-accent-2"
                     >
-                      {link}
+                      <PlatformIcon className={`h-3.5 w-3.5 ${color}`} /> {label}
                     </a>
                   ))}
                 </div>

@@ -25,7 +25,7 @@ function FieldStatus({ status, t }) {
   return null;
 }
 
-export function SignupForm({ dict, locale }) {
+export function SignupForm({ dict, locale, embedded = false }) {
   const router = useRouter();
   const t = dict.auth.signup;
   const ROLES = [
@@ -146,7 +146,7 @@ export function SignupForm({ dict, locale }) {
 
   if (submitted) {
     return (
-      <div className="mx-auto flex max-w-sm flex-col px-6 py-24 text-center">
+      <div className={embedded ? "flex flex-col text-center" : "mx-auto flex max-w-sm flex-col px-6 py-24 text-center"}>
         <h1 className="font-display text-2xl font-semibold tracking-tight">{t.checkEmailTitle}</h1>
         <p className="mt-3 text-foreground-muted">{t.checkEmailBody}</p>
       </div>
@@ -161,10 +161,13 @@ export function SignupForm({ dict, locale }) {
     emailStatus === "taken";
 
   return (
-    <div className="mx-auto flex max-w-3xl flex-col px-6 py-24">
+    <div className={embedded ? "flex flex-col" : "mx-auto flex max-w-3xl flex-col px-6 py-24"}>
       <h1 className="font-display text-3xl md:text-5xl font-semibold tracking-tight">{t.title}</h1>
 
-      <form onSubmit={handleSubmit} className="mt-8 grid grid-cols-1 gap-x-6 gap-y-4 lg:grid-cols-2">
+      <form
+        onSubmit={handleSubmit}
+        className={`mt-8 grid grid-cols-1 gap-x-6 gap-y-4 ${embedded ? "" : "lg:grid-cols-2"}`}
+      >
         <div className="flex flex-col gap-1.5">
           <label htmlFor="displayName" className="text-sm text-foreground-muted">
             {t.displayNamePlaceholder} <span className="text-red-500">*</span>
@@ -225,7 +228,7 @@ export function SignupForm({ dict, locale }) {
           />
         </div>
 
-        <fieldset className="flex flex-col gap-2 lg:col-span-2">
+        <fieldset className={`flex flex-col gap-2 ${embedded ? "" : "lg:col-span-2"}`}>
           <legend className="mb-1 text-sm text-foreground-muted">
             {t.roleLabel} <span className="text-red-500">*</span>
           </legend>
@@ -254,12 +257,14 @@ export function SignupForm({ dict, locale }) {
           </div>
         </fieldset>
 
-        {error && <p className="text-sm text-red-500 lg:col-span-2">{error}</p>}
+        {error && <p className={`text-sm text-red-500 ${embedded ? "" : "lg:col-span-2"}`}>{error}</p>}
 
         <button
           type="submit"
           disabled={blockingSubmit}
-          className="mt-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition-opacity disabled:opacity-60 lg:col-span-2 lg:justify-self-start"
+          className={`mt-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition-opacity disabled:opacity-60 ${
+            embedded ? "" : "lg:col-span-2 lg:justify-self-start"
+          }`}
         >
           {loading ? t.submitLoading : t.submit}
         </button>
@@ -267,7 +272,7 @@ export function SignupForm({ dict, locale }) {
 
       <p className="mt-6 text-center text-sm text-foreground-muted">
         {t.haveAccount}{" "}
-        <Link href={`/${locale}/login`} className="text-accent hover:text-accent-2">
+        <Link href={`/${locale}/login`} replace className="text-accent hover:text-accent-2">
           {t.loginLink}
         </Link>
       </p>

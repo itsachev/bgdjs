@@ -6,7 +6,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { resolvePostAuthPath } from "@/lib/post-auth-redirect";
 
-export function LoginForm({ dict, locale }) {
+export function LoginForm({ dict, locale, embedded = false }) {
   const t = dict.auth.login;
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -35,7 +35,7 @@ export function LoginForm({ dict, locale }) {
   }
 
   return (
-    <div className="mx-auto flex max-w-xl flex-col px-6 py-24">
+    <div className={embedded ? "flex flex-col" : "mx-auto flex max-w-xl flex-col px-6 py-24"}>
       <h1 className="font-display text-3xl md:text-5xl font-semibold tracking-tight">{t.title}</h1>
 
       <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-5">
@@ -69,7 +69,7 @@ export function LoginForm({ dict, locale }) {
 
       <p className="mt-6 text-center text-sm text-foreground-muted">
         {t.noAccount}{" "}
-        <Link href={`/${locale}/signup`} className="text-accent hover:text-accent-2">
+        <Link href={`/${locale}/signup`} replace className="text-accent hover:text-accent-2">
           {t.signupLink}
         </Link>
       </p>

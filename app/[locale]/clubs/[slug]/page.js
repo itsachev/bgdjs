@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 import { getDictionary, hasLocale } from "../../dictionaries";
 import { MapPinIcon, GlobeIcon, MusicNoteIcon, MicIcon, UsersIcon, PhoneIcon, LinkIcon, BuildingIcon } from "@/components/icons";
@@ -73,7 +74,7 @@ export default async function ClubProfilePage({ params }) {
           aria-hidden="true"
           className="pointer-events-none absolute inset-y-0 right-0 -z-10 hidden w-1/2 opacity-30 mask-[linear-gradient(to_left,black_40%,transparent)] md:block"
         >
-          <img src={profile.avatar_url} alt="" className="h-full w-full object-cover" />
+          <Image src={profile.avatar_url} alt="" fill sizes="50vw" className="object-cover" />
         </div>
       )}
 

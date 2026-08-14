@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 
 function extFromFile(file) {
@@ -77,9 +78,9 @@ export function AvatarUpload({ userId, initialUrl, onChange, t }) {
 
   return (
     <div className="flex items-center gap-4">
-      <div className="h-24 w-24 shrink-0 overflow-hidden rounded-full border border-border bg-background-elevated sm:h-32 sm:w-32 md:h-40 md:w-40">
+      <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-full border border-border bg-background-elevated sm:h-32 sm:w-32 md:h-40 md:w-40">
         {url ? (
-          <img src={url} alt="Avatar" className="h-full w-full object-cover" />
+          <Image src={url} alt="Avatar" fill sizes="160px" className="object-cover" />
         ) : (
           <span className="flex h-full w-full items-center justify-center px-2 text-center text-xs text-foreground-muted">
             No photo

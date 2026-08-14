@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
+import Image from "next/image";
 import { Waveform } from "./waveform";
 
 export function Hero({ dict, locale, hero }) {
@@ -43,7 +44,7 @@ export function Hero({ dict, locale, hero }) {
                 playsInline
               />
             ) : (
-              <img src={mediaUrl} alt="" className="h-full w-full object-cover" />
+              <Image src={mediaUrl} alt="" fill sizes="100vw" preload className="object-cover" />
             )}
             <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/90 to-background" />
           </>
@@ -57,7 +58,7 @@ export function Hero({ dict, locale, hero }) {
       </p>
       <h1
         data-hero-title
-        className="max-w-3xl text-balance bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display text-5xl font-bold tracking-tight text-transparent sm:text-6xl md:text-7xl"
+        className="text-balance bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display text-5xl font-bold tracking-tight text-transparent sm:text-6xl md:text-7xl"
       >
         {title}
       </h1>

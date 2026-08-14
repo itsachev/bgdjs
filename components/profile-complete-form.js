@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { AvatarUpload } from "@/components/avatar-upload";
 import { BULGARIAN_CITIES } from "@/lib/bulgarian-cities";
@@ -202,7 +203,7 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, d
           aria-hidden="true"
           className="pointer-events-none absolute inset-y-0 right-0 -z-10 hidden w-1/2 opacity-80 mask-[linear-gradient(to_left,black_40%,transparent)] md:block"
         >
-          <img src={avatarUrl} alt="" className="h-full w-full object-cover" />
+          <Image src={avatarUrl} alt="" fill sizes="50vw" className="object-cover" />
         </div>
       )}
 

@@ -62,7 +62,7 @@
     "signup": {
       "title": "Регистрация",
       "metaDescription": "Създай своя BGDj's акаунт като DJ, клуб или фен и се присъедини към българската DJ общност.",
-      "displayNamePlaceholder": "Име за показване",
+      "displayNamePlaceholder": "Потребителско име",
       "emailPlaceholder": "Имейл",
       "passwordPlaceholder": "Парола",
       "confirmPasswordPlaceholder": "Потвърди паролата",

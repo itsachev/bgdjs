@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { isAdmin } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { HeroEditor } from "@/components/hero-editor";
+import { LoginBackgroundEditor } from "@/components/login-background-editor";
 
 export const metadata = {
   title: "Admin",
@@ -13,6 +14,7 @@ export default async function AdminPage() {
 
   const supabase = await createClient();
   const { data: hero } = await supabase.from("hero_content").select("*").eq("id", 1).maybeSingle();
+  const { data: loginBackground } = await supabase.from("login_content").select("*").eq("id", 1).maybeSingle();
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
@@ -24,6 +26,11 @@ export default async function AdminPage() {
       <section className="mt-12">
         <h2 className="font-display text-xl font-semibold tracking-tight">Hero section</h2>
         <HeroEditor initial={hero} />
+      </section>
+
+      <section className="mt-12">
+        <h2 className="font-display text-xl font-semibold tracking-tight">Login page background</h2>
+        <LoginBackgroundEditor initial={loginBackground} />
       </section>
     </div>
   );

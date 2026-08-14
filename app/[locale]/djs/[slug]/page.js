@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 import { getDictionary, hasLocale } from "../../dictionaries";
 import { MapPinIcon, GlobeIcon, UserIcon, LinkIcon, ClockIcon } from "@/components/icons";
@@ -72,20 +73,14 @@ export default async function DjProfilePage({ params }) {
           aria-hidden="true"
           className="pointer-events-none absolute inset-y-0 right-0 -z-10 hidden w-1/2 opacity-30 mask-[linear-gradient(to_left,black_40%,transparent)] md:block"
         >
-          <img src={profile.avatar_url} alt="" className="h-full w-full object-cover" />
+          <Image src={profile.avatar_url} alt="" fill sizes="50vw" className="object-cover" />
         </div>
       )}
 
       <div className="relative mx-auto max-w-7xl px-6 py-16">
         <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)] lg:items-start lg:gap-16">
           <div className="flex flex-col items-center text-center lg:sticky lg:top-24 lg:items-start lg:text-left">
-            <div className="h-48 w-48 shrink-0 overflow-hidden rounded-full border border-border bg-background-elevated shadow-[0_0_40px_color-mix(in_oklch,var(--color-accent)_20%,transparent)] lg:h-56 lg:w-56">
-              {profile.avatar_url ? (
-                <img src={profile.avatar_url} alt={profile.display_name} className="h-full w-full object-cover" />
-              ) : null}
-            </div>
-
-            <h1 className="mt-6 uppercase bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display font-semibold tracking-tight text-transparent sm:text-3xl md:text-6xl">
+            <h1 className="uppercase bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display font-semibold tracking-tight text-transparent sm:text-3xl md:text-6xl">
               {dj?.stage_name || profile.display_name}
             </h1>
 

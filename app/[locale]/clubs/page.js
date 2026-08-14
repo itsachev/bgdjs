@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getDictionary, hasLocale } from "../dictionaries";
@@ -169,7 +170,7 @@ export default async function ClubsPage({ params, searchParams }) {
 
                   <div className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-full border border-border bg-background-elevated font-display text-xl font-semibold text-accent">
                     {avatar_url ? (
-                      <img src={avatar_url} alt={name} className="h-full w-full object-cover" />
+                      <Image src={avatar_url} alt={name} fill sizes="80px" className="object-cover" />
                     ) : (
                       name.slice(0, 2).toUpperCase()
                     )}

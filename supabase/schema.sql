@@ -142,6 +142,55 @@ create policy "Admins can delete hero media"
     and exists (select 1 from public.profiles where id = auth.uid() and role = 'admin')
   );
 
+-- Login page background content, editable via the admin CMS. Singleton row (id = 1).
+create table public.login_content (
+  id smallint primary key default 1,
+  media_url text,
+  media_path text,
+  media_type text check (media_type in ('image', 'video')),
+  updated_at timestamptz not null default now(),
+  constraint login_content_singleton check (id = 1)
+);
+
+insert into public.login_content (id) values (1);
+
+alter table public.login_content enable row level security;
+
+create policy "Login content is viewable by everyone"
+  on public.login_content for select
+  using (true);
+
+create policy "Admins can update login content"
+  on public.login_content for update
+  using (exists (select 1 from public.profiles where id = auth.uid() and role = 'admin'));
+
+-- Storage bucket for login background image/video uploads. Public so the
+-- login page can render the media directly without signed URLs.
+insert into storage.buckets (id, name, public)
+values ('login', 'login', true)
+on conflict (id) do nothing;
+
+create policy "Admins can upload login media"
+  on storage.objects for insert
+  with check (
+    bucket_id = 'login'
+    and exists (select 1 from public.profiles where id = auth.uid() and role = 'admin')
+  );
+
+create policy "Admins can update login media"
+  on storage.objects for update
+  using (
+    bucket_id = 'login'
+    and exists (select 1 from public.profiles where id = auth.uid() and role = 'admin')
+  );
+
+create policy "Admins can delete login media"
+  on storage.objects for delete
+  using (
+    bucket_id = 'login'
+    and exists (select 1 from public.profiles where id = auth.uid() and role = 'admin')
+  );
+
 -- DJ- and club-specific profile fields. 1:1 extension of public.profiles,
 -- only populated for accounts with the matching role. A row's existence
 -- (with sound_profile set, its one required field) marks that profile as

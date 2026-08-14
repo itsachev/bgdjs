@@ -62,7 +62,7 @@
     "signup": {
       "title": "Sign up",
       "metaDescription": "Create your BGDj's account as a DJ, club, or fan and join the Bulgarian DJ community.",
-      "displayNamePlaceholder": "Display name",
+      "displayNamePlaceholder": "Username",
       "emailPlaceholder": "Email",
       "passwordPlaceholder": "Password",
       "confirmPasswordPlaceholder": "Confirm password",

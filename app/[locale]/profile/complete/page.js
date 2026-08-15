@@ -60,6 +60,7 @@ export default async function ProfileCompletePage({ params }) {
       role={profile.role}
       locale={locale}
       userId={user.id}
+      accountEmail={user.email}
       profile={profile}
       roleData={roleData}
       galleryPhotos={galleryPhotos || []}

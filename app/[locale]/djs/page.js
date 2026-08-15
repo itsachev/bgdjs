@@ -3,7 +3,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getDictionary, hasLocale } from "../dictionaries";
-import { MapPinIcon } from "@/components/icons";
+import { MapPinIcon, CrownIcon, HeartIcon } from "@/components/icons";
 import { BULGARIAN_CITIES } from "@/lib/bulgarian-cities";
 import { EntitySearch } from "@/components/entity-search";
 
@@ -52,6 +52,56 @@ function cityMatches(location, needle) {
   return labels.some((label) => label.includes(needle));
 }
 
+function TopGenreDjs({ title, djs, locale, votesLabel }) {
+  if (djs.length === 0) return null;
+
+  return (
+    <div className="my-20">
+      <h2 className="font-display text-xl font-semibold tracking-tight">{title}</h2>
+      <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+        {djs.map(({ id, display_name, avatar_url, avatar_position, dj, votes }, i) => {
+          const name = dj?.stage_name || display_name;
+          const rank = i + 1;
+          return (
+            <Link
+              key={id}
+              href={`/${locale}/djs/${encodeURIComponent(display_name)}`}
+              className="group relative flex flex-col items-center gap-2 rounded-2xl border border-border bg-background-elevated p-4 text-center transition-colors hover:border-accent"
+            >
+              <span className="absolute left-3 top-3 font-display text-sm font-bold text-foreground-muted">
+                {rank}
+              </span>
+              {rank === 1 && <CrownIcon className="absolute right-3 top-3 h-4 w-4 text-yellow-400" />}
+              <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full border border-border bg-background">
+                {avatar_url ? (
+                  <Image
+                    src={avatar_url}
+                    alt={name}
+                    fill
+                    sizes="64px"
+                    className="object-cover"
+                    style={{ objectPosition: avatar_position || "50% 50%" }}
+                  />
+                ) : (
+                  <span className="flex h-full w-full items-center justify-center font-display text-lg font-semibold text-accent">
+                    {name.slice(0, 2).toUpperCase()}
+                  </span>
+                )}
+              </div>
+              <p className="truncate text-sm font-semibold tracking-tight transition-colors group-hover:text-accent">
+                {name}
+              </p>
+              <p className="flex items-center gap-1 text-xs text-foreground-muted">
+                <HeartIcon className="h-3.5 w-3.5" /> {votes} {votesLabel}
+              </p>
+            </Link>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 function pageHref(locale, { page, q, genre }) {
   const search = new URLSearchParams();
   if (q) search.set("q", q);
@@ -90,11 +140,25 @@ export default async function DjsPage({ params, searchParams }) {
     .from("dj_profiles")
     .select("id, stage_name, gender, location, sound_profile");
 
+  const { data: voteCounts } = await supabase.from("profile_vote_counts").select("target_id, votes");
+  const voteCountById = new Map((voteCounts || []).map((v) => [v.target_id, v.votes]));
+
   const djById = new Map((djProfiles || []).map((d) => [d.id, d]));
 
   let djs = (profiles || [])
     .map((p) => ({ ...p, dj: djById.get(p.id) }))
     .sort((a, b) => completenessOf(b) - completenessOf(a) || seedOf(a.id) - seedOf(b.id));
+
+  function topDjsFor(genre) {
+    return djs
+      .filter(({ dj }) => dj?.sound_profile?.split(",").map((g) => g.trim()).includes(genre))
+      .map((d) => ({ ...d, votes: voteCountById.get(d.id) || 0 }))
+      .sort((a, b) => b.votes - a.votes || seedOf(a.id) - seedOf(b.id))
+      .slice(0, 5);
+  }
+
+  const topHouseDjs = topDjsFor("House");
+  const topPopFolkDjs = topDjsFor("Pop Folk");
 
   if (query) {
     const needle = query.toLowerCase();
@@ -129,6 +193,9 @@ export default async function DjsPage({ params, searchParams }) {
           {t.title}
         </h1>
         <p className="mt-4 text-foreground-muted">{t.subtitle}</p>
+
+        <TopGenreDjs title={t.topHouse.title} djs={topHouseDjs} locale={locale} votesLabel={t.topHouse.votes} />
+        <TopGenreDjs title={t.topPopFolk.title} djs={topPopFolkDjs} locale={locale} votesLabel={t.topPopFolk.votes} />
 
         <EntitySearch
           basePath={`/${locale}/djs`}

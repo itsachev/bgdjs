@@ -7,6 +7,7 @@
     "djs": "Dee Jays",
     "clubs": "Clubs",
     "events": "Events",
+    "ranking": "Ranking",
     "login": "Log in",
     "signup": "Sign up",
     "logout": "Log out",
@@ -35,7 +36,15 @@
     "page": "Page",
     "searchPlaceholder": "Search by username, stage name, or city...",
     "search": "Search",
-    "online": "Online now"
+    "online": "Online now",
+    "topHouse": {
+      "title": "Top 5 House DJs",
+      "votes": "votes"
+    },
+    "topPopFolk": {
+      "title": "Top 5 Pop Folk DJs",
+      "votes": "votes"
+    }
   },
   "clubsPage": {
     "title": "Clubs",
@@ -106,6 +115,7 @@
       "bioLabel": "Describe yourself",
       "socialLabel": "Where to find you online",
       "socialTip": "Tip: we don't verify these links — fake ones won't make you famous, but real ones might.",
+      "contactEmailHint": "Pre-filled with your account email — shown publicly on your profile's \"Contact me\" section. Edit or clear it if you'd rather not make it public.",
       "soundProfileLabel": "Sound profile",
       "soundProfileHint": "select the styles that fit",
       "selectCity": "Select a city",
@@ -140,6 +150,7 @@
         "location": "Location",
         "website": "Website",
         "years_active": "Years active",
+        "contact_email": "Contact email",
         "instagram_url": "Instagram",
         "facebook_url": "Facebook",
         "tiktok_url": "TikTok",
@@ -177,7 +188,43 @@
       "confirmRemoveEvent": "Confirm?",
       "gallery": "Gallery",
       "gallerySeeAll": "Show me more",
-      "gallerySeeLess": "Show less"
+      "gallerySeeLess": "Show less",
+      "contact": {
+        "title": "Let's Mix",
+        "subtitle": "Open for bookings, b2b collabs, and 3AM afterparty ideas.",
+        "eyebrow": "GET IN TOUCH",
+        "copy": "Copy email",
+        "copied": "Copied!"
+      },
+      "rating": {
+        "title": "Ratings & Reviews",
+        "viewReviews": "View reviews",
+        "hideReviews": "Hide reviews",
+        "reviewsSuffix": "reviews",
+        "writeReview": "Write a review",
+        "editReview": "Edit your review",
+        "deleteReview": "Delete review",
+        "confirmDelete": "Confirm?",
+        "cancel": "Cancel",
+        "submit": "Submit review",
+        "update": "Update review",
+        "submitting": "Saving...",
+        "reviewPlaceholder": "Share your experience (optional)",
+        "loginToReview": "Log in to leave a review",
+        "errorGeneric": "Something went wrong. Please try again.",
+        "empty": "No reviews yet — be the first.",
+        "emptyOwn": "No reviews yet.",
+        "criteria": {
+          "mixing": "Mixing",
+          "trackSelection": "Track selection",
+          "crowdReading": "Crowd reading",
+          "stagePresence": "Stage presence",
+          "sound": "Sound system",
+          "atmosphere": "Atmosphere",
+          "crowd": "Crowd & vibe",
+          "service": "Service"
+        }
+      }
     }
   },
   "eventCreate": {
@@ -223,5 +270,15 @@
     "delete": "Delete",
     "confirmDelete": "Confirm?",
     "deleting": "Deleting..."
+  },
+  "ranking": {
+    "title": "Ranking",
+    "subtitle": "Vote for your favorite DJs and clubs — the community decides who's on top.",
+    "tabDjs": "DJs",
+    "tabClubs": "Clubs",
+    "vote": "Vote",
+    "voted": "Voted",
+    "loginToVote": "Log in to vote",
+    "empty": "No one to rank yet."
   }
 }

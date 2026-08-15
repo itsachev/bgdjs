@@ -7,6 +7,7 @@
     "djs": "DJ-и",
     "clubs": "Клубове",
     "events": "Събития",
+    "ranking": "Класация",
     "login": "Вход",
     "signup": "Регистрация",
     "logout": "Изход",
@@ -35,7 +36,15 @@
     "page": "Страница",
     "searchPlaceholder": "Търси по потребителско, сценично име или град...",
     "search": "Търси",
-    "online": "Онлайн сега"
+    "online": "Онлайн сега",
+    "topHouse": {
+      "title": "Топ 5 House DJ-и",
+      "votes": "гласа"
+    },
+    "topPopFolk": {
+      "title": "Топ 5 Pop Folk DJ-и",
+      "votes": "гласа"
+    }
   },
   "clubsPage": {
     "title": "Клубове",
@@ -106,6 +115,7 @@
       "bioLabel": "Опиши себе си",
       "socialLabel": "Къде да те намерят",
       "socialTip": "Съвет: не проверяваме тези линкове — фалшивите няма да те направят известен, но истинските може би ще.",
+      "contactEmailHint": "Попълнен автоматично с имейла на акаунта ти — показва се публично в секцията \"Свържи се с мен\" на профила ти. Редактирай или изтрий го, ако не искаш да е публичен.",
       "soundProfileLabel": "Музикален профил",
       "soundProfileHint": "избери стиловете, които те описват",
       "selectCity": "Избери град",
@@ -140,6 +150,7 @@
         "location": "Локация",
         "website": "Уебсайт",
         "years_active": "Години опит",
+        "contact_email": "Имейл за връзка",
         "instagram_url": "Instagram",
         "facebook_url": "Facebook",
         "tiktok_url": "TikTok",
@@ -177,7 +188,43 @@
       "confirmRemoveEvent": "Сигурен ли си?",
       "gallery": "Галерия",
       "gallerySeeAll": "Покажи ми повече",
-      "gallerySeeLess": "Покажи по-малко"
+      "gallerySeeLess": "Покажи по-малко",
+      "contact": {
+        "title": "Да миксираме",
+        "subtitle": "На линия за резервации, b2b колаборации и идеи за след 3 сутринта.",
+        "eyebrow": "СВЪРЖИ СЕ С МЕН",
+        "copy": "Копирай имейла",
+        "copied": "Копирано!"
+      },
+      "rating": {
+        "title": "Оценки и ревюта",
+        "viewReviews": "Виж ревютата",
+        "hideReviews": "Скрий ревютата",
+        "reviewsSuffix": "ревюта",
+        "writeReview": "Напиши ревю",
+        "editReview": "Редактирай ревюто си",
+        "deleteReview": "Изтрий ревюто",
+        "confirmDelete": "Потвърди?",
+        "cancel": "Отказ",
+        "submit": "Изпрати ревю",
+        "update": "Обнови ревюто",
+        "submitting": "Запазване...",
+        "reviewPlaceholder": "Сподели впечатленията си (по избор)",
+        "loginToReview": "Влез, за да оставиш ревю",
+        "errorGeneric": "Нещо се обърка. Опитай отново.",
+        "empty": "Все още няма ревюта — бъди първи.",
+        "emptyOwn": "Все още няма ревюта.",
+        "criteria": {
+          "mixing": "Миксиране",
+          "trackSelection": "Подбор на музика",
+          "crowdReading": "Усещане за публиката",
+          "stagePresence": "Сценично присъствие",
+          "sound": "Озвучение",
+          "atmosphere": "Атмосфера",
+          "crowd": "Публика и настроение",
+          "service": "Обслужване"
+        }
+      }
     }
   },
   "eventCreate": {
@@ -223,5 +270,15 @@
     "delete": "Изтрий",
     "confirmDelete": "Сигурен ли си?",
     "deleting": "Изтриване..."
+  },
+  "ranking": {
+    "title": "Класация",
+    "subtitle": "Гласувай за любимите си DJ-и и клубове — общността решава кой е на върха.",
+    "tabDjs": "DJ-и",
+    "tabClubs": "Клубове",
+    "vote": "Гласувай",
+    "voted": "Гласувано",
+    "loginToVote": "Влез, за да гласуваш",
+    "empty": "Все още няма кой да бъде класиран."
   }
 }

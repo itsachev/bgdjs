@@ -26,6 +26,7 @@ export function MobileNav({ locale, dict, isAdmin, profile }) {
     { href: `/${locale}/djs`, label: dict.nav.djs },
     { href: `/${locale}/clubs`, label: dict.nav.clubs },
     { href: `/${locale}/events`, label: dict.nav.events },
+    { href: `/${locale}/ranking`, label: dict.nav.ranking },
   ];
   if (isAdmin) {
     links.push({ href: `/${locale}/admin`, label: dict.nav.admin, admin: true });

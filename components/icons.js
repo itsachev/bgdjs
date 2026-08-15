@@ -279,3 +279,59 @@ export function TrashIcon(props) {
     </Icon>
   );
 }
+
+export function CrownIcon(props) {
+  return (
+    <Icon {...props}>
+      <path d="M3 8l4 3 5-6 5 6 4-3-2 10H5L3 8Z" fill="currentColor" stroke="none" />
+    </Icon>
+  );
+}
+
+export function HeartIcon({ filled, ...props }) {
+  return (
+    <Icon {...props}>
+      <path
+        d="M12 20s-7-4.35-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 5c-2.5 4.65-9.5 9-9.5 9Z"
+        fill={filled ? "currentColor" : "none"}
+      />
+    </Icon>
+  );
+}
+
+export function StarIcon({ filled, ...props }) {
+  return (
+    <Icon {...props}>
+      <path
+        d="M12 3.5l2.6 5.5 6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6-4.4-4.2 6-.8L12 3.5Z"
+        fill={filled ? "currentColor" : "none"}
+      />
+    </Icon>
+  );
+}
+
+export function MailIcon(props) {
+  return (
+    <Icon {...props}>
+      <rect x="3" y="5" width="18" height="14" rx="2.5" />
+      <path d="M3.5 6.5l8.5 7 8.5-7" />
+    </Icon>
+  );
+}
+
+export function CopyIcon(props) {
+  return (
+    <Icon {...props}>
+      <rect x="9" y="9" width="12" height="12" rx="2" />
+      <path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1" />
+    </Icon>
+  );
+}
+
+export function ArrowUpRightIcon(props) {
+  return (
+    <Icon {...props}>
+      <path d="M7 17 17 7M9 7h8v8" />
+    </Icon>
+  );
+}

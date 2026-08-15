@@ -10,6 +10,7 @@ export function NavLinks({ locale, dict, isAdmin }) {
     { href: `/${locale}/djs`, label: dict.nav.djs },
     { href: `/${locale}/clubs`, label: dict.nav.clubs },
     { href: `/${locale}/events`, label: dict.nav.events },
+    { href: `/${locale}/ranking`, label: dict.nav.ranking },
   ];
 
   function isActive(href) {

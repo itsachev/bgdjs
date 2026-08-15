@@ -58,6 +58,7 @@ const FIELD_KEYS = {
     { key: "location", type: "select", mandatory: true },
     { key: "website", type: "text" },
     { key: "years_active", type: "number" },
+    { key: "contact_email", type: "email", hint: "contactEmailHint" },
   ],
   club: [
     { key: "name", type: "text", mandatory: true },
@@ -83,7 +84,7 @@ const FIELD_KEYS = {
   ],
 };
 
-export function ProfileCompleteForm({ role, locale, userId, profile, roleData, galleryPhotos, mixes, dict }) {
+export function ProfileCompleteForm({ role, locale, userId, accountEmail, profile, roleData, galleryPhotos, mixes, dict }) {
   const router = useRouter();
   const t = dict.profile.complete;
   const fields = FIELD_KEYS[role];
@@ -96,6 +97,10 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, g
   const [values, setValues] = useState(() => {
     const initial = {};
     allFields.forEach((f) => {
+      if (f.key === "contact_email") {
+        initial[f.key] = roleData?.contact_email ?? accountEmail ?? "";
+        return;
+      }
       initial[f.key] = roleData?.[f.key] ?? (f.type === "dj-picker" ? [] : "");
     });
     return initial;
@@ -221,7 +226,7 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, g
         <div className="absolute bottom-0 left-[20%] h-104 w-104 rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent)_26%,transparent),transparent_70%)] blur-3xl" />
       </div>
 
-      <form onSubmit={handleSubmit} className="relative mx-auto flex max-w-7xl flex-col gap-6 px-6 py-16">
+      <form onSubmit={handleSubmit} className="relative mx-auto flex max-w-7xl flex-col gap-16 px-6 py-16">
         <div>
           <h1 className="bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display text-3xl font-semibold tracking-tight text-transparent sm:text-4xl xl:text-5xl">
             {t.title}
@@ -231,7 +236,7 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, g
           </p>
         </div>
 
-      <div className="mt-4 flex flex-col gap-2">
+      <div className="flex flex-col gap-2">
         <AvatarUpload
           userId={userId}
           initialUrl={avatarUrl}
@@ -246,7 +251,7 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, g
         )}
       </div>
 
-      <div className="mt-8 grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-2">
         <div className="flex flex-col gap-1.5">
           <label className="text-sm text-foreground-muted" htmlFor="displayName">
             {t.usernameLabel} <span className="text-red-500">*</span>
@@ -367,13 +372,14 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, g
             ) : (
               <input
                 id={f.key}
-                type={f.type === "number" ? "number" : "text"}
+                type={f.type === "number" ? "number" : f.type === "email" ? "email" : "text"}
                 required={f.mandatory}
                 value={values[f.key]}
                 onChange={(e) => setValue(f.key, e.target.value)}
                 className="rounded-lg border border-border bg-background-elevated px-4 py-2.5 outline-none focus:border-accent"
               />
             )}
+            {f.hint && <p className="text-xs text-foreground-muted">{t[f.hint]}</p>}
           </div>
         ))}
       </div>
@@ -414,7 +420,7 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, g
         </div>
       </div>
 
-      <div className="mt-4 flex flex-col gap-4">
+      <div className="flex flex-col gap-4">
         <p className="text-4xl font-semibold text-foreground">
           {t.soundProfileLabel} <span className="text-red-500">*</span>{" "}
           <span className="text-sm font-normal text-foreground-muted">— {t.soundProfileHint}</span>
@@ -454,7 +460,7 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, g
       <button
         type="submit"
         disabled={saving}
-        className="self-start rounded-full bg-[linear-gradient(to_right,var(--color-accent),var(--color-accent-2))] mt-10 px-6 py-2.5 text-sm font-semibold text-white shadow-[0_0_24px_color-mix(in_oklch,var(--color-accent)_35%,transparent)] transition-opacity hover:opacity-90 disabled:opacity-60"
+        className="self-start rounded-full bg-[linear-gradient(to_right,var(--color-accent),var(--color-accent-2))] px-6 py-2.5 text-sm font-semibold text-white shadow-[0_0_24px_color-mix(in_oklch,var(--color-accent)_35%,transparent)] transition-opacity hover:opacity-90 disabled:opacity-60"
       >
         {saving ? t.saving : t.save}
       </button>

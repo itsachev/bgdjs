@@ -34,16 +34,22 @@ export function ProfileParallaxBg({ src, position }) {
     <div
       ref={rootRef}
       aria-hidden="true"
-      className="pointer-events-none absolute inset-y-0 right-0 -z-10 hidden w-1/2 opacity-30 mask-[linear-gradient(to_left,black_40%,transparent)] md:block"
+      className="pointer-events-none absolute top-0 right-0 -z-10 hidden h-screen w-1/2 md:block"
     >
-      <Image
-        src={src}
-        alt=""
-        fill
-        sizes="50vw"
-        className="object-cover"
-        style={{ objectPosition: position || "50% 50%" }}
-      />
+      {/* Opacity + left mask live on this inner layer only, so the bottom-fade
+          overlay below isn't dimmed along with the photo and can reach a fully
+          opaque match with the page background instead of a faint 30% tint. */}
+      <div className="absolute inset-0 opacity-30 mask-[linear-gradient(to_left,black_40%,transparent)]">
+        <Image
+          src={src}
+          alt=""
+          fill
+          sizes="50vw"
+          className="object-cover"
+          style={{ objectPosition: position || "50% 50%" }}
+        />
+      </div>
+      <div className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-background to-transparent" />
     </div>
   );
 }

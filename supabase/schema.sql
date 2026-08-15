@@ -310,6 +310,10 @@ create table public.dj_profiles (
   location text,
   years_active integer,
   sound_profile text not null,
+  -- Optional, opt-in contact address shown publicly on the profile's
+  -- "Contact me" section — separate from the account's login email, which is
+  -- never exposed client-side.
+  contact_email text,
   updated_at timestamptz not null default now()
 );
 
@@ -556,3 +560,77 @@ create policy "Admins can delete events section media"
     bucket_id = 'events-section'
     and exists (select 1 from public.profiles where id = auth.uid() and role = 'admin')
   );
+
+-- DJ/club ranking votes. One vote per (voter, target) pair — toggled by
+-- inserting/deleting the row rather than an update. Any authenticated user
+-- can vote for any DJ or club except themselves.
+create table public.profile_votes (
+  id uuid primary key default gen_random_uuid(),
+  voter_id uuid not null references public.profiles (id) on delete cascade,
+  target_id uuid not null references public.profiles (id) on delete cascade,
+  created_at timestamptz not null default now(),
+  unique (voter_id, target_id),
+  constraint profile_votes_no_self_vote check (voter_id <> target_id)
+);
+
+alter table public.profile_votes enable row level security;
+
+create policy "Votes are viewable by everyone"
+  on public.profile_votes for select
+  using (true);
+
+create policy "Users can vote for DJs and clubs"
+  on public.profile_votes for insert
+  with check (
+    auth.uid() = voter_id
+    and exists (select 1 from public.profiles where id = target_id and role in ('dj', 'club'))
+  );
+
+create policy "Users can remove their own vote"
+  on public.profile_votes for delete
+  using (auth.uid() = voter_id);
+
+-- Aggregate vote counts per profile, used to sort the ranking page.
+create view public.profile_vote_counts as
+  select target_id, count(*)::int as votes
+  from public.profile_votes
+  group by target_id;
+
+-- DJ/club star ratings + written reviews. `criteria` is a flexible jsonb map
+-- of criterion key -> 1-5 int; the actual key set depends on the target's
+-- role (DJ vs club) and is enforced client-side, not in the schema, since it
+-- only ever needs to be read back as a whole for the profile page that
+-- fetches it. One review per (reviewer, target) pair — resubmitting edits
+-- the existing row instead of creating a duplicate.
+create table public.profile_reviews (
+  id uuid primary key default gen_random_uuid(),
+  reviewer_id uuid not null references public.profiles (id) on delete cascade,
+  target_id uuid not null references public.profiles (id) on delete cascade,
+  criteria jsonb not null,
+  body text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (reviewer_id, target_id),
+  constraint profile_reviews_no_self_review check (reviewer_id <> target_id)
+);
+
+alter table public.profile_reviews enable row level security;
+
+create policy "Reviews are viewable by everyone"
+  on public.profile_reviews for select
+  using (true);
+
+create policy "Users can review DJs and clubs"
+  on public.profile_reviews for insert
+  with check (
+    auth.uid() = reviewer_id
+    and exists (select 1 from public.profiles where id = target_id and role in ('dj', 'club'))
+  );
+
+create policy "Users can update their own review"
+  on public.profile_reviews for update
+  using (auth.uid() = reviewer_id);
+
+create policy "Users can delete their own review"
+  on public.profile_reviews for delete
+  using (auth.uid() = reviewer_id);

@@ -21,6 +21,7 @@ import {
 import { ProfileGallery } from "@/components/profile-gallery";
 import { ProfileEvents } from "@/components/profile-events";
 import { ProfileParallaxBg } from "@/components/profile-parallax-bg";
+import { RatingSection } from "@/components/rating-section";
 
 const SOCIAL_PLATFORMS = [
   { key: "instagram_url", label: "Instagram", icon: InstagramIcon, color: "text-pink-500" },
@@ -117,6 +118,48 @@ export default async function ClubProfilePage({ params }) {
     .eq("organizer_id", profile.id)
     .gte("starts_at", new Date().toISOString())
     .order("starts_at", { ascending: true });
+
+  const { data: reviewRows } = await supabase
+    .from("profile_reviews")
+    .select("id, reviewer_id, criteria, body, created_at")
+    .eq("target_id", profile.id)
+    .order("created_at", { ascending: false });
+
+  const reviewerIds = [...new Set((reviewRows || []).map((r) => r.reviewer_id))];
+  const { data: reviewerProfiles } = reviewerIds.length
+    ? await supabase.from("profiles").select("id, display_name, avatar_url, avatar_position").in("id", reviewerIds)
+    : { data: [] };
+  const reviewerById = new Map((reviewerProfiles || []).map((p) => [p.id, p]));
+
+  const reviews = (reviewRows || []).map((r) => {
+    const reviewer = reviewerById.get(r.reviewer_id);
+    return {
+      id: r.id,
+      reviewerId: r.reviewer_id,
+      reviewerName: reviewer?.display_name || "—",
+      reviewerAvatarUrl: reviewer?.avatar_url || null,
+      reviewerAvatarPosition: reviewer?.avatar_position || null,
+      criteria: r.criteria || {},
+      body: r.body,
+      createdAt: r.created_at,
+    };
+  });
+
+  let viewer = null;
+  if (user && user.id !== profile.id) {
+    const { data: viewerProfile } = await supabase
+      .from("profiles")
+      .select("display_name, avatar_url, avatar_position")
+      .eq("id", user.id)
+      .maybeSingle();
+    if (viewerProfile) {
+      viewer = {
+        name: viewerProfile.display_name,
+        avatarUrl: viewerProfile.avatar_url,
+        avatarPosition: viewerProfile.avatar_position,
+      };
+    }
+  }
 
   const isOwner = user?.id === profile.id;
 
@@ -316,6 +359,21 @@ export default async function ClubProfilePage({ params }) {
             />
           </div>
         )}
+
+        <div className="mt-28">
+          <RatingSection
+            targetId={profile.id}
+            targetRole="club"
+            reviews={reviews}
+            userId={user?.id ?? null}
+            viewer={viewer}
+            locale={locale}
+            dict={t.rating}
+            title={t.rating.title}
+            seeAllLabel={t.gallerySeeAll}
+            seeLessLabel={t.gallerySeeLess}
+          />
+        </div>
       </div>
     </div>
   );

@@ -121,7 +121,7 @@ export function ResidentDjPicker({ value, onChange, t }) {
         tabIndex={0}
         onClick={() => setOpen(true)}
         onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && setOpen(true)}
-        className="flex min-h-11 w-full flex-wrap items-center gap-1.5 rounded-lg border border-border bg-background-elevated px-3 py-2 outline-none focus:border-accent"
+        className="inline-flex min-h-11 max-w-full flex-wrap items-center gap-1.5 rounded-lg border border-border bg-background-elevated px-3 py-2 outline-none focus:border-accent"
       >
         {entries.length === 0 ? (
           <span className="px-1 text-foreground-muted">{t.residentDjPlaceholder}</span>

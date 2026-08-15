@@ -8,6 +8,7 @@ import {
   UserIcon,
   LinkIcon,
   ClockIcon,
+  MusicNoteIcon,
   InstagramIcon,
   FacebookIcon,
   TiktokIcon,
@@ -111,7 +112,7 @@ export default async function DjProfilePage({ params }) {
             </h1>
 
             {profile.bio && (
-              <p className="mt-4 w-full text-left text-foreground-muted lg:max-w-md">{profile.bio}</p>
+              <p className="mt-4 w-full whitespace-pre-wrap text-left text-foreground-muted lg:max-w-md">{profile.bio}</p>
             )}
 
             {isOwner && (
@@ -126,15 +127,20 @@ export default async function DjProfilePage({ params }) {
 
           <div className="mt-10 lg:mt-0">
             {genres.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {genres.map((genre) => (
-                  <span
-                    key={genre}
-                    className="rounded-full border border-border px-4 py-1.5 text-sm font-medium text-foreground-muted"
-                  >
-                    {genre}
-                  </span>
-                ))}
+              <div>
+                <p className="flex items-center gap-1.5 text-xs uppercase tracking-wide text-foreground-muted">
+                  <MusicNoteIcon className="h-3.5 w-3.5" /> {t.soundProfile}
+                </p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {genres.map((genre) => (
+                    <span
+                      key={genre}
+                      className="rounded-full border border-border px-4 py-1.5 text-sm font-medium text-foreground-muted"
+                    >
+                      {genre}
+                    </span>
+                  ))}
+                </div>
               </div>
             )}
 

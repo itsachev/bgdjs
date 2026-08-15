@@ -219,7 +219,7 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, d
         <div className="absolute bottom-0 left-[20%] h-104 w-104 rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent)_26%,transparent),transparent_70%)] blur-3xl" />
       </div>
 
-      <form onSubmit={handleSubmit} className="relative mx-auto flex max-w-2xl flex-col gap-6 px-6 py-16">
+      <form onSubmit={handleSubmit} className="relative mx-auto flex max-w-4xl flex-col gap-6 px-6 py-16">
         <div>
           <h1 className="bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display text-3xl font-semibold tracking-tight text-transparent sm:text-4xl xl:text-5xl">
             {t.title}
@@ -308,7 +308,7 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, d
           <div
             key={f.key}
             className={`flex flex-col gap-1.5 ${
-              f.type === "textarea" || f.type === "pills" || f.type === "dj-picker" ? "md:col-span-2" : ""
+              f.type === "textarea" || f.type === "pills" ? "md:col-span-2" : ""
             }`}
           >
             <label className="flex items-center gap-1.5 text-sm text-foreground-muted" htmlFor={f.key}>
@@ -436,7 +436,7 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, d
       <button
         type="submit"
         disabled={saving}
-        className="self-start rounded-full bg-[linear-gradient(to_right,var(--color-accent),var(--color-accent-2))] px-6 py-2.5 text-sm font-semibold text-white shadow-[0_0_24px_color-mix(in_oklch,var(--color-accent)_35%,transparent)] transition-opacity hover:opacity-90 disabled:opacity-60"
+        className="self-start rounded-full bg-[linear-gradient(to_right,var(--color-accent),var(--color-accent-2))] mt-10 px-6 py-2.5 text-sm font-semibold text-white shadow-[0_0_24px_color-mix(in_oklch,var(--color-accent)_35%,transparent)] transition-opacity hover:opacity-90 disabled:opacity-60"
       >
         {saving ? t.saving : t.save}
       </button>

@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 import { getDictionary, hasLocale } from "../../dictionaries";
 import {
@@ -16,6 +15,8 @@ import {
   MixcloudIcon,
   YoutubeIcon,
 } from "@/components/icons";
+import { ProfileGallery } from "@/components/profile-gallery";
+import { ProfileParallaxBg } from "@/components/profile-parallax-bg";
 
 const SOCIAL_PLATFORMS = [
   { key: "instagram_url", label: "Instagram", icon: InstagramIcon, color: "text-pink-500" },
@@ -78,6 +79,12 @@ export default async function DjProfilePage({ params }) {
     : [];
   const socialLinks = SOCIAL_PLATFORMS.filter((p) => dj?.[p.key]);
 
+  const { data: galleryPhotos } = await supabase
+    .from("profile_gallery")
+    .select("id, url, width, height")
+    .eq("profile_id", profile.id)
+    .order("created_at", { ascending: true });
+
   const isOwner = user?.id === profile.id;
 
   return (
@@ -89,19 +96,7 @@ export default async function DjProfilePage({ params }) {
       </div>
 
       {profile.avatar_url && (
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 right-0 -z-10 hidden w-1/2 opacity-30 mask-[linear-gradient(to_left,black_40%,transparent)] md:block"
-        >
-          <Image
-            src={profile.avatar_url}
-            alt=""
-            fill
-            sizes="50vw"
-            className="object-cover"
-            style={{ objectPosition: profile.avatar_position || "50% 50%" }}
-          />
-        </div>
+        <ProfileParallaxBg src={profile.avatar_url} position={profile.avatar_position} />
       )}
 
       <div className="relative mx-auto max-w-7xl px-6 py-16">
@@ -213,6 +208,17 @@ export default async function DjProfilePage({ params }) {
             )}
           </div>
         </div>
+
+        {galleryPhotos?.length > 0 && (
+          <div className="mt-28">
+            <ProfileGallery
+              photos={galleryPhotos}
+              title={t.gallery}
+              seeAllLabel={t.gallerySeeAll}
+              seeLessLabel={t.gallerySeeLess}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -388,3 +388,44 @@ create policy "Users can update their own avatar"
 create policy "Users can delete their own avatar"
   on storage.objects for delete
   using (bucket_id = 'avatars' and owner = auth.uid());
+
+-- Photo gallery shown on DJ and club profile pages. One row per photo,
+-- ordered by upload time (created_at) — owners can add and remove but not
+-- reorder in place.
+create table public.profile_gallery (
+  id uuid primary key default gen_random_uuid(),
+  profile_id uuid not null references public.profiles (id) on delete cascade,
+  url text not null,
+  path text not null,
+  -- Captured client-side at upload time so the gallery can reserve the
+  -- correct aspect ratio before the image loads (no layout shift).
+  width integer,
+  height integer,
+  created_at timestamptz not null default now()
+);
+
+alter table public.profile_gallery enable row level security;
+
+create policy "Gallery photos are viewable by everyone"
+  on public.profile_gallery for select
+  using (true);
+
+create policy "Owners can add their own gallery photos"
+  on public.profile_gallery for insert
+  with check (auth.uid() = profile_id);
+
+create policy "Owners can delete their own gallery photos"
+  on public.profile_gallery for delete
+  using (auth.uid() = profile_id);
+
+insert into storage.buckets (id, name, public)
+values ('gallery', 'gallery', true)
+on conflict (id) do nothing;
+
+create policy "Authenticated users can upload gallery photos"
+  on storage.objects for insert
+  with check (bucket_id = 'gallery' and auth.role() = 'authenticated');
+
+create policy "Owners can delete their own gallery photos from storage"
+  on storage.objects for delete
+  using (bucket_id = 'gallery' and owner = auth.uid());

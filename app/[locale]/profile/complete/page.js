@@ -39,6 +39,11 @@ export default async function ProfileCompletePage({ params }) {
 
   const table = profile.role === "dj" ? "dj_profiles" : "club_profiles";
   const { data: roleData } = await supabase.from(table).select("*").eq("id", user.id).maybeSingle();
+  const { data: galleryPhotos } = await supabase
+    .from("profile_gallery")
+    .select("id, url, path, width, height")
+    .eq("profile_id", user.id)
+    .order("created_at", { ascending: true });
 
   return (
     <ProfileCompleteForm
@@ -47,6 +52,7 @@ export default async function ProfileCompletePage({ params }) {
       userId={user.id}
       profile={profile}
       roleData={roleData}
+      galleryPhotos={galleryPhotos || []}
       dict={dict}
     />
   );

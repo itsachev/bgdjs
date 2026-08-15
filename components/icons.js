@@ -210,3 +210,29 @@ export function PlusIcon(props) {
     </Icon>
   );
 }
+
+export function ChevronLeftIcon(props) {
+  return (
+    <Icon {...props}>
+      <path d="M15 6l-6 6 6 6" />
+    </Icon>
+  );
+}
+
+export function ChevronRightIcon(props) {
+  return (
+    <Icon {...props}>
+      <path d="M9 6l6 6-6 6" />
+    </Icon>
+  );
+}
+
+export function ImageIcon(props) {
+  return (
+    <Icon {...props}>
+      <rect x="3" y="4" width="18" height="16" rx="3" />
+      <circle cx="9" cy="10" r="1.8" />
+      <path d="M4.5 17.5l5-5 3.5 3.5 2.5-2.5 4.5 4.5" />
+    </Icon>
+  );
+}

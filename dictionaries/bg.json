@@ -119,6 +119,10 @@
       "residentDjAddHint": "Още не е регистриран? Добави го по име.",
       "residentDjSelected": "избрани",
       "residentDjDone": "Готово",
+      "galleryLabel": "Галерия",
+      "galleryHint": "Добави няколко снимки от сетовете, локацията или публиката — до 12.",
+      "galleryUpload": "Добави снимки",
+      "galleryUploading": "Качване...",
       "fields": {
         "stage_name": "Сценично име",
         "genre": "Жанр",
@@ -158,7 +162,10 @@
       "location": "Локация",
       "website": "Уебсайт",
       "yearsActive": "Години опит",
-      "social": "Социални мрежи"
+      "social": "Социални мрежи",
+      "gallery": "Галерия",
+      "gallerySeeAll": "Покажи ми повече",
+      "gallerySeeLess": "Покажи по-малко"
     }
   }
 }

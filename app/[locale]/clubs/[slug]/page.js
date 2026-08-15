@@ -18,6 +18,7 @@ import {
   MixcloudIcon,
   YoutubeIcon,
 } from "@/components/icons";
+import { ProfileGallery } from "@/components/profile-gallery";
 
 const SOCIAL_PLATFORMS = [
   { key: "instagram_url", label: "Instagram", icon: InstagramIcon, color: "text-pink-500" },
@@ -101,6 +102,12 @@ export default async function ClubProfilePage({ params }) {
     ? club.sound_profile.split(",").map((g) => g.trim()).filter(Boolean)
     : [];
   const socialLinks = SOCIAL_PLATFORMS.filter((p) => club?.[p.key]);
+
+  const { data: galleryPhotos } = await supabase
+    .from("profile_gallery")
+    .select("id, url, width, height")
+    .eq("profile_id", profile.id)
+    .order("created_at", { ascending: true });
 
   const isOwner = user?.id === profile.id;
 
@@ -190,7 +197,7 @@ export default async function ClubProfilePage({ params }) {
               {club?.location && (
                 <div className="rounded-xl border border-border bg-background-elevated/40 p-4">
                   <dt className="flex items-center gap-1.5 text-xs uppercase tracking-wide text-foreground-muted">
-                    <MapPinIcon className="h-3.5 w-3.5" /> {t.location}
+                    <MapPinIcon className="uppeh-3.5 w-3.5" /> {t.location}
                   </dt>
                   <dd className="mt-1.5 font-medium">{club.location}</dd>
                 </div>
@@ -205,7 +212,7 @@ export default async function ClubProfilePage({ params }) {
                       <a
                         key={dj.id}
                         href={`/${locale}/djs/${encodeURIComponent(dj.display_name)}`}
-                        className="flex items-center gap-2 rounded-full border border-border bg-background-elevated py-1 pl-1 pr-3 text-sm font-medium transition-colors hover:border-accent hover:text-accent"
+                        className="uppercase flex items-center gap-2 rounded-full border border-border bg-background-elevated py-1 pl-1 pr-3 text-sm font-medium transition-colors hover:border-accent hover:text-accent"
                       >
                         {dj.avatar_url ? (
                           <Image
@@ -286,6 +293,17 @@ export default async function ClubProfilePage({ params }) {
             )}
           </div>
         </div>
+
+        {galleryPhotos?.length > 0 && (
+          <div className="mt-28">
+            <ProfileGallery
+              photos={galleryPhotos}
+              title={t.gallery}
+              seeAllLabel={t.gallerySeeAll}
+              seeLessLabel={t.gallerySeeLess}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

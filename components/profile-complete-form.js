@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { AvatarUpload } from "@/components/avatar-upload";
 import { ResidentDjPicker } from "@/components/resident-dj-picker";
+import { GalleryEditor } from "@/components/gallery-editor";
 import { BULGARIAN_CITIES } from "@/lib/bulgarian-cities";
 import {
   InstagramIcon,
@@ -81,7 +82,7 @@ const FIELD_KEYS = {
   ],
 };
 
-export function ProfileCompleteForm({ role, locale, userId, profile, roleData, dict }) {
+export function ProfileCompleteForm({ role, locale, userId, profile, roleData, galleryPhotos, dict }) {
   const router = useRouter();
   const t = dict.profile.complete;
   const fields = FIELD_KEYS[role];
@@ -396,6 +397,11 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, d
           ))}
         </div>
         <p className="text-xs text-foreground-muted">{t.socialTip}</p>
+      </div>
+
+      <div className="flex flex-col gap-4 rounded-2xl border border-border bg-background-elevated/40 p-5">
+        <p className="text-sm font-medium text-foreground">{t.galleryLabel}</p>
+        <GalleryEditor userId={userId} initial={galleryPhotos} t={t} />
       </div>
 
       <div className="mt-4 flex flex-col gap-4">

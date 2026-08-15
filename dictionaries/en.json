@@ -119,6 +119,10 @@
       "residentDjAddHint": "Not registered yet? Add them by name.",
       "residentDjSelected": "selected",
       "residentDjDone": "Done",
+      "galleryLabel": "Gallery",
+      "galleryHint": "Add a few photos of your sets, the venue, or the crowd — up to 12.",
+      "galleryUpload": "Add photos",
+      "galleryUploading": "Uploading...",
       "fields": {
         "stage_name": "Stage name",
         "genre": "Genre",
@@ -158,7 +162,10 @@
       "location": "Location",
       "website": "Website",
       "yearsActive": "Years active",
-      "social": "Social"
+      "social": "Social",
+      "gallery": "Gallery",
+      "gallerySeeAll": "Show me more",
+      "gallerySeeLess": "Show less"
     }
   }
 }

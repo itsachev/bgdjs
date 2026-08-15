@@ -57,7 +57,8 @@ export function ParallaxSection({ children, className = "", media }) {
             ) : (
               <Image src={media.url} alt="" fill sizes="100vw" className="object-cover" />
             )}
-            <div className="absolute inset-0 bg-linear-to-b from-background/50 via-background/85 to-background" />
+            {/* Fixed dark scrim regardless of site theme — a light-theme fade here would wash the photo out to white. */}
+            <div className="absolute inset-0 bg-linear-to-b from-[#07060a]/50 via-[#07060a]/85 to-[#07060a]" />
           </div>
         ) : (
           <>

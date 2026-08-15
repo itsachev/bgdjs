@@ -28,7 +28,7 @@ export function NavLinks({ locale, dict, isAdmin }) {
         >
           <span className="relative block h-[1em] overflow-hidden leading-none">
             <span className="flex flex-col leading-none transition-transform duration-300 ease-[cubic-bezier(0.65,0,0.35,1)] group-hover:-translate-y-1/2">
-              <span className={isActive(link.href) ? "text-accent" : "text-white"}>{link.label}</span>
+              <span className={isActive(link.href) ? "text-accent" : "text-foreground"}>{link.label}</span>
               <span className="text-accent" aria-hidden="true">
                 {link.label}
               </span>

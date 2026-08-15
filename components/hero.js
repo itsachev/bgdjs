@@ -63,7 +63,8 @@ export function Hero({ dict, locale, hero }) {
             ) : (
               <Image src={mediaUrl} alt="" fill sizes="100vw" preload className="object-cover" />
             )}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/90 to-background" />
+            {/* Fixed dark scrim regardless of site theme — a light-theme fade here would wash the photo out to white. */}
+            <div className="absolute inset-0 bg-linear-to-b from-black/60 via-black/90 to-[#07060a]" />
           </>
         ) : (
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,color-mix(in_oklch,var(--color-accent)_22%,transparent),transparent_60%)]" />
@@ -73,9 +74,11 @@ export function Hero({ dict, locale, hero }) {
       {/* <p data-hero-eyebrow className="mb-4 text-sm font-medium uppercase tracking-[0.25em] text-accent">
         {dict.hero.eyebrow}
       </p> */}
+      {/* Fixed dark-theme gradient stops regardless of site theme — against a
+          photo background, a light-theme dark start color went unreadable. */}
       <h1
         data-hero-title
-        className="text-balance bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display text-4xl font-bold tracking-tight text-transparent sm:text-5xl md:text-6xl xl:text-7xl"
+        className="text-balance bg-[linear-gradient(to_right,#f4f2fb,#a855f7_60%,#22ffd1)] bg-clip-text font-display text-4xl font-bold tracking-tight text-transparent sm:text-5xl md:text-6xl xl:text-7xl"
       >
         {title}
       </h1>

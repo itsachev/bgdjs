@@ -1,23 +1,15 @@
 import Link from "next/link";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getDictionary, hasLocale } from "../dictionaries";
-import { MapPinIcon, CrownIcon, HeartIcon } from "@/components/icons";
+import { ChevronLeftIcon, ChevronRightIcon } from "@/components/icons";
 import { BULGARIAN_CITIES } from "@/lib/bulgarian-cities";
 import { EntitySearch } from "@/components/entity-search";
 import { AmbientGlow } from "@/components/ambient-glow";
 import { Kicker } from "@/components/kicker";
+import { DjDirectory } from "@/components/dj-directory";
 
 const PAGE_SIZE = 20;
-
-// Matches the presence heartbeat interval (60s) with buffer for network lag.
-const ONLINE_THRESHOLD_MS = 2 * 60 * 1000;
-
-function isOnline(lastSeenAt) {
-  if (!lastSeenAt) return false;
-  return Date.now() - new Date(lastSeenAt).getTime() < ONLINE_THRESHOLD_MS;
-}
 
 // Genre names are kept in Latin script for both locales, matching the
 // sound-profile pills on the profile-completion form.
@@ -52,53 +44,6 @@ function cityMatches(location, needle) {
   if (!location) return false;
   const labels = CITY_LABELS.get(location) || [location.toLowerCase()];
   return labels.some((label) => label.includes(needle));
-}
-
-function TopGenreDjs({ title, djs, locale, votesLabel }) {
-  if (djs.length === 0) return null;
-
-  return (
-    <div className="my-20">
-      <h2 className="font-display text-display-3 font-bold tracking-tight">{title}</h2>
-      <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-        {djs.map(({ id, display_name, avatar_url, avatar_position, dj, votes }, i) => {
-          const name = dj?.stage_name || display_name;
-          const rank = i + 1;
-          return (
-            <Link
-              key={id}
-              href={`/${locale}/djs/${encodeURIComponent(display_name)}`}
-              className="group relative flex flex-col items-center gap-2 rounded-2xl border border-border bg-background-elevated p-4 text-center transition-colors hover:border-accent"
-            >
-              {rank === 1 && <CrownIcon className="absolute right-3 top-3 h-4 w-4 text-yellow-400" />}
-              <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full border border-border bg-background">
-                {avatar_url ? (
-                  <Image
-                    src={avatar_url}
-                    alt={name}
-                    fill
-                    sizes="64px"
-                    className="object-cover"
-                    style={{ objectPosition: avatar_position || "50% 50%" }}
-                  />
-                ) : (
-                  <span className="flex h-full w-full items-center justify-center font-display text-lg font-semibold text-accent">
-                    {name.slice(0, 2).toUpperCase()}
-                  </span>
-                )}
-              </div>
-              <p className="truncate text-sm font-semibold tracking-tight transition-colors group-hover:text-accent">
-                {name}
-              </p>
-              <p className="flex items-center gap-1 text-xs text-foreground-muted">
-                <HeartIcon className="h-3.5 w-3.5" /> {votes} {votesLabel}
-              </p>
-            </Link>
-          );
-        })}
-      </div>
-    </div>
-  );
 }
 
 function pageHref(locale, { page, q, genre }) {
@@ -184,147 +129,77 @@ export default async function DjsPage({ params, searchParams }) {
       <AmbientGlow variant="directory" />
 
       <div className="relative mx-auto max-w-7xl px-6 py-16">
-        <div className="flex flex-wrap items-start justify-between gap-6">
-          <div>
-            <Kicker>{dict.nav.djs}</Kicker>
-            <h1 className="mt-3 font-display text-display-2 font-bold tracking-tight">{t.title}</h1>
-            <p className="mt-4 text-foreground-muted">{t.subtitle}</p>
-          </div>
-          <div className="flex w-full flex-col gap-3 sm:w-72">
-            <EntitySearch
-              basePath={`/${locale}/djs`}
-              searchApi="/api/djs/search"
-              initialQuery={query}
-              initialGenre={genre}
-              placeholder={t.searchPlaceholder}
-              searchLabel={t.search}
-            />
-            <div className="flex flex-wrap gap-x-5 gap-y-2">
-              {QUICK_GENRES.map((g) => {
-                const active = genre === g;
-                return (
-                  <Link
-                    key={g}
-                    href={pageHref(locale, { page: 1, q: query, genre: active ? "" : g })}
-                    className={`relative pb-1 text-sm font-semibold uppercase tracking-wide transition-colors after:absolute after:-bottom-0.5 after:left-0 after:h-0.5 after:w-full after:origin-left after:scale-x-0 after:bg-accent after:transition-transform after:duration-300 after:content-[''] ${
-                      active ? "text-accent after:scale-x-100" : "text-foreground-muted hover:text-foreground"
-                    }`}
-                  >
-                    {g}
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
+        <div>
+          <Kicker>{dict.nav.djs}</Kicker>
+          <h1 className="mt-3 font-display text-display-2 font-bold tracking-tight">{t.title}</h1>
+          <p className="mt-4 max-w-lg text-foreground-muted">{t.subtitle}</p>
         </div>
 
-        <TopGenreDjs title={t.topHouse.title} djs={topHouseDjs} locale={locale} votesLabel={t.topHouse.votes} />
-        <TopGenreDjs title={t.topPopFolk.title} djs={topPopFolkDjs} locale={locale} votesLabel={t.topPopFolk.votes} />
-
-        {pageDjs.length === 0 ? (
-          <p className="mt-16 text-foreground-muted">{query || genre ? t.noResults : t.empty}</p>
-        ) : (
-          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {pageDjs.map(({ id, display_name, avatar_url, avatar_position, last_seen_at, dj }) => {
-              const name = dj?.stage_name || display_name;
-              const genres = dj?.sound_profile
-                ? dj.sound_profile.split(",").map((g) => g.trim()).filter(Boolean).slice(0, 3)
-                : [];
-
+        <div className="mt-10 flex flex-col gap-5 border-y border-border py-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-wrap gap-x-6 gap-y-2">
+            {QUICK_GENRES.map((g) => {
+              const active = genre === g;
               return (
                 <Link
-                  key={id}
-                  href={`/${locale}/djs/${encodeURIComponent(display_name)}`}
-                  className="group relative flex flex-col items-center gap-3 overflow-hidden rounded-2xl border border-border bg-[linear-gradient(135deg,color-mix(in_oklch,var(--color-accent)_7%,var(--color-background-elevated)),color-mix(in_oklch,var(--color-accent-2)_7%,var(--color-background-elevated)))] bg-size-[200%_200%] bg-top-left p-6 text-center transition-all duration-500 [@media(hover:hover)]:hover:-translate-y-1 [@media(hover:hover)]:hover:bg-bottom-right"
+                  key={g}
+                  href={pageHref(locale, { page: 1, q: query, genre: active ? "" : g })}
+                  className={`relative pb-1 text-sm font-semibold uppercase tracking-wide transition-colors after:absolute after:-bottom-0.5 after:left-0 after:h-0.5 after:w-full after:origin-left after:scale-x-0 after:bg-accent after:transition-transform after:duration-300 after:content-[''] ${
+                    active ? "text-accent after:scale-x-100" : "text-foreground-muted hover:text-foreground"
+                  }`}
                 >
-                  <div
-                    aria-hidden="true"
-                    className="pointer-events-none absolute -top-16 -right-16 -z-10 h-40 w-40 rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent)_30%,transparent),transparent_70%)] opacity-30 blur-2xl transition-all duration-500 [@media(hover:hover)]:group-hover:scale-125 [@media(hover:hover)]:group-hover:opacity-100"
-                  />
-                  <div
-                    aria-hidden="true"
-                    className="pointer-events-none absolute -bottom-16 -left-16 -z-10 h-40 w-40 rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent-2)_25%,transparent),transparent_70%)] opacity-30 blur-2xl transition-all duration-500 [@media(hover:hover)]:group-hover:scale-125 [@media(hover:hover)]:group-hover:opacity-80"
-                  />
-
-                  <div className="relative h-20 w-20 shrink-0">
-                    <div className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-full border border-border bg-background-elevated font-display text-xl font-semibold text-accent">
-                      {avatar_url ? (
-                        <Image
-                          src={avatar_url}
-                          alt={name}
-                          fill
-                          sizes="80px"
-                          className="object-cover"
-                          style={{ objectPosition: avatar_position || "50% 50%" }}
-                        />
-                      ) : (
-                        name.slice(0, 2).toUpperCase()
-                      )}
-                    </div>
-                    {isOnline(last_seen_at) && (
-                      <span className="group/status absolute bottom-0.5 right-0.5">
-                        <span className="block h-3.5 w-3.5 rounded-full border-2 border-background bg-green-500" />
-                        <span className="pointer-events-none absolute bottom-full right-0 mb-1.5 whitespace-nowrap rounded-md bg-background-elevated px-2 py-1 text-xs font-medium text-foreground opacity-0 shadow-lg ring-1 ring-border transition-opacity duration-150 group-hover/status:opacity-100">
-                          {t.online}
-                        </span>
-                      </span>
-                    )}
-                  </div>
-
-                  <p className="font-display font-semibold tracking-tight transition-colors group-hover:text-accent">
-                    {name}
-                  </p>
-
-                  {dj?.location && (
-                    <p className="flex items-center gap-1 text-xs text-foreground-muted">
-                      <MapPinIcon className="h-3.5 w-3.5" /> {dj.location}
-                    </p>
-                  )}
-
-                  {genres.length > 0 && (
-                    <div className="mt-1 flex flex-wrap justify-center gap-1.5">
-                      {genres.map((genre) => (
-                        <span
-                          key={genre}
-                          className="rounded-full border border-border px-2.5 py-0.5 text-xs text-foreground-muted"
-                        >
-                          {genre}
-                        </span>
-                      ))}
-                    </div>
-                  )}
+                  {g}
                 </Link>
               );
             })}
           </div>
-        )}
+          <EntitySearch
+            basePath={`/${locale}/djs`}
+            searchApi="/api/djs/search"
+            initialQuery={query}
+            initialGenre={genre}
+            placeholder={t.searchPlaceholder}
+            searchLabel={t.search}
+            className="w-full sm:w-72"
+          />
+        </div>
+
+        <DjDirectory
+          topHouseDjs={topHouseDjs}
+          topHouseTitle={t.topHouse.title}
+          topHouseVotesLabel={t.topHouse.votes}
+          topPopFolkDjs={topPopFolkDjs}
+          topPopFolkTitle={t.topPopFolk.title}
+          topPopFolkVotesLabel={t.topPopFolk.votes}
+          pageDjs={pageDjs}
+          locale={locale}
+          onlineLabel={t.online}
+          emptyMessage={query || genre ? t.noResults : t.empty}
+        />
 
         {totalPages > 1 && (
-          <div className="mt-12 flex items-center justify-center gap-4">
+          <div className="mt-16 flex items-center justify-center gap-4">
             <Link
               href={pageHref(locale, { page: currentPage - 1, q: query, genre })}
               aria-disabled={currentPage <= 1}
-              className={`rounded-full border border-border px-4 py-2 text-sm font-medium transition-colors ${
-                currentPage <= 1
-                  ? "pointer-events-none opacity-40"
-                  : "hover:border-accent hover:text-accent"
+              aria-label={t.prev}
+              className={`flex h-10 w-10 items-center justify-center rounded-full border border-border transition-colors ${
+                currentPage <= 1 ? "pointer-events-none opacity-30" : "hover:border-accent hover:text-accent"
               }`}
             >
-              {t.prev}
+              <ChevronLeftIcon className="h-4 w-4" />
             </Link>
-            <p className="text-sm text-foreground-muted">
+            <p className="text-sm font-medium text-foreground-muted">
               {t.page} {currentPage} / {totalPages}
             </p>
             <Link
               href={pageHref(locale, { page: currentPage + 1, q: query, genre })}
               aria-disabled={currentPage >= totalPages}
-              className={`rounded-full border border-border px-4 py-2 text-sm font-medium transition-colors ${
-                currentPage >= totalPages
-                  ? "pointer-events-none opacity-40"
-                  : "hover:border-accent hover:text-accent"
+              aria-label={t.next}
+              className={`flex h-10 w-10 items-center justify-center rounded-full border border-border transition-colors ${
+                currentPage >= totalPages ? "pointer-events-none opacity-30" : "hover:border-accent hover:text-accent"
               }`}
             >
-              {t.next}
+              <ChevronRightIcon className="h-4 w-4" />
             </Link>
           </div>
         )}

@@ -26,9 +26,9 @@ function PlaceholderGrid({ title, count = 3 }) {
   );
 }
 
-function EventsSection({ title, viewAllLabel, emptyLabel, events, locale }) {
+function EventsSection({ title, viewAllLabel, emptyLabel, events, locale, media }) {
   return (
-    <ParallaxSection className="mx-auto max-w-7xl px-6 py-20">
+    <ParallaxSection className="mx-auto max-w-7xl px-6 py-20" media={media}>
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">{title}</h2>
         <Link
@@ -58,6 +58,11 @@ export default async function HomePage({ params }) {
 
   const supabase = await createClient();
   const { data: hero } = await supabase.from("hero_content").select("*").eq("id", 1).maybeSingle();
+  const { data: eventsSection } = await supabase
+    .from("events_section_content")
+    .select("*")
+    .eq("id", 1)
+    .maybeSingle();
   const { data: events } = await supabase
     .from("events")
     .select("id, title, cover_url, starts_at, city, venue_name, price_info")
@@ -65,15 +70,21 @@ export default async function HomePage({ params }) {
     .order("starts_at", { ascending: true })
     .limit(UPCOMING_EVENTS_LIMIT);
 
+  const eventsSectionTitle = eventsSection?.[`title_${locale}`] || dict.sections.events;
+  const eventsSectionMedia = eventsSection?.media_url
+    ? { url: eventsSection.media_url, type: eventsSection.media_type }
+    : null;
+
   return (
     <>
       <Hero dict={dict} locale={locale} hero={hero} />
       <EventsSection
-        title={dict.sections.events}
+        title={eventsSectionTitle}
         viewAllLabel={dict.sections.viewAll}
         emptyLabel={dict.eventsPage.empty}
         events={events || []}
         locale={locale}
+        media={eventsSectionMedia}
       />
       <PlaceholderGrid title={dict.sections.djs} />
       <PlaceholderGrid title={dict.sections.clubs} />

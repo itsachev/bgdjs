@@ -505,3 +505,54 @@ create policy "Owners can update their own event covers"
 create policy "Owners can delete their own event covers"
   on storage.objects for delete
   using (bucket_id = 'events' and owner = auth.uid());
+
+-- Homepage "Upcoming events" section content, editable via the admin CMS.
+-- Singleton row (id = 1).
+create table public.events_section_content (
+  id smallint primary key default 1,
+  title_bg text,
+  title_en text,
+  media_url text,
+  media_path text,
+  media_type text check (media_type in ('image', 'video')),
+  updated_at timestamptz not null default now(),
+  constraint events_section_content_singleton check (id = 1)
+);
+
+insert into public.events_section_content (id) values (1);
+
+alter table public.events_section_content enable row level security;
+
+create policy "Events section content is viewable by everyone"
+  on public.events_section_content for select
+  using (true);
+
+create policy "Admins can update events section content"
+  on public.events_section_content for update
+  using (exists (select 1 from public.profiles where id = auth.uid() and role = 'admin'));
+
+-- Storage bucket for the events-section background image/video upload.
+insert into storage.buckets (id, name, public)
+values ('events-section', 'events-section', true)
+on conflict (id) do nothing;
+
+create policy "Admins can upload events section media"
+  on storage.objects for insert
+  with check (
+    bucket_id = 'events-section'
+    and exists (select 1 from public.profiles where id = auth.uid() and role = 'admin')
+  );
+
+create policy "Admins can update events section media"
+  on storage.objects for update
+  using (
+    bucket_id = 'events-section'
+    and exists (select 1 from public.profiles where id = auth.uid() and role = 'admin')
+  );
+
+create policy "Admins can delete events section media"
+  on storage.objects for delete
+  using (
+    bucket_id = 'events-section'
+    and exists (select 1 from public.profiles where id = auth.uid() and role = 'admin')
+  );

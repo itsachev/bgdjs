@@ -18,7 +18,7 @@ export function NavLinks({ locale, dict, isAdmin }) {
   }
 
   return (
-    <nav className="hidden items-center gap-8 text-sm font-medium text-foreground-muted md:flex">
+    <nav className="hidden items-center gap-8 text-sm font-medium text-foreground-muted nav:flex">
       {links.map((link) => (
         <Link
           key={link.href}

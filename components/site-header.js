@@ -22,7 +22,7 @@ export async function SiteHeader({ locale, dict }) {
         <NavLinks locale={locale} dict={dict} isAdmin={isAdmin} />
 
         <div className="flex items-center gap-4">
-          <div className="hidden items-center gap-4 md:flex">
+          <div className="hidden items-center gap-4 nav:flex">
             <LocaleSwitcher locale={locale} />
             <ThemeToggle />
             {profile ? (

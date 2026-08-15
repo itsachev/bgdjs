@@ -196,6 +196,7 @@ export function EventCreateForm({ locale, userId, t, event }) {
             <input
               id="event-starts-at"
               type="datetime-local"
+              lang="bg-BG"
               required
               value={startsAt}
               onChange={(e) => setStartsAt(e.target.value)}

@@ -17,12 +17,13 @@ export function Hero({ dict, locale, hero }) {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      // Elements start hidden via CSS (not gsap.from) so they never flash at full
+      // opacity between server-rendered paint and this effect running.
       gsap.timeline({ defaults: { ease: "power3.out" } })
-        .from("[data-hero-eyebrow]", { opacity: 0, y: 16, duration: 0.6 })
-        .from("[data-hero-title]", { opacity: 0, y: 24, duration: 0.8 }, "-=0.35")
-        .from("[data-hero-subtitle]", { opacity: 0, y: 16, duration: 0.7 }, "-=0.5")
-        .from("[data-hero-cta]", { opacity: 0, y: 16, duration: 0.6 }, "-=0.45")
-        .from("[data-hero-waveform]", { opacity: 0, duration: 1 }, "-=0.4");
+        .to("[data-hero-title]", { opacity: 1, y: 0, duration: 0.8 })
+        .to("[data-hero-subtitle]", { opacity: 1, y: 0, duration: 0.7 }, "-=0.5")
+        .to("[data-hero-cta]", { opacity: 1, y: 0, duration: 0.6 }, "-=0.45")
+        .to("[data-hero-waveform]", { opacity: 1, duration: 1 }, "-=0.4");
 
       // Background drifts slower than the scroll (classic parallax); the
       // 1.3 scale gives it enough bleed that the shift never exposes an edge.
@@ -78,23 +79,23 @@ export function Hero({ dict, locale, hero }) {
           photo background, a light-theme dark start color went unreadable. */}
       <h1
         data-hero-title
-        className="text-balance bg-[linear-gradient(to_right,#f4f2fb,#a855f7_60%,#22ffd1)] bg-clip-text font-display text-4xl font-bold tracking-tight text-transparent sm:text-5xl md:text-6xl xl:text-7xl"
+        className="transform-[translateY(24px)] text-balance bg-[linear-gradient(to_right,#f4f2fb,#a855f7_60%,#22ffd1)] bg-clip-text font-display text-4xl font-bold tracking-tight text-transparent opacity-0 sm:text-5xl md:text-6xl xl:text-7xl"
       >
         {title}
       </h1>
-      <p data-hero-subtitle className="mt-6 max-w-xl text-balance text-lg text-foreground-muted">
+      <p data-hero-subtitle className="mt-6 max-w-xl transform-[translateY(16px)] text-balance text-lg text-foreground-muted opacity-0">
         {dict.hero.subtitle}
       </p>
 
       <a
         data-hero-cta
         href={`/${locale}/djs`}
-        className="mt-10 inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3 text-sm font-semibold text-white transition-transform hover:scale-105"
+        className="mt-10 inline-flex transform-[translateY(16px)] items-center gap-2 rounded-full bg-accent px-7 py-3 text-sm font-semibold text-white opacity-0 transition-transform hover:scale-105"
       >
         {dict.hero.cta}
       </a>
 
-      <div data-hero-waveform className="mt-16 h-5 w-full max-w-2xl">
+      <div data-hero-waveform className="mt-16 h-5 w-full max-w-2xl opacity-0">
         <Waveform className="h-full w-full justify-center" />
       </div>
     </section>

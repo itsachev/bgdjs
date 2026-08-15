@@ -75,7 +75,7 @@ export function MobileNav({ locale, dict, isAdmin, profile }) {
         onClick={() => setOpen((v) => !v)}
         aria-label={open ? "Close menu" : "Open menu"}
         aria-expanded={open}
-        className="relative z-50 flex h-9 w-9 shrink-0 items-center justify-center md:hidden"
+        className="relative z-50 flex h-9 w-9 shrink-0 items-center justify-center nav:hidden"
       >
         <span className="relative block h-4 w-5">
           <span
@@ -100,7 +100,7 @@ export function MobileNav({ locale, dict, isAdmin, profile }) {
         createPortal(
           <div
             ref={panelRef}
-            className={`fixed inset-x-0 top-16 bottom-0 z-40 origin-top overflow-y-auto bg-background/98 backdrop-blur-xl transition-all duration-500 ease-[cubic-bezier(0.65,0,0.35,1)] md:hidden ${
+            className={`fixed inset-x-0 top-16 bottom-0 z-40 origin-top overflow-y-auto bg-background/98 backdrop-blur-xl transition-all duration-500 ease-[cubic-bezier(0.65,0,0.35,1)] nav:hidden ${
               open ? "pointer-events-auto scale-y-100 opacity-100" : "pointer-events-none scale-y-0 opacity-0"
             }`}
           >

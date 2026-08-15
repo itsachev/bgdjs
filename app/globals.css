@@ -23,6 +23,7 @@
 }
 
 @theme inline {
+  --breakpoint-nav: 900px;
   --color-background: var(--color-bg);
   --color-background-elevated: var(--color-bg-elevated);
   --color-foreground: var(--color-fg);

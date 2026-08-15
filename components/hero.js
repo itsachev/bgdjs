@@ -25,10 +25,10 @@ export function Hero({ dict, locale, hero }) {
         .from("[data-hero-waveform]", { opacity: 0, duration: 1 }, "-=0.4");
 
       // Background drifts slower than the scroll (classic parallax); the
-      // 1.15 scale gives it enough bleed that the shift never exposes an edge.
-      gsap.set("[data-hero-bg]", { scale: 1.15 });
+      // 1.3 scale gives it enough bleed that the shift never exposes an edge.
+      gsap.set("[data-hero-bg]", { scale: 1.3 });
       gsap.to("[data-hero-bg]", {
-        yPercent: 15,
+        yPercent: 30,
         ease: "none",
         scrollTrigger: {
           trigger: rootRef.current,

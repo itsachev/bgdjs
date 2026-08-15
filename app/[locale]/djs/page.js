@@ -171,7 +171,7 @@ export default async function DjsPage({ params, searchParams }) {
                 <Link
                   key={id}
                   href={`/${locale}/djs/${encodeURIComponent(display_name)}`}
-                  className="group relative flex flex-col items-center gap-3 overflow-hidden rounded-2xl border border-border bg-[linear-gradient(135deg,color-mix(in_oklch,var(--color-accent)_7%,var(--color-background-elevated)),color-mix(in_oklch,var(--color-accent-2)_7%,var(--color-background-elevated)))] bg-size-[200%_200%] bg-top-left p-6 text-center transition-all duration-500 [@media(hover:hover)]:hover:-translate-y-1 [@media(hover:hover)]:hover:bg-bottom-right [@media(hover:hover)]:hover:shadow-[0_0_32px_color-mix(in_oklch,var(--color-accent)_25%,transparent)]"
+                  className="group relative flex flex-col items-center gap-3 overflow-hidden rounded-2xl border border-border bg-[linear-gradient(135deg,color-mix(in_oklch,var(--color-accent)_7%,var(--color-background-elevated)),color-mix(in_oklch,var(--color-accent-2)_7%,var(--color-background-elevated)))] bg-size-[200%_200%] bg-top-left p-6 text-center transition-all duration-500 [@media(hover:hover)]:hover:-translate-y-1 [@media(hover:hover)]:hover:bg-bottom-right"
                 >
                   <div
                     aria-hidden="true"

@@ -11,7 +11,10 @@ gsap.registerPlugin(ScrollTrigger);
 // pages, but scroll-linked here — each orb moves at its own rate as the section
 // passes through the viewport, giving the section depth without needing a photo.
 // When a CMS `media` background is set, that drifts instead (same bleed-then-drift
-// trick as the hero), and the orbs are skipped so the two don't compete.
+// trick as the hero), and the orbs are skipped so the two don't compete. The
+// background always spans the full viewport width — only `children` gets
+// constrained by `className` — so an uploaded photo/video bleeds edge to edge
+// instead of being boxed in by the section's own max-width.
 export function ParallaxSection({ children, className = "", media }) {
   const rootRef = useRef(null);
   const bgRef = useRef(null);
@@ -21,9 +24,9 @@ export function ParallaxSection({ children, className = "", media }) {
   useEffect(() => {
     const ctx = gsap.context(() => {
       if (media?.url) {
-        gsap.set(bgRef.current, { scale: 1.15 });
+        gsap.set(bgRef.current, { scale: 1.3 });
         gsap.to(bgRef.current, {
-          yPercent: 15,
+          yPercent: 30,
           ease: "none",
           scrollTrigger: { trigger: rootRef.current, start: "top bottom", end: "bottom top", scrub: true },
         });
@@ -45,7 +48,7 @@ export function ParallaxSection({ children, className = "", media }) {
   }, [media?.url]);
 
   return (
-    <section ref={rootRef} className={`relative overflow-hidden ${className}`}>
+    <section ref={rootRef} className="relative overflow-hidden">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
         {media?.url ? (
           <div ref={bgRef} className="absolute inset-0">
@@ -69,7 +72,7 @@ export function ParallaxSection({ children, className = "", media }) {
           </>
         )}
       </div>
-      {children}
+      <div className={className}>{children}</div>
     </section>
   );
 }

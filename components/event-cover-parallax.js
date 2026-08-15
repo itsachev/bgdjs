@@ -15,9 +15,9 @@ export function EventCoverParallax({ src }) {
     const ctx = gsap.context(() => {
       // Same bleed-then-drift trick as the homepage hero and profile
       // backgrounds, just scoped to this in-flow banner's own scroll range.
-      gsap.set(imgRef.current, { scale: 1.15 });
+      gsap.set(imgRef.current, { scale: 1.3 });
       gsap.to(imgRef.current, {
-        yPercent: 12,
+        yPercent: 30,
         ease: "none",
         scrollTrigger: {
           trigger: rootRef.current,

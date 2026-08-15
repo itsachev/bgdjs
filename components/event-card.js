@@ -18,7 +18,7 @@ export function EventCard({ event, locale }) {
   return (
     <Link
       href={`/${locale}/events/${event.id}`}
-      className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-background-elevated/40 transition-all duration-500 [@media(hover:hover)]:hover:-translate-y-1 [@media(hover:hover)]:hover:shadow-[0_0_32px_color-mix(in_oklch,var(--color-accent)_25%,transparent)]">
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-background-elevated/40 transition-all duration-500 [@media(hover:hover)]:hover:-translate-y-1">
       <div className="relative aspect-video w-full overflow-hidden bg-background-elevated">
         {event.cover_url ? (
           <Image

@@ -14,9 +14,9 @@ export function ProfileParallaxBg({ src, position }) {
     const ctx = gsap.context(() => {
       // Same trick as the homepage hero: scale up for bleed room, then drift the
       // background slower than the page scroll so it never exposes an edge.
-      gsap.set(rootRef.current, { scale: 1.15 });
+      gsap.set(rootRef.current, { scale: 1.3 });
       gsap.to(rootRef.current, {
-        yPercent: 15,
+        yPercent: 30,
         ease: "none",
         scrollTrigger: {
           trigger: rootRef.current,

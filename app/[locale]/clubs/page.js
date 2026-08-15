@@ -157,7 +157,7 @@ export default async function ClubsPage({ params, searchParams }) {
                 <Link
                   key={id}
                   href={`/${locale}/clubs/${encodeURIComponent(display_name)}`}
-                  className="group relative flex flex-col items-center gap-3 overflow-hidden rounded-2xl border border-border bg-[linear-gradient(135deg,color-mix(in_oklch,var(--color-accent)_7%,var(--color-background-elevated)),color-mix(in_oklch,var(--color-accent-2)_7%,var(--color-background-elevated)))] p-6 text-center transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:shadow-[0_0_32px_color-mix(in_oklch,var(--color-accent)_25%,transparent)]"
+                  className="group relative flex flex-col items-center gap-3 overflow-hidden rounded-2xl border border-border bg-[linear-gradient(135deg,color-mix(in_oklch,var(--color-accent)_7%,var(--color-background-elevated)),color-mix(in_oklch,var(--color-accent-2)_7%,var(--color-background-elevated)))] p-6 text-center transition-all duration-300 hover:-translate-y-1 hover:border-accent"
                 >
                   <div
                     aria-hidden="true"

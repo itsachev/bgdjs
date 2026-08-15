@@ -19,6 +19,8 @@ import {
   YoutubeIcon,
 } from "@/components/icons";
 import { ProfileGallery } from "@/components/profile-gallery";
+import { ProfileEvents } from "@/components/profile-events";
+import { ProfileParallaxBg } from "@/components/profile-parallax-bg";
 
 const SOCIAL_PLATFORMS = [
   { key: "instagram_url", label: "Instagram", icon: InstagramIcon, color: "text-pink-500" },
@@ -109,6 +111,13 @@ export default async function ClubProfilePage({ params }) {
     .eq("profile_id", profile.id)
     .order("created_at", { ascending: true });
 
+  const { data: events } = await supabase
+    .from("events")
+    .select("id, title, cover_url, starts_at, city, venue_name, price_info")
+    .eq("organizer_id", profile.id)
+    .gte("starts_at", new Date().toISOString())
+    .order("starts_at", { ascending: true });
+
   const isOwner = user?.id === profile.id;
 
   return (
@@ -120,19 +129,7 @@ export default async function ClubProfilePage({ params }) {
       </div>
 
       {profile.avatar_url && (
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 right-0 -z-10 hidden w-1/2 opacity-30 mask-[linear-gradient(to_left,black_40%,transparent)] md:block"
-        >
-          <Image
-            src={profile.avatar_url}
-            alt=""
-            fill
-            sizes="50vw"
-            className="object-cover"
-            style={{ objectPosition: profile.avatar_position || "50% 50%" }}
-          />
-        </div>
+        <ProfileParallaxBg src={profile.avatar_url} position={profile.avatar_position} />
       )}
 
       <div className="relative mx-auto max-w-7xl px-6 py-16">
@@ -293,6 +290,18 @@ export default async function ClubProfilePage({ params }) {
             )}
           </div>
         </div>
+
+        {events?.length > 0 && (
+          <div className="mt-28">
+            <ProfileEvents
+              events={events}
+              locale={locale}
+              title={t.events}
+              isOwner={isOwner}
+              removeLabel={t.removeEvent}
+            />
+          </div>
+        )}
 
         {galleryPhotos?.length > 0 && (
           <div className="mt-28">

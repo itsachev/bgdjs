@@ -18,6 +18,7 @@ import {
 import { ProfileGallery } from "@/components/profile-gallery";
 import { ProfileParallaxBg } from "@/components/profile-parallax-bg";
 import { MixesSection } from "@/components/mixes-section";
+import { ProfileEvents } from "@/components/profile-events";
 
 const SOCIAL_PLATFORMS = [
   { key: "instagram_url", label: "Instagram", icon: InstagramIcon, color: "text-pink-500" },
@@ -91,6 +92,13 @@ export default async function DjProfilePage({ params }) {
     .select("id, title, url, platform")
     .eq("profile_id", profile.id)
     .order("created_at", { ascending: true });
+
+  const { data: events } = await supabase
+    .from("events")
+    .select("id, title, cover_url, starts_at, city, venue_name, price_info")
+    .eq("organizer_id", profile.id)
+    .gte("starts_at", new Date().toISOString())
+    .order("starts_at", { ascending: true });
 
   const isOwner = user?.id === profile.id;
 
@@ -215,6 +223,18 @@ export default async function DjProfilePage({ params }) {
             )}
           </div>
         </div>
+
+        {events?.length > 0 && (
+          <div className="mt-28">
+            <ProfileEvents
+              events={events}
+              locale={locale}
+              title={t.events}
+              isOwner={isOwner}
+              removeLabel={t.removeEvent}
+            />
+          </div>
+        )}
 
         {mixes?.length > 0 && (
           <div className="mt-28">

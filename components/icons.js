@@ -244,3 +244,38 @@ export function PlayIcon(props) {
     </Icon>
   );
 }
+
+export function CalendarIcon(props) {
+  return (
+    <Icon {...props}>
+      <rect x="3" y="5" width="18" height="16" rx="2.5" />
+      <path d="M3 10h18M8 3v4M16 3v4" />
+    </Icon>
+  );
+}
+
+export function TicketIcon(props) {
+  return (
+    <Icon {...props}>
+      <path d="M3 9a2 2 0 0 1 0-4h18a2 2 0 0 1 0 4 2 2 0 0 0 0 6 2 2 0 0 1 0 4H3a2 2 0 0 1 0-4 2 2 0 0 0 0-6Z" />
+      <path d="M10 4.5v15" strokeDasharray="2.5 2.5" />
+    </Icon>
+  );
+}
+
+export function EditIcon(props) {
+  return (
+    <Icon {...props}>
+      <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
+    </Icon>
+  );
+}
+
+export function TrashIcon(props) {
+  return (
+    <Icon {...props}>
+      <path d="M4 7h16M9 7V4.5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1V7M6 7l1 13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-13" />
+      <path d="M10 11v6M14 11v6" />
+    </Icon>
+  );
+}

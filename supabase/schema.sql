@@ -455,3 +455,53 @@ create policy "Owners can add their own mixes"
 create policy "Owners can delete their own mixes"
   on public.dj_mixes for delete
   using (auth.uid() = profile_id);
+
+-- Community events. Any authenticated user (DJ, club, or fan) may post one;
+-- only the organizer can edit or remove it afterwards.
+create table public.events (
+  id uuid primary key default gen_random_uuid(),
+  organizer_id uuid not null references public.profiles (id) on delete cascade,
+  title text not null,
+  description text,
+  cover_url text,
+  starts_at timestamptz not null,
+  city text,
+  venue_name text,
+  ticket_url text,
+  price_info text,
+  created_at timestamptz not null default now()
+);
+
+alter table public.events enable row level security;
+
+create policy "Events are viewable by everyone"
+  on public.events for select
+  using (true);
+
+create policy "Authenticated users can create events"
+  on public.events for insert
+  with check (auth.uid() = organizer_id);
+
+create policy "Organizers can update their own events"
+  on public.events for update
+  using (auth.uid() = organizer_id);
+
+create policy "Organizers can delete their own events"
+  on public.events for delete
+  using (auth.uid() = organizer_id);
+
+insert into storage.buckets (id, name, public)
+values ('events', 'events', true)
+on conflict (id) do nothing;
+
+create policy "Authenticated users can upload event covers"
+  on storage.objects for insert
+  with check (bucket_id = 'events' and auth.role() = 'authenticated');
+
+create policy "Owners can update their own event covers"
+  on storage.objects for update
+  using (bucket_id = 'events' and owner = auth.uid());
+
+create policy "Owners can delete their own event covers"
+  on storage.objects for delete
+  using (bucket_id = 'events' and owner = auth.uid());

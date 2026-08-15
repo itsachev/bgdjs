@@ -10,7 +10,8 @@
     "login": "Log in",
     "signup": "Sign up",
     "logout": "Log out",
-    "admin": "Admin"
+    "admin": "Admin",
+    "addEvent": "Add event"
   },
   "hero": {
     "eyebrow": "Bulgarian DJ Community",
@@ -21,7 +22,8 @@
   "sections": {
     "djs": "Featured DJs",
     "clubs": "Featured Clubs",
-    "events": "Upcoming Events"
+    "events": "Upcoming Events",
+    "viewAll": "View all"
   },
   "djsPage": {
     "title": "Dee Jays",
@@ -170,9 +172,55 @@
       "yearsActive": "Years active",
       "social": "Social",
       "mixes": "Mixes",
+      "events": "Events",
+      "removeEvent": "Remove event",
       "gallery": "Gallery",
       "gallerySeeAll": "Show me more",
       "gallerySeeLess": "Show less"
     }
+  },
+  "eventCreate": {
+    "title": "Create an event",
+    "subtitle": "Put your night on the map — fill in the details below.",
+    "editTitle": "Edit event",
+    "editSubtitle": "Update the details below.",
+    "saveChanges": "Save changes",
+    "savingChanges": "Saving...",
+    "coverLabel": "Cover image",
+    "uploadCover": "Upload cover",
+    "uploadingCover": "Uploading...",
+    "removeCover": "Remove",
+    "invalidImageFile": "Please choose an image file.",
+    "titleLabel": "Event title",
+    "descriptionLabel": "Description",
+    "startsAtLabel": "Date & time",
+    "cityLabel": "City",
+    "selectCity": "Select a city",
+    "venueNameLabel": "Venue",
+    "ticketUrlLabel": "Ticket link",
+    "priceInfoLabel": "Price info",
+    "priceInfoPlaceholder": "e.g. Free entry, or 20 BGN",
+    "save": "Publish event",
+    "saving": "Publishing...",
+    "errorRequired": "Please fill in the title, date, and city.",
+    "errorGeneric": "Something went wrong. Please try again."
+  },
+  "eventsPage": {
+    "title": "Events",
+    "subtitle": "Upcoming nights from across the Bulgarian scene.",
+    "empty": "No upcoming events yet.",
+    "addEvent": "Add your event"
+  },
+  "eventDetail": {
+    "backToEvents": "← All events",
+    "dateLabel": "Date & time",
+    "locationLabel": "Location",
+    "priceLabel": "Price",
+    "hostedBy": "Hosted by",
+    "getTickets": "Get tickets",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirmDelete": "Confirm?",
+    "deleting": "Deleting..."
   }
 }

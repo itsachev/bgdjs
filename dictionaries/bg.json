@@ -10,7 +10,8 @@
     "login": "Вход",
     "signup": "Регистрация",
     "logout": "Изход",
-    "admin": "Админ"
+    "admin": "Админ",
+    "addEvent": "Добави събитие"
   },
   "hero": {
     "eyebrow": "Българска DJ Общност",
@@ -21,7 +22,8 @@
   "sections": {
     "djs": "Препоръчани DJ-и",
     "clubs": "Препоръчани клубове",
-    "events": "Предстоящи събития"
+    "events": "Предстоящи събития",
+    "viewAll": "Виж всички"
   },
   "djsPage": {
     "title": "DJ-и",
@@ -170,9 +172,55 @@
       "yearsActive": "Години опит",
       "social": "Социални мрежи",
       "mixes": "Миксове",
+      "events": "Събития",
+      "removeEvent": "Премахни събитието",
       "gallery": "Галерия",
       "gallerySeeAll": "Покажи ми повече",
       "gallerySeeLess": "Покажи по-малко"
     }
+  },
+  "eventCreate": {
+    "title": "Създай събитие",
+    "subtitle": "Сложи вечерта си на картата — попълни детайлите по-долу.",
+    "editTitle": "Редактирай събитието",
+    "editSubtitle": "Обнови детайлите по-долу.",
+    "saveChanges": "Запази промените",
+    "savingChanges": "Запазване...",
+    "coverLabel": "Корица",
+    "uploadCover": "Качи корица",
+    "uploadingCover": "Качване...",
+    "removeCover": "Премахни",
+    "invalidImageFile": "Моля, избери файл със снимка.",
+    "titleLabel": "Заглавие на събитието",
+    "descriptionLabel": "Описание",
+    "startsAtLabel": "Дата и час",
+    "cityLabel": "Град",
+    "selectCity": "Избери град",
+    "venueNameLabel": "Локация",
+    "ticketUrlLabel": "Линк за билети",
+    "priceInfoLabel": "Информация за цена",
+    "priceInfoPlaceholder": "напр. Свободен вход, или 20 лв.",
+    "save": "Публикувай събитието",
+    "saving": "Публикуване...",
+    "errorRequired": "Моля, попълни заглавие, дата и град.",
+    "errorGeneric": "Нещо се обърка. Опитай отново."
+  },
+  "eventsPage": {
+    "title": "Събития",
+    "subtitle": "Предстоящи вечери от цялата българска сцена.",
+    "empty": "Все още няма предстоящи събития.",
+    "addEvent": "Добави своето събитие"
+  },
+  "eventDetail": {
+    "backToEvents": "← Всички събития",
+    "dateLabel": "Дата и час",
+    "locationLabel": "Локация",
+    "priceLabel": "Цена",
+    "hostedBy": "Организатор",
+    "getTickets": "Вземи билети",
+    "edit": "Редактирай",
+    "delete": "Изтрий",
+    "confirmDelete": "Сигурен ли си?",
+    "deleting": "Изтриване..."
   }
 }

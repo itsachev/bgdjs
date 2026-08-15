@@ -26,7 +26,12 @@ export async function SiteHeader({ locale, dict }) {
             <LocaleSwitcher locale={locale} />
             <ThemeToggle />
             {profile ? (
-              <UserMenu profile={profile} logoutLabel={dict.nav.logout} locale={locale} />
+              <UserMenu
+                profile={profile}
+                logoutLabel={dict.nav.logout}
+                locale={locale}
+                addEventLabel={dict.nav.addEvent}
+              />
             ) : (
               <div className="flex items-center gap-2">
                 <Link

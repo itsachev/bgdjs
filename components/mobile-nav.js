@@ -30,6 +30,9 @@ export function MobileNav({ locale, dict, isAdmin, profile }) {
   if (isAdmin) {
     links.push({ href: `/${locale}/admin`, label: dict.nav.admin, admin: true });
   }
+  if (profile) {
+    links.push({ href: `/${locale}/events/create`, label: dict.nav.addEvent });
+  }
 
   function isActive(href) {
     return pathname === href || pathname.startsWith(`${href}/`);

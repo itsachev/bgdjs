@@ -6,6 +6,8 @@ import { UserMenu } from "./user-menu";
 import { NavLinks } from "./nav-links";
 import { MobileNav } from "./mobile-nav";
 import { PresenceHeartbeat } from "./presence-heartbeat";
+import { HeaderShrink } from "./header-shrink";
+import { ScrollProgress } from "./scroll-progress";
 
 export async function SiteHeader({ locale, dict }) {
   const profile = await getCurrentProfile();
@@ -14,9 +16,10 @@ export async function SiteHeader({ locale, dict }) {
   return (
     <header className="sticky top-0 z-50 border-b border-border/80 bg-background/80 backdrop-blur-md">
       <PresenceHeartbeat userId={profile?.id ?? null} />
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-        <Link href={`/${locale}`} className="text-lg font-display font-semibold tracking-tight">
+      <HeaderShrink>
+        <Link href={`/${locale}`} className="font-display text-lg font-bold tracking-tight">
           BG<span className="text-accent">DJ</span>
+          <span className="text-accent-2">.</span>
         </Link>
 
         <NavLinks locale={locale} dict={dict} isAdmin={isAdmin} />
@@ -51,7 +54,8 @@ export async function SiteHeader({ locale, dict }) {
           </div>
           <MobileNav locale={locale} dict={dict} isAdmin={isAdmin} profile={profile} />
         </div>
-      </div>
+      </HeaderShrink>
+      <ScrollProgress />
     </header>
   );
 }

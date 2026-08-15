@@ -5,8 +5,13 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import { Waveform } from "./waveform";
+import { Marquee } from "./marquee";
 
 gsap.registerPlugin(ScrollTrigger);
+
+// Kept in Latin script for both locales — matches the sound-profile pills
+// used elsewhere (see djs/page.js), which never translate genre names.
+const GENRES = ["House", "Techno", "Pop Folk", "Trap", "Deep House", "Reggaeton", "Afrobeat", "Commercial"];
 
 export function Hero({ dict, locale, hero }) {
   const rootRef = useRef(null);
@@ -20,10 +25,12 @@ export function Hero({ dict, locale, hero }) {
       // Elements start hidden via CSS (not gsap.from) so they never flash at full
       // opacity between server-rendered paint and this effect running.
       gsap.timeline({ defaults: { ease: "power3.out" } })
-        .to("[data-hero-title]", { opacity: 1, y: 0, duration: 0.8 })
+        .to("[data-hero-eyebrow]", { opacity: 1, y: 0, duration: 0.6 })
+        .to("[data-hero-title]", { opacity: 1, y: 0, duration: 0.8 }, "-=0.4")
         .to("[data-hero-subtitle]", { opacity: 1, y: 0, duration: 0.7 }, "-=0.5")
         .to("[data-hero-cta]", { opacity: 1, y: 0, duration: 0.6 }, "-=0.45")
-        .to("[data-hero-waveform]", { opacity: 1, duration: 1 }, "-=0.4");
+        .to("[data-hero-waveform]", { opacity: 1, duration: 1 }, "-=0.4")
+        .to("[data-hero-marquee]", { opacity: 1, duration: 1 }, "-=0.6");
 
       // Background drifts slower than the scroll (classic parallax); the
       // 1.3 scale gives it enough bleed that the shift never exposes an edge.
@@ -72,9 +79,14 @@ export function Hero({ dict, locale, hero }) {
         )}
       </div>
 
-      {/* <p data-hero-eyebrow className="mb-4 text-sm font-medium uppercase tracking-[0.25em] text-accent">
+      <p
+        data-hero-eyebrow
+        className="mb-5 flex transform-[translateY(16px)] items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.3em] text-accent opacity-0"
+      >
+        <span className="h-px w-6 bg-current" aria-hidden="true" />
         {dict.hero.eyebrow}
-      </p> */}
+        <span className="h-px w-6 bg-current" aria-hidden="true" />
+      </p>
       {/* Fixed dark-theme gradient stops regardless of site theme — against a
           photo background, a light-theme dark start color went unreadable. */}
       <h1
@@ -97,6 +109,13 @@ export function Hero({ dict, locale, hero }) {
 
       <div data-hero-waveform className="mt-16 h-5 w-full max-w-2xl opacity-0">
         <Waveform className="h-full w-full justify-center" />
+      </div>
+
+      <div data-hero-marquee className="absolute inset-x-0 bottom-10 opacity-0">
+        <Marquee
+          items={GENRES}
+          className="mask-[linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]"
+        />
       </div>
     </section>
   );

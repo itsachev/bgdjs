@@ -51,10 +51,11 @@ export default async function RootLayout({ children, params }) {
       <body className="min-h-full antialiased">
         <ThemeProvider>
           <SmoothScrollProvider>
+            <div aria-hidden="true" className="bg-grain" />
             <div className="flex min-h-screen flex-col">
               <SiteHeader locale={locale} dict={dict} />
               <main className="flex flex-1 flex-col">{children}</main>
-              <SiteFooter dict={dict} />
+              <SiteFooter locale={locale} dict={dict} />
             </div>
             <SiteAudio />
           </SmoothScrollProvider>

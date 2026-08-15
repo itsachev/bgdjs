@@ -4,6 +4,8 @@ import { createClient } from "@/lib/supabase/server";
 import { getDictionary, hasLocale } from "../dictionaries";
 import { PlusIcon } from "@/components/icons";
 import { EventCard } from "@/components/event-card";
+import { AmbientGlow } from "@/components/ambient-glow";
+import { Kicker } from "@/components/kicker";
 
 export async function generateMetadata({ params }) {
   const { locale } = await params;
@@ -33,18 +35,13 @@ export default async function EventsPage({ params }) {
 
   return (
     <div className="relative flex-1 overflow-hidden">
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-40 left-[10%] h-112 w-md rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent)_38%,transparent),transparent_70%)] blur-3xl" />
-        <div className="absolute top-1/3 -right-32 h-128 w-lg rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent-2)_32%,transparent),transparent_70%)] blur-3xl" />
-        <div className="absolute bottom-0 left-[20%] h-104 w-104 rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent)_26%,transparent),transparent_70%)] blur-3xl" />
-      </div>
+      <AmbientGlow variant="directory" />
 
       <div className="relative mx-auto max-w-7xl px-6 py-16">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h1 className="bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display text-4xl font-semibold tracking-tight text-transparent sm:text-5xl xl:text-6xl">
-              {t.title}
-            </h1>
+            <Kicker>{dict.nav.events}</Kicker>
+            <h1 className="mt-3 font-display text-display-2 font-bold tracking-tight">{t.title}</h1>
             <p className="mt-4 text-foreground-muted">{t.subtitle}</p>
           </div>
           {user && (

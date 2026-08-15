@@ -6,6 +6,8 @@ import { getDictionary, hasLocale } from "../dictionaries";
 import { MapPinIcon, CrownIcon, HeartIcon } from "@/components/icons";
 import { BULGARIAN_CITIES } from "@/lib/bulgarian-cities";
 import { EntitySearch } from "@/components/entity-search";
+import { AmbientGlow } from "@/components/ambient-glow";
+import { Kicker } from "@/components/kicker";
 
 const PAGE_SIZE = 20;
 
@@ -57,7 +59,7 @@ function TopGenreDjs({ title, djs, locale, votesLabel }) {
 
   return (
     <div className="my-20">
-      <h2 className="font-display text-xl font-semibold tracking-tight">{title}</h2>
+      <h2 className="font-display text-display-3 font-bold tracking-tight">{title}</h2>
       <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
         {djs.map(({ id, display_name, avatar_url, avatar_position, dj, votes }, i) => {
           const name = dj?.stage_name || display_name;
@@ -179,18 +181,13 @@ export default async function DjsPage({ params, searchParams }) {
 
   return (
     <div className="relative flex-1 overflow-hidden">
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-40 left-[10%] h-112 w-md rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent)_38%,transparent),transparent_70%)] blur-3xl" />
-        <div className="absolute top-1/3 -right-32 h-128 w-lg rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent-2)_32%,transparent),transparent_70%)] blur-3xl" />
-        <div className="absolute bottom-0 left-[20%] h-104 w-104 rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent)_26%,transparent),transparent_70%)] blur-3xl" />
-      </div>
+      <AmbientGlow variant="directory" />
 
       <div className="relative mx-auto max-w-7xl px-6 py-16">
         <div className="flex flex-wrap items-start justify-between gap-6">
           <div>
-            <h1 className="bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display text-4xl font-semibold tracking-tight text-transparent sm:text-5xl xl:text-6xl">
-              {t.title}
-            </h1>
+            <Kicker>{dict.nav.djs}</Kicker>
+            <h1 className="mt-3 font-display text-display-2 font-bold tracking-tight">{t.title}</h1>
             <p className="mt-4 text-foreground-muted">{t.subtitle}</p>
           </div>
           <div className="flex w-full flex-col gap-3 sm:w-72">
@@ -202,17 +199,15 @@ export default async function DjsPage({ params, searchParams }) {
               placeholder={t.searchPlaceholder}
               searchLabel={t.search}
             />
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-x-5 gap-y-2">
               {QUICK_GENRES.map((g) => {
                 const active = genre === g;
                 return (
                   <Link
                     key={g}
                     href={pageHref(locale, { page: 1, q: query, genre: active ? "" : g })}
-                    className={`rounded-full border px-4 py-1.5 text-sm font-medium transition-colors ${
-                      active
-                        ? "border-transparent bg-accent text-white"
-                        : "border-border text-foreground-muted hover:text-foreground"
+                    className={`relative pb-1 text-sm font-semibold uppercase tracking-wide transition-colors after:absolute after:-bottom-0.5 after:left-0 after:h-0.5 after:w-full after:origin-left after:scale-x-0 after:bg-accent after:transition-transform after:duration-300 after:content-[''] ${
+                      active ? "text-accent after:scale-x-100" : "text-foreground-muted hover:text-foreground"
                     }`}
                   >
                     {g}

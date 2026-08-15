@@ -18,23 +18,26 @@ export function EventCard({ event, locale }) {
   return (
     <Link
       href={`/${locale}/events/${event.id}`}
-      className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-background-elevated/40 transition-all duration-500 [@media(hover:hover)]:hover:-translate-y-1">
-      <div className="relative aspect-video w-full overflow-hidden bg-background-elevated">
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-background-elevated/40 transition-all duration-500 [@media(hover:hover)]:hover:-translate-y-1 [@media(hover:hover)]:hover:border-accent/60">
+      <div className="relative aspect-4/3 w-full overflow-hidden bg-background-elevated">
         {event.cover_url ? (
           <Image
             src={event.cover_url}
             alt=""
             fill
             sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            className="object-cover transition-transform duration-500 [@media(hover:hover)]:group-hover:scale-105"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(135deg,color-mix(in_oklch,var(--color-accent)_18%,var(--color-background-elevated)),color-mix(in_oklch,var(--color-accent-2)_18%,var(--color-background-elevated)))]">
             <CalendarIcon className="h-8 w-8 text-foreground-muted" />
           </div>
         )}
-        <div className="absolute left-3 top-3 flex flex-col items-center rounded-lg bg-background/90 px-3 py-1.5 text-center leading-none shadow-lg backdrop-blur-sm">
-          <span className="font-display text-lg font-bold text-accent">{day}</span>
+        <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent opacity-0 transition-opacity duration-500 [@media(hover:hover)]:group-hover:opacity-100" />
+        <div className="absolute left-3 top-3 flex flex-col items-center rounded-xl border border-white/10 bg-background/90 px-3 py-1.5 text-center leading-none shadow-lg backdrop-blur-md">
+          <span className="bg-[linear-gradient(to_bottom,var(--color-accent),var(--color-accent-2))] bg-clip-text font-display text-lg font-bold text-transparent">
+            {day}
+          </span>
           <span className="text-[0.65rem] font-semibold uppercase tracking-wide text-foreground-muted">{month}</span>
         </div>
       </div>
@@ -53,7 +56,7 @@ export function EventCard({ event, locale }) {
           )}
         </div>
         {event.price_info && (
-          <span className="mt-1 self-start rounded-full border border-border px-3 py-1 text-xs font-medium text-foreground-muted">
+          <span className="mt-1 self-start rounded-full bg-accent/10 px-3 py-1 text-xs font-medium text-accent">
             {event.price_info}
           </span>
         )}

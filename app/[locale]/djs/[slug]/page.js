@@ -21,6 +21,7 @@ import { MixesSection } from "@/components/mixes-section";
 import { ProfileEvents } from "@/components/profile-events";
 import { RatingSection } from "@/components/rating-section";
 import { ContactSection } from "@/components/contact-section";
+import { AmbientGlow } from "@/components/ambient-glow";
 
 const SOCIAL_PLATFORMS = [
   { key: "instagram_url", label: "Instagram", icon: InstagramIcon, color: "text-pink-500" },
@@ -148,11 +149,7 @@ export default async function DjProfilePage({ params }) {
 
   return (
     <div className="relative flex-1 overflow-hidden">
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-40 left-[10%] h-112 w-md rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent)_38%,transparent),transparent_70%)] blur-3xl" />
-        <div className="absolute top-1/3 -right-32 h-128 w-lg rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent-2)_32%,transparent),transparent_70%)] blur-3xl" />
-        <div className="absolute bottom-0 left-[20%] h-104 w-104 rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent)_26%,transparent),transparent_70%)] blur-3xl" />
-      </div>
+      <AmbientGlow variant="profile" />
 
       {profile.avatar_url && (
         <ProfileParallaxBg src={profile.avatar_url} position={profile.avatar_position} />

@@ -26,6 +26,24 @@
     "events": "Upcoming Events",
     "viewAll": "View all"
   },
+  "home": {
+    "stats": {
+      "djs": "DJs",
+      "clubs": "Clubs",
+      "events": "Events hosted",
+      "ratings": "Ratings given"
+    },
+    "featuredDjsKicker": "On the rise",
+    "featuredClubsKicker": "Where it happens",
+    "eventsKicker": "Don't miss out",
+    "rankingKicker": "Community picks",
+    "rankingTitle": "Top of the charts",
+    "rankingViewAll": "See full ranking",
+    "ctaKicker": "For DJs & clubs",
+    "ctaTitle": "Get discovered.",
+    "ctaSubtitle": "Create a free profile, collect ratings, and climb the ranking — it takes two minutes.",
+    "ctaButton": "Create your profile"
+  },
   "djsPage": {
     "title": "Dee Jays",
     "subtitle": "Browse the DJs in the Bulgarian community.",
@@ -59,12 +77,17 @@
   },
   "footer": {
     "tagline": "Built by the community, for the community.",
-    "rights": "All rights reserved."
+    "rights": "All rights reserved.",
+    "exploreTitle": "Explore",
+    "joinTitle": "Join"
   },
   "auth": {
     "login": {
       "title": "Log in",
       "metaDescription": "Log in to your BGDj's account to manage your DJ or club profile.",
+      "heroKicker": "Welcome back",
+      "heroTitle": "Pick up right where you left off.",
+      "heroSubtitle": "Your profile, your mixes, your crowd — all waiting.",
       "emailPlaceholder": "Email",
       "passwordPlaceholder": "Password",
       "submit": "Log in",
@@ -75,6 +98,13 @@
     "signup": {
       "title": "Sign up",
       "metaDescription": "Create your BGDj's account as a DJ, club, or fan and join the Bulgarian DJ community.",
+      "heroKicker": "Join the community",
+      "heroTitle": "Your stage starts here.",
+      "benefits": [
+        "Create a free DJ or club profile",
+        "Collect ratings from the scene",
+        "Climb the community ranking"
+      ],
       "displayNamePlaceholder": "Username",
       "emailPlaceholder": "Email",
       "passwordPlaceholder": "Password",
@@ -272,6 +302,7 @@
     "deleting": "Deleting..."
   },
   "ranking": {
+    "kicker": "Community picks",
     "title": "Ranking",
     "subtitle": "Vote for your favorite DJs and clubs — the community decides who's on top.",
     "tabDjs": "DJs",

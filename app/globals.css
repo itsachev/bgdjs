@@ -33,12 +33,31 @@
   --color-border: var(--color-border);
   --font-sans: var(--font-body);
   --font-display: var(--font-display);
+  /* Fluid display sizes — scale with viewport so hero/section headlines stay
+     proportional between mobile and ultra-wide instead of jumping at breakpoints. */
+  --text-display-1: clamp(2.75rem, 1.7rem + 4.6vw, 6.75rem);
+  --text-display-1--line-height: 1.04;
+  --text-display-2: clamp(2.1rem, 1.55rem + 2.5vw, 4.25rem);
+  --text-display-2--line-height: 1.08;
+  --text-display-3: clamp(1.4rem, 1.2rem + 0.9vw, 2rem);
+  --text-display-3--line-height: 1.2;
 }
 
 body {
   background: var(--color-bg);
   color: var(--color-fg);
   font-family: var(--font-sans);
+}
+
+/* The header's own scroll-progress bar replaces the native scrollbar as the
+   position indicator, so the native one is redundant chrome. */
+html {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* legacy Edge */
+}
+
+html::-webkit-scrollbar {
+  display: none; /* Chromium/WebKit */
 }
 
 ::selection {
@@ -56,4 +75,29 @@ button:disabled {
 
 h1 {
   line-height: 1.2;
+}
+
+/* Fixed film-grain texture over the whole viewport — a cheap but effective
+   way to keep large flat gradient/glow areas from looking sterile. Opacity is
+   intentionally subtle; mix-blend-mode lets it read on both themes without
+   separate light/dark variants. */
+.bg-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  opacity: 0.045;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }

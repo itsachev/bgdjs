@@ -1,28 +1,39 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { gsap } from "gsap";
 import Link from "next/link";
-import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { PasswordInput } from "@/components/password-input";
 import { resolvePostAuthPath } from "@/lib/post-auth-redirect";
-import { Waveform } from "@/components/waveform";
+import { AuthLayout } from "@/components/auth-layout";
+import { MicIcon, BuildingIcon, HeartIcon, CheckIcon, CloseIcon, MailIcon } from "@/components/icons";
 
 const DEBOUNCE_MS = 500;
 
+const ROLE_ICONS = { dj: MicIcon, club: BuildingIcon, fan: HeartIcon };
+
 function FieldStatus({ status, t }) {
   if (status === "checking") {
-    return <p className="text-sm text-foreground-muted">{t.checking}</p>;
+    return <p className="text-xs text-foreground-muted">{t.checking}</p>;
   }
   if (status === "available") {
-    return <p className="text-sm text-accent-2">{t.available}</p>;
+    return (
+      <p className="flex items-center gap-1.5 text-xs font-medium text-accent-2">
+        <CheckIcon className="h-3.5 w-3.5" /> {t.available}
+      </p>
+    );
   }
   if (status === "taken") {
-    return <p className="text-sm text-red-500">{t.taken}</p>;
+    return (
+      <p className="flex items-center gap-1.5 text-xs font-medium text-red-500">
+        <CloseIcon className="h-3.5 w-3.5" /> {t.taken}
+      </p>
+    );
   }
   if (status === "error") {
-    return <p className="text-sm text-foreground-muted">{t.checkFailed}</p>;
+    return <p className="text-xs text-foreground-muted">{t.checkFailed}</p>;
   }
   return null;
 }
@@ -32,6 +43,7 @@ export function SignupForm({ dict, locale, embedded = false, background = null }
   const t = dict.auth.signup;
   const mediaUrl = background?.media_url;
   const mediaType = background?.media_type;
+  const rootRef = useRef(null);
   const ROLES = [
     { value: "dj", label: t.roleDj },
     { value: "club", label: t.roleClub },
@@ -49,6 +61,24 @@ export function SignupForm({ dict, locale, embedded = false, background = null }
 
   const [displayNameStatus, setDisplayNameStatus] = useState("idle");
   const [emailStatus, setEmailStatus] = useState("idle");
+
+  useEffect(() => {
+    if (embedded) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      gsap.set("[data-auth-reveal]", { opacity: 1, y: 0 });
+      return;
+    }
+    const ctx = gsap.context(() => {
+      gsap.timeline({ defaults: { ease: "power3.out" } }).to("[data-auth-reveal]", {
+        opacity: 1,
+        y: 0,
+        duration: 0.6,
+        stagger: 0.08,
+      });
+    }, rootRef);
+    return () => ctx.revert();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [submitted]);
 
   useEffect(() => {
     const name = displayName.trim();
@@ -148,40 +178,13 @@ export function SignupForm({ dict, locale, embedded = false, background = null }
     setSubmitted(true);
   }
 
-  const backgroundLayer = (
-    <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-      {mediaUrl ? (
-        <>
-          {mediaType === "video" ? (
-            <video
-              src={mediaUrl}
-              className="h-full w-full object-cover"
-              autoPlay
-              muted
-              loop
-              playsInline
-            />
-          ) : (
-            <Image src={mediaUrl} alt="" fill sizes="100vw" preload className="object-cover" />
-          )}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/85 to-background" />
-        </>
-      ) : (
-        <>
-          <div className="absolute -top-40 left-[8%] h-112 w-md rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent)_38%,transparent),transparent_70%)] blur-3xl" />
-          <div className="absolute top-1/3 -right-32 h-128 w-lg rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent-2)_32%,transparent),transparent_70%)] blur-3xl" />
-          <div className="absolute bottom-0 left-1/2 h-72 w-full max-w-4xl -translate-x-1/2 opacity-[0.15]">
-            <Waveform className="h-full w-full justify-center" />
-          </div>
-        </>
-      )}
-    </div>
-  );
-
   if (submitted) {
     const content = (
-      <div className={embedded ? "flex flex-col text-center" : "mx-auto flex max-w-sm flex-col px-6 py-24 text-center"}>
-        <h1 className="font-display text-2xl font-semibold tracking-tight">{t.checkEmailTitle}</h1>
+      <div className="flex flex-col items-center text-center">
+        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-accent/10 text-accent">
+          <MailIcon className="h-6 w-6" />
+        </div>
+        <h1 className="mt-6 font-display text-display-3 font-bold tracking-tight">{t.checkEmailTitle}</h1>
         <p className="mt-3 text-foreground-muted">{t.checkEmailBody}</p>
       </div>
     );
@@ -189,10 +192,16 @@ export function SignupForm({ dict, locale, embedded = false, background = null }
     if (embedded) return content;
 
     return (
-      <div className="relative flex-1 overflow-hidden">
-        {backgroundLayer}
-        <div className="relative">{content}</div>
-      </div>
+      <AuthLayout
+        locale={locale}
+        mediaUrl={mediaUrl}
+        mediaType={mediaType}
+        kicker={t.heroKicker}
+        title={t.heroTitle}
+        benefits={t.benefits}
+      >
+        {content}
+      </AuthLayout>
     );
   }
 
@@ -205,10 +214,7 @@ export function SignupForm({ dict, locale, embedded = false, background = null }
 
   const formBody = (
     <>
-      <form
-        onSubmit={handleSubmit}
-        className={`mt-8 grid grid-cols-1 gap-x-6 gap-y-4 ${embedded ? "" : "lg:grid-cols-2"}`}
-      >
+      <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-4">
         <div className="flex flex-col gap-1.5">
           <label htmlFor="displayName" className="text-sm text-foreground-muted">
             {t.displayNamePlaceholder} <span className="text-red-500">*</span>
@@ -219,7 +225,7 @@ export function SignupForm({ dict, locale, embedded = false, background = null }
             required
             value={displayName}
             onChange={(e) => setDisplayName(e.target.value)}
-            className="rounded-lg border border-border bg-background-elevated px-4 py-2.5 outline-none focus:border-accent"
+            className="rounded-xl border border-border bg-background-elevated px-4 py-3 outline-none transition-colors focus:border-accent"
           />
           <FieldStatus
             status={displayNameStatus}
@@ -237,7 +243,7 @@ export function SignupForm({ dict, locale, embedded = false, background = null }
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="rounded-lg border border-border bg-background-elevated px-4 py-2.5 outline-none focus:border-accent"
+            className="rounded-xl border border-border bg-background-elevated px-4 py-3 outline-none transition-colors focus:border-accent"
           />
           <FieldStatus
             status={emailStatus}
@@ -245,67 +251,67 @@ export function SignupForm({ dict, locale, embedded = false, background = null }
           />
         </div>
 
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="password" className="text-sm text-foreground-muted">
-            {t.passwordPlaceholder} <span className="text-red-500">*</span>
-          </label>
-          <PasswordInput
-            id="password"
-            minLength={6}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+        <div className="grid grid-cols-2 gap-4">
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="password" className="text-sm text-foreground-muted">
+              {t.passwordPlaceholder} <span className="text-red-500">*</span>
+            </label>
+            <PasswordInput id="password" minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="confirmPassword" className="text-sm text-foreground-muted">
+              {t.confirmPasswordPlaceholder} <span className="text-red-500">*</span>
+            </label>
+            <PasswordInput
+              id="confirmPassword"
+              minLength={6}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+          </div>
         </div>
 
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="confirmPassword" className="text-sm text-foreground-muted">
-            {t.confirmPasswordPlaceholder} <span className="text-red-500">*</span>
-          </label>
-          <PasswordInput
-            id="confirmPassword"
-            minLength={6}
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-        </div>
-
-        <fieldset className={`flex flex-col gap-2 ${embedded ? "" : "lg:col-span-2"}`}>
+        <fieldset className="flex flex-col gap-2">
           <legend className="mb-1 text-sm text-foreground-muted">
             {t.roleLabel} <span className="text-red-500">*</span>
           </legend>
-          <div className="grid grid-cols-3 gap-2">
-            {ROLES.map((r) => (
-              <label
-                key={r.value}
-                className={`cursor-pointer rounded-lg border px-3 py-2 text-center text-sm font-medium transition-all ${
-                  role === r.value
-                    ? "border-transparent bg-accent text-white"
-                    : "border-border text-foreground-muted hover:text-foreground"
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="role"
-                  required
-                  value={r.value}
-                  checked={role === r.value}
-                  onChange={() => setRole(r.value)}
-                  className="sr-only"
-                />
-                {r.label}
-              </label>
-            ))}
+          <div className="grid grid-cols-3 gap-3">
+            {ROLES.map((r) => {
+              const Icon = ROLE_ICONS[r.value];
+              const active = role === r.value;
+              return (
+                <label
+                  key={r.value}
+                  className={`group flex cursor-pointer flex-col items-center gap-2 rounded-xl border px-3 py-4 text-center transition-all ${
+                    active
+                      ? "border-accent bg-accent/10 text-accent"
+                      : "border-border text-foreground-muted hover:border-accent/50 hover:text-foreground"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="role"
+                    required
+                    value={r.value}
+                    checked={active}
+                    onChange={() => setRole(r.value)}
+                    className="sr-only"
+                  />
+                  <Icon className="h-5 w-5" />
+                  <span className="text-xs font-semibold uppercase tracking-wide">{r.label}</span>
+                </label>
+              );
+            })}
           </div>
         </fieldset>
 
-        {error && <p className={`text-sm text-red-500 ${embedded ? "" : "lg:col-span-2"}`}>{error}</p>}
+        {error && <p className="text-sm text-red-500">{error}</p>}
 
         <button
           type="submit"
           disabled={blockingSubmit}
-          className={`mt-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition-opacity disabled:opacity-60 ${
-            embedded ? "" : "lg:col-span-2 lg:justify-self-start"
-          }`}
+          className="mt-2 w-full rounded-full bg-[linear-gradient(to_right,var(--color-accent),var(--color-accent-2))] px-5 py-3.5 text-sm font-semibold text-white shadow-[0_0_24px_color-mix(in_oklch,var(--color-accent)_35%,transparent)] transition-transform disabled:opacity-60 disabled:shadow-none [@media(hover:hover)]:hover:not-disabled:scale-[1.02]"
         >
           {loading ? t.submitLoading : t.submit}
         </button>
@@ -323,21 +329,29 @@ export function SignupForm({ dict, locale, embedded = false, background = null }
   if (embedded) {
     return (
       <div className="flex flex-col">
-        <h1 className="font-display text-3xl md:text-5xl font-semibold tracking-tight">{t.title}</h1>
+        <h1 className="font-display text-display-3 font-bold tracking-tight">{t.title}</h1>
         {formBody}
       </div>
     );
   }
 
   return (
-    <div className="relative flex-1 overflow-hidden">
-      {backgroundLayer}
-      <div className="relative mx-auto flex max-w-3xl flex-col px-6 py-24">
-        <h1 className="bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display text-3xl font-semibold tracking-tight text-transparent sm:text-4xl xl:text-5xl">
+    <AuthLayout
+      locale={locale}
+      mediaUrl={mediaUrl}
+      mediaType={mediaType}
+      kicker={t.heroKicker}
+      title={t.heroTitle}
+      benefits={t.benefits}
+    >
+      <div ref={rootRef}>
+        <h1 data-auth-reveal className="translate-y-3 font-display text-display-3 font-bold tracking-tight opacity-0">
           {t.title}
         </h1>
-        {formBody}
+        <div data-auth-reveal className="translate-y-3 opacity-0">
+          {formBody}
+        </div>
       </div>
-    </div>
+    </AuthLayout>
   );
 }

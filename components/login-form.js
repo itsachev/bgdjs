@@ -117,7 +117,7 @@ export function LoginForm({ dict, locale, embedded = false, background = null })
         )}
       </div>
 
-      <div className="relative mx-auto flex max-w-2xl flex-col px-6 py-24">
+      <div className="relative mx-auto flex max-w-xl flex-col px-6 py-24">
         <h1 className="bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display text-3xl font-semibold tracking-tight text-transparent sm:text-4xl xl:text-5xl">
           {t.title}
         </h1>

@@ -68,9 +68,6 @@ function TopGenreDjs({ title, djs, locale, votesLabel }) {
               href={`/${locale}/djs/${encodeURIComponent(display_name)}`}
               className="group relative flex flex-col items-center gap-2 rounded-2xl border border-border bg-background-elevated p-4 text-center transition-colors hover:border-accent"
             >
-              <span className="absolute left-3 top-3 font-display text-sm font-bold text-foreground-muted">
-                {rank}
-              </span>
               {rank === 1 && <CrownIcon className="absolute right-3 top-3 h-4 w-4 text-yellow-400" />}
               <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full border border-border bg-background">
                 {avatar_url ? (
@@ -189,40 +186,45 @@ export default async function DjsPage({ params, searchParams }) {
       </div>
 
       <div className="relative mx-auto max-w-7xl px-6 py-16">
-        <h1 className="bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display text-4xl font-semibold tracking-tight text-transparent sm:text-5xl xl:text-6xl">
-          {t.title}
-        </h1>
-        <p className="mt-4 text-foreground-muted">{t.subtitle}</p>
+        <div className="flex flex-wrap items-start justify-between gap-6">
+          <div>
+            <h1 className="bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display text-4xl font-semibold tracking-tight text-transparent sm:text-5xl xl:text-6xl">
+              {t.title}
+            </h1>
+            <p className="mt-4 text-foreground-muted">{t.subtitle}</p>
+          </div>
+          <div className="flex w-full flex-col gap-3 sm:w-72">
+            <EntitySearch
+              basePath={`/${locale}/djs`}
+              searchApi="/api/djs/search"
+              initialQuery={query}
+              initialGenre={genre}
+              placeholder={t.searchPlaceholder}
+              searchLabel={t.search}
+            />
+            <div className="flex flex-wrap gap-2">
+              {QUICK_GENRES.map((g) => {
+                const active = genre === g;
+                return (
+                  <Link
+                    key={g}
+                    href={pageHref(locale, { page: 1, q: query, genre: active ? "" : g })}
+                    className={`rounded-full border px-4 py-1.5 text-sm font-medium transition-colors ${
+                      active
+                        ? "border-transparent bg-accent text-white"
+                        : "border-border text-foreground-muted hover:text-foreground"
+                    }`}
+                  >
+                    {g}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </div>
 
         <TopGenreDjs title={t.topHouse.title} djs={topHouseDjs} locale={locale} votesLabel={t.topHouse.votes} />
         <TopGenreDjs title={t.topPopFolk.title} djs={topPopFolkDjs} locale={locale} votesLabel={t.topPopFolk.votes} />
-
-        <EntitySearch
-          basePath={`/${locale}/djs`}
-          initialQuery={query}
-          initialGenre={genre}
-          placeholder={t.searchPlaceholder}
-          searchLabel={t.search}
-        />
-
-        <div className="mt-3 flex flex-wrap gap-2">
-          {QUICK_GENRES.map((g) => {
-            const active = genre === g;
-            return (
-              <Link
-                key={g}
-                href={pageHref(locale, { page: 1, q: query, genre: active ? "" : g })}
-                className={`rounded-full border px-4 py-1.5 text-sm font-medium transition-colors ${
-                  active
-                    ? "border-transparent bg-accent text-white"
-                    : "border-border text-foreground-muted hover:text-foreground"
-                }`}
-              >
-                {g}
-              </Link>
-            );
-          })}
-        </div>
 
         {pageDjs.length === 0 ? (
           <p className="mt-16 text-foreground-muted">{query || genre ? t.noResults : t.empty}</p>

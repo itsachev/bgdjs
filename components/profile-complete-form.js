@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import { AvatarUpload } from "@/components/avatar-upload";
 import { ResidentDjPicker } from "@/components/resident-dj-picker";
 import { GalleryEditor } from "@/components/gallery-editor";
+import { MixEditor } from "@/components/mix-editor";
 import { BULGARIAN_CITIES } from "@/lib/bulgarian-cities";
 import {
   InstagramIcon,
@@ -82,7 +83,7 @@ const FIELD_KEYS = {
   ],
 };
 
-export function ProfileCompleteForm({ role, locale, userId, profile, roleData, galleryPhotos, dict }) {
+export function ProfileCompleteForm({ role, locale, userId, profile, roleData, galleryPhotos, mixes, dict }) {
   const router = useRouter();
   const t = dict.profile.complete;
   const fields = FIELD_KEYS[role];
@@ -220,7 +221,7 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, g
         <div className="absolute bottom-0 left-[20%] h-104 w-104 rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent)_26%,transparent),transparent_70%)] blur-3xl" />
       </div>
 
-      <form onSubmit={handleSubmit} className="relative mx-auto flex max-w-4xl flex-col gap-6 px-6 py-16">
+      <form onSubmit={handleSubmit} className="relative mx-auto flex max-w-7xl flex-col gap-6 px-6 py-16">
         <div>
           <h1 className="bg-[linear-gradient(to_right,var(--color-foreground),var(--color-accent)_60%,var(--color-accent-2))] bg-clip-text font-display text-3xl font-semibold tracking-tight text-transparent sm:text-4xl xl:text-5xl">
             {t.title}
@@ -399,9 +400,18 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, g
         <p className="text-xs text-foreground-muted">{t.socialTip}</p>
       </div>
 
-      <div className="flex flex-col gap-4 rounded-2xl border border-border bg-background-elevated/40 p-5">
-        <p className="text-sm font-medium text-foreground">{t.galleryLabel}</p>
-        <GalleryEditor userId={userId} initial={galleryPhotos} t={t} />
+      <div className={`grid grid-cols-1 gap-6 ${role === "dj" ? "lg:grid-cols-2" : ""}`}>
+        {role === "dj" && (
+          <div className="flex flex-col gap-4 rounded-2xl border border-border bg-background-elevated/40 p-5">
+            <p className="text-sm font-medium text-foreground">{t.mixesLabel}</p>
+            <MixEditor userId={userId} initial={mixes} t={t} />
+          </div>
+        )}
+
+        <div className="flex flex-col gap-4 rounded-2xl border border-border bg-background-elevated/40 p-5">
+          <p className="text-sm font-medium text-foreground">{t.galleryLabel}</p>
+          <GalleryEditor userId={userId} initial={galleryPhotos} t={t} />
+        </div>
       </div>
 
       <div className="mt-4 flex flex-col gap-4">
@@ -409,6 +419,7 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, g
           {t.soundProfileLabel} <span className="text-red-500">*</span>{" "}
           <span className="text-sm font-normal text-foreground-muted">— {t.soundProfileHint}</span>
         </p>
+        <div className="grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2">
         {GENRE_CATEGORIES.map((category) => (
           <div key={category.label} className="flex flex-col gap-2 mt-4">
             <p className="text-sm font-medium text-foreground">
@@ -435,6 +446,7 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, g
             </div>
           </div>
         ))}
+        </div>
       </div>
 
       {error && <p className="text-sm text-red-500">{error}</p>}

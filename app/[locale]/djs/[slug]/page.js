@@ -17,6 +17,7 @@ import {
 } from "@/components/icons";
 import { ProfileGallery } from "@/components/profile-gallery";
 import { ProfileParallaxBg } from "@/components/profile-parallax-bg";
+import { MixesSection } from "@/components/mixes-section";
 
 const SOCIAL_PLATFORMS = [
   { key: "instagram_url", label: "Instagram", icon: InstagramIcon, color: "text-pink-500" },
@@ -82,6 +83,12 @@ export default async function DjProfilePage({ params }) {
   const { data: galleryPhotos } = await supabase
     .from("profile_gallery")
     .select("id, url, width, height")
+    .eq("profile_id", profile.id)
+    .order("created_at", { ascending: true });
+
+  const { data: mixes } = await supabase
+    .from("dj_mixes")
+    .select("id, title, url, platform")
     .eq("profile_id", profile.id)
     .order("created_at", { ascending: true });
 
@@ -208,6 +215,12 @@ export default async function DjProfilePage({ params }) {
             )}
           </div>
         </div>
+
+        {mixes?.length > 0 && (
+          <div className="mt-28">
+            <MixesSection mixes={mixes} title={t.mixes} />
+          </div>
+        )}
 
         {galleryPhotos?.length > 0 && (
           <div className="mt-28">

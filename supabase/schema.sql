@@ -429,3 +429,29 @@ create policy "Authenticated users can upload gallery photos"
 create policy "Owners can delete their own gallery photos from storage"
   on storage.objects for delete
   using (bucket_id = 'gallery' and owner = auth.uid());
+
+-- DJ-shared mixes, embedded from Mixcloud/SoundCloud/YouTube via their public
+-- widget URLs (built client-side, no stored embed markup). Owners can add and
+-- remove but not reorder in place, same as profile_gallery above.
+create table public.dj_mixes (
+  id uuid primary key default gen_random_uuid(),
+  profile_id uuid not null references public.profiles (id) on delete cascade,
+  title text not null,
+  url text not null,
+  platform text not null,
+  created_at timestamptz not null default now()
+);
+
+alter table public.dj_mixes enable row level security;
+
+create policy "Mixes are viewable by everyone"
+  on public.dj_mixes for select
+  using (true);
+
+create policy "Owners can add their own mixes"
+  on public.dj_mixes for insert
+  with check (auth.uid() = profile_id);
+
+create policy "Owners can delete their own mixes"
+  on public.dj_mixes for delete
+  using (auth.uid() = profile_id);

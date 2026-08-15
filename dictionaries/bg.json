@@ -123,6 +123,12 @@
       "galleryHint": "Добави няколко снимки от сетовете, локацията или публиката — до 12.",
       "galleryUpload": "Добави снимки",
       "galleryUploading": "Качване...",
+      "mixesLabel": "Миксове",
+      "mixesHint": "Сподели своите миксове от Mixcloud, SoundCloud или YouTube — до 12.",
+      "mixesTitlePlaceholder": "Заглавие (по избор)",
+      "mixesUrlPlaceholder": "Постави линк към микс...",
+      "mixesAdd": "Добави микс",
+      "mixesInvalidUrl": "Постави валиден линк от Mixcloud, SoundCloud или YouTube.",
       "fields": {
         "stage_name": "Сценично име",
         "genre": "Жанр",
@@ -163,6 +169,7 @@
       "website": "Уебсайт",
       "yearsActive": "Години опит",
       "social": "Социални мрежи",
+      "mixes": "Миксове",
       "gallery": "Галерия",
       "gallerySeeAll": "Покажи ми повече",
       "gallerySeeLess": "Покажи по-малко"

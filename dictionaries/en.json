@@ -123,6 +123,12 @@
       "galleryHint": "Add a few photos of your sets, the venue, or the crowd — up to 12.",
       "galleryUpload": "Add photos",
       "galleryUploading": "Uploading...",
+      "mixesLabel": "Mixes",
+      "mixesHint": "Share your Mixcloud, SoundCloud, or YouTube mixes — up to 12.",
+      "mixesTitlePlaceholder": "Title (optional)",
+      "mixesUrlPlaceholder": "Paste a mix link...",
+      "mixesAdd": "Add mix",
+      "mixesInvalidUrl": "Paste a valid Mixcloud, SoundCloud, or YouTube link.",
       "fields": {
         "stage_name": "Stage name",
         "genre": "Genre",
@@ -163,6 +169,7 @@
       "website": "Website",
       "yearsActive": "Years active",
       "social": "Social",
+      "mixes": "Mixes",
       "gallery": "Gallery",
       "gallerySeeAll": "Show me more",
       "gallerySeeLess": "Show less"

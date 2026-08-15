@@ -236,3 +236,11 @@ export function ImageIcon(props) {
     </Icon>
   );
 }
+
+export function PlayIcon(props) {
+  return (
+    <Icon {...props}>
+      <path d="M8 5.5v13l11-6.5-11-6.5Z" fill="currentColor" stroke="none" />
+    </Icon>
+  );
+}

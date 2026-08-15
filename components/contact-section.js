@@ -22,7 +22,7 @@ export function ContactSection({ email, title, subtitle, eyebrow, copyLabel, cop
         scrollTrigger: {
           trigger: rootRef.current,
           start: "top 65%",
-          end: "top 20%",
+          end: "top 40%",
           scrub: true,
         },
         defaults: { ease: "power3.out" },

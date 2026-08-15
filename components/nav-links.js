@@ -22,23 +22,35 @@ export function NavLinks({ locale, dict, isAdmin }) {
         <Link
           key={link.href}
           href={link.href}
-          className={`relative uppercase font-bold transition-colors after:absolute after:-bottom-2 after:left-0 after:h-0.5 after:w-full after:origin-left after:scale-x-0 after:bg-accent after:transition-transform after:content-[''] ${
-            isActive(link.href)
-              ? "text-accent after:scale-x-100"
-              : "text-white hover:text-foreground"
+          className={`group relative uppercase font-bold after:absolute after:-bottom-2 after:left-0 after:h-0.5 after:w-full after:origin-left after:scale-x-0 after:bg-accent after:transition-transform after:duration-300 after:content-[''] ${
+            isActive(link.href) ? "after:scale-x-100" : ""
           }`}
         >
-          {link.label}
+          <span className="relative block h-[1em] overflow-hidden leading-none">
+            <span className="flex flex-col leading-none transition-transform duration-300 ease-[cubic-bezier(0.65,0,0.35,1)] group-hover:-translate-y-1/2">
+              <span className={isActive(link.href) ? "text-accent" : "text-white"}>{link.label}</span>
+              <span className="text-accent" aria-hidden="true">
+                {link.label}
+              </span>
+            </span>
+          </span>
         </Link>
       ))}
       {isAdmin && (
         <Link
           href={`/${locale}/admin`}
-          className={`relative uppercase font-bold transition-colors after:absolute after:-bottom-2 after:left-0 after:h-0.5 after:w-full after:origin-left after:scale-x-0 after:bg-accent-2 after:transition-transform after:content-[''] ${
-            isActive(`/${locale}/admin`) ? "text-accent-2 after:scale-x-100" : "text-accent hover:text-accent-2"
+          className={`group relative uppercase font-bold after:absolute after:-bottom-2 after:left-0 after:h-0.5 after:w-full after:origin-left after:scale-x-0 after:bg-accent-2 after:transition-transform after:duration-300 after:content-[''] ${
+            isActive(`/${locale}/admin`) ? "text-accent-2 after:scale-x-100" : ""
           }`}
         >
-          {dict.nav.admin}
+          <span className="relative block h-[1em] overflow-hidden leading-none">
+            <span className="flex flex-col leading-none transition-transform duration-300 ease-[cubic-bezier(0.65,0,0.35,1)] group-hover:-translate-y-1/2">
+              <span className={isActive(`/${locale}/admin`) ? "text-accent-2" : "text-accent"}>{dict.nav.admin}</span>
+              <span className="text-accent-2" aria-hidden="true">
+                {dict.nav.admin}
+              </span>
+            </span>
+          </span>
         </Link>
       )}
     </nav>

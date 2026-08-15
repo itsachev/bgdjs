@@ -279,6 +279,9 @@
     "vote": "Vote",
     "voted": "Voted",
     "loginToVote": "Log in to vote",
-    "empty": "No one to rank yet."
+    "empty": "No one to rank yet.",
+    "prev": "Previous",
+    "next": "Next",
+    "page": "Page"
   }
 }

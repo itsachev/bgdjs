@@ -7,8 +7,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { CrownIcon, HeartIcon } from "@/components/icons";
+import { useLenis } from "./smooth-scroll-provider";
 
 gsap.registerPlugin(Flip);
+
+const REST_PAGE_SIZE = 10;
 
 const MEDAL_STYLES = {
   1: {
@@ -201,9 +204,33 @@ function RankingList({ items, type, locale, dict, userId, onVote }) {
   const mountRef = useRef(null);
   const listRef = useRef(null);
   const pendingFlip = useRef(null);
+  const [page, setPage] = useState(1);
+  const lenisRef = useLenis();
 
   const top3 = items.slice(0, 3);
   const rest = items.slice(3);
+  const totalPages = Math.max(1, Math.ceil(rest.length / REST_PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const pageStart = (currentPage - 1) * REST_PAGE_SIZE;
+  const pageRest = rest.slice(pageStart, pageStart + REST_PAGE_SIZE);
+
+  function goToPage(next) {
+    setPage(next);
+    const lenis = lenisRef?.current;
+    if (lenis && listRef.current) {
+      // -20 alone left the first row tucked under the sticky h-16 (64px)
+      // header; clear it plus a little breathing room.
+      lenis.scrollTo(listRef.current, { offset: -96 });
+    } else if (listRef.current) {
+      listRef.current.scrollIntoView({ block: "start" });
+    }
+  }
+
+  // Switching tabs (dj/club) swaps in an unrelated list — start it back at
+  // page 1 rather than carrying over an offset that may not even exist.
+  useEffect(() => {
+    setPage(1);
+  }, [type]);
 
   useEffect(() => {
     if (pendingFlip.current) {
@@ -220,8 +247,8 @@ function RankingList({ items, type, locale, dict, userId, onVote }) {
       );
     }, mountRef);
     return () => ctx.revert();
-     
-  }, [items]);
+
+  }, [items, currentPage]);
 
   function handleVote(item) {
     if (listRef.current) {
@@ -263,11 +290,11 @@ function RankingList({ items, type, locale, dict, userId, onVote }) {
           ref={listRef}
           className="mt-10 flex flex-col divide-y divide-border overflow-hidden rounded-2xl border border-border"
         >
-          {rest.map((item, i) => (
+          {pageRest.map((item, i) => (
             <RankRow
               key={item.id}
               item={item}
-              rank={i + 4}
+              rank={pageStart + i + 4}
               href={hrefFor(item)}
               dict={dict}
               userId={userId}
@@ -275,6 +302,30 @@ function RankingList({ items, type, locale, dict, userId, onVote }) {
             />
           ))}
         </ul>
+      )}
+
+      {totalPages > 1 && (
+        <div className="mt-6 flex items-center justify-center gap-4">
+          <button
+            type="button"
+            onClick={() => goToPage(Math.max(1, currentPage - 1))}
+            disabled={currentPage <= 1}
+            className="rounded-full border border-border px-4 py-2 text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-40 hover:border-accent hover:text-accent"
+          >
+            {dict.prev}
+          </button>
+          <p className="text-sm text-foreground-muted">
+            {dict.page} {currentPage} / {totalPages}
+          </p>
+          <button
+            type="button"
+            onClick={() => goToPage(Math.min(totalPages, currentPage + 1))}
+            disabled={currentPage >= totalPages}
+            className="rounded-full border border-border px-4 py-2 text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-40 hover:border-accent hover:text-accent"
+          >
+            {dict.next}
+          </button>
+        </div>
       )}
     </div>
   );

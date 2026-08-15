@@ -34,7 +34,26 @@ export function SmoothScrollProvider({ children }) {
     gsap.ticker.add(tick);
     gsap.ticker.lagSmoothing(0);
 
+    // Collapsing/expanding content (an accordion, a "show more" list, a
+    // reviews panel) changes the page height without a window resize, so
+    // Lenis's scroll bounds and ScrollTrigger's cached trigger positions
+    // would otherwise go stale — sections below the change (e.g. "Get in
+    // touch") would then reveal at the wrong scroll offset. Debounced since
+    // a single GSAP height-animation fires many resize notifications while
+    // it's mid-transition.
+    let resizeTimeout;
+    const resizeObserver = new ResizeObserver(() => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        lenis.resize();
+        ScrollTrigger.refresh();
+      }, 150);
+    });
+    resizeObserver.observe(document.body);
+
     return () => {
+      clearTimeout(resizeTimeout);
+      resizeObserver.disconnect();
       gsap.ticker.remove(tick);
       lenis.destroy();
       lenisRef.current = null;

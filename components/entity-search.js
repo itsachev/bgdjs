@@ -153,7 +153,14 @@ export function EntitySearch({
             <Link
               key={result.id}
               href={`${basePath}/${encodeURIComponent(result.slug)}`}
-              onClick={() => setDropdownOpen(false)}
+              onClick={() => {
+                setDropdownOpen(false);
+                // Skip the debounce this clear would otherwise schedule — it
+                // would navigate back to the (now query-less) listing page
+                // and race with the click's own navigation to the profile.
+                skipNextDebounce.current = true;
+                setValue("");
+              }}
               className="flex items-center gap-3 px-4 py-2.5 transition-colors hover:bg-background"
             >
               <div className="relative h-8 w-8 shrink-0 overflow-hidden rounded-full border border-border bg-background font-display text-xs font-semibold text-accent">

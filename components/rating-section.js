@@ -17,7 +17,7 @@ const CRITERIA_BY_ROLE = {
 // Same preview-then-expand convention as ProfileGallery: show a fixed count
 // and fold the rest behind a single tile rather than growing the page
 // unbounded once a profile racks up a lot of reviews.
-const PREVIEW_COUNT = 5;
+const PREVIEW_COUNT = 2;
 
 // Fixed 4-axis layout (both roles always have exactly 4 criteria) — top,
 // right, bottom, left — so the per-index anchor/offset math below can stay
@@ -341,7 +341,7 @@ export function RatingSection({
   const [formOpen, setFormOpen] = useState(false);
   const [formError, setFormError] = useState(false);
   const [expanded, setExpanded] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const listRef = useRef(null);
   const contentRef = useRef(null);
   const summaryRef = useRef(null);

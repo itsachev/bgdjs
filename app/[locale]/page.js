@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { EventCard } from "@/components/event-card";
 import { ParallaxSection } from "@/components/parallax-section";
 
-const UPCOMING_EVENTS_LIMIT = 5;
+const UPCOMING_EVENTS_LIMIT = 4;
 
 function PlaceholderGrid({ title, count = 3 }) {
   return (
@@ -41,7 +41,7 @@ function EventsSection({ title, viewAllLabel, emptyLabel, events, locale, media 
       {events.length === 0 ? (
         <p className="text-foreground-muted">{emptyLabel}</p>
       ) : (
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {events.map((event) => (
             <EventCard key={event.id} event={event} locale={locale} />
           ))}

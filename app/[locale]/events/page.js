@@ -61,7 +61,7 @@ export default async function EventsPage({ params }) {
         {!events || events.length === 0 ? (
           <p className="mt-16 text-foreground-muted">{t.empty}</p>
         ) : (
-          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {events.map((event) => (
               <EventCard key={event.id} event={event} locale={locale} />
             ))}

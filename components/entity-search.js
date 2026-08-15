@@ -15,7 +15,7 @@ export function EntitySearch({ basePath, initialQuery, initialGenre, placeholder
     if (q.trim()) params.set("q", q.trim());
     if (initialGenre) params.set("genre", initialGenre);
     const qs = params.toString();
-    router.push(`${basePath}${qs ? `?${qs}` : ""}`);
+    router.push(`${basePath}${qs ? `?${qs}` : ""}`, { scroll: false });
   }
 
   useEffect(() => {

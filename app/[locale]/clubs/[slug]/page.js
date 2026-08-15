@@ -76,6 +76,27 @@ export default async function ClubProfilePage({ params }) {
 
   const { data: club } = await supabase.from("club_profiles").select("*").eq("id", profile.id).maybeSingle();
 
+  const residentEntries = club?.resident_djs || [];
+  const residentIds = residentEntries.filter((e) => e.id).map((e) => e.id);
+  const residentCustomNames = residentEntries.filter((e) => e.name).map((e) => e.name);
+
+  let residentDjs = [];
+  if (residentIds.length) {
+    const { data: residentProfiles } = await supabase
+      .from("profiles")
+      .select("id, display_name, avatar_url")
+      .in("id", residentIds);
+    const { data: residentDjProfiles } = await supabase
+      .from("dj_profiles")
+      .select("id, stage_name")
+      .in("id", residentIds);
+    const stageNameById = new Map((residentDjProfiles || []).map((d) => [d.id, d.stage_name]));
+    residentDjs = (residentProfiles || []).map((p) => ({
+      ...p,
+      name: stageNameById.get(p.id) || p.display_name,
+    }));
+  }
+
   const genres = club?.sound_profile
     ? club.sound_profile.split(",").map((g) => g.trim()).filter(Boolean)
     : [];
@@ -167,12 +188,43 @@ export default async function ClubProfilePage({ params }) {
                   <dd className="mt-1.5 font-medium">{club.location}</dd>
                 </div>
               )}
-              {club?.resident_dj && (
-                <div className="rounded-xl border border-border bg-background-elevated/40 p-4">
+              {(residentDjs.length > 0 || residentCustomNames.length > 0) && (
+                <div className="rounded-xl border border-border bg-background-elevated/40 p-4 sm:col-span-2 xl:col-span-3">
                   <dt className="flex items-center gap-1.5 text-xs uppercase tracking-wide text-foreground-muted">
-                    <MicIcon className="h-3.5 w-3.5" /> {tf.resident_dj}
+                    <MicIcon className="h-3.5 w-3.5" /> {tf.resident_djs}
                   </dt>
-                  <dd className="mt-1.5 font-medium">{club.resident_dj}</dd>
+                  <dd className="mt-2 flex flex-wrap gap-2">
+                    {residentDjs.map((dj) => (
+                      <a
+                        key={dj.id}
+                        href={`/${locale}/djs/${encodeURIComponent(dj.display_name)}`}
+                        className="flex items-center gap-2 rounded-full border border-border bg-background-elevated py-1 pl-1 pr-3 text-sm font-medium transition-colors hover:border-accent hover:text-accent"
+                      >
+                        {dj.avatar_url ? (
+                          <Image
+                            src={dj.avatar_url}
+                            alt=""
+                            width={24}
+                            height={24}
+                            className="h-6 w-6 rounded-full object-cover"
+                          />
+                        ) : (
+                          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-background text-xs font-semibold text-accent">
+                            {dj.name.slice(0, 1).toUpperCase()}
+                          </span>
+                        )}
+                        {dj.name}
+                      </a>
+                    ))}
+                    {residentCustomNames.map((name) => (
+                      <span
+                        key={name}
+                        className="flex items-center gap-2 rounded-full border border-dashed border-border py-1 px-3 text-sm font-medium text-foreground-muted"
+                      >
+                        {name}
+                      </span>
+                    ))}
+                  </dd>
                 </div>
               )}
               {club?.capacity != null && (

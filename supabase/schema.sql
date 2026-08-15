@@ -337,7 +337,9 @@ create table public.club_profiles (
   venue_type text,
   location text,
   website text,
-  resident_dj text,
+  -- Each entry is either { "id": "<profile uuid>" } for a registered DJ or
+  -- { "name": "<text>" } for a resident who isn't on the platform yet.
+  resident_djs jsonb not null default '[]',
   sound_profile text not null,
   genre text,
   instagram_url text,

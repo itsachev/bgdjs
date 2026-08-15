@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { AvatarUpload } from "@/components/avatar-upload";
+import { ResidentDjPicker } from "@/components/resident-dj-picker";
 import { BULGARIAN_CITIES } from "@/lib/bulgarian-cities";
 import {
   InstagramIcon,
@@ -74,7 +75,7 @@ const FIELD_KEYS = {
     },
     { key: "location", type: "select", mandatory: true },
     { key: "website", type: "text" },
-    { key: "resident_dj", type: "text", mandatory: true },
+    { key: "resident_djs", type: "dj-picker", mandatory: true },
     { key: "capacity", type: "number", mandatory: true },
     { key: "reservation_contact", type: "text", mandatory: true },
   ],
@@ -93,7 +94,7 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, d
   const [values, setValues] = useState(() => {
     const initial = {};
     allFields.forEach((f) => {
-      initial[f.key] = roleData?.[f.key] ?? "";
+      initial[f.key] = roleData?.[f.key] ?? (f.type === "dj-picker" ? [] : "");
     });
     return initial;
   });
@@ -160,8 +161,13 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, d
       setError(t.errorGenre);
       return;
     }
-    const missingPillField = fields.find((f) => f.type === "pills" && f.mandatory && !values[f.key]);
-    if (missingPillField) {
+    const missingCustomField = fields.find((f) => {
+      if (!f.mandatory) return false;
+      if (f.type === "pills") return !values[f.key];
+      if (f.type === "dj-picker") return values[f.key].length === 0;
+      return false;
+    });
+    if (missingCustomField) {
       setError(t.errorRequired);
       return;
     }
@@ -301,7 +307,9 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, d
           .map((f) => (
           <div
             key={f.key}
-            className={`flex flex-col gap-1.5 ${f.type === "textarea" || f.type === "pills" ? "md:col-span-2" : ""}`}
+            className={`flex flex-col gap-1.5 ${
+              f.type === "textarea" || f.type === "pills" || f.type === "dj-picker" ? "md:col-span-2" : ""
+            }`}
           >
             <label className="flex items-center gap-1.5 text-sm text-foreground-muted" htmlFor={f.key}>
               {f.icon && <f.icon className={`h-3.5 w-3.5 ${f.color || ""}`} />}
@@ -337,6 +345,8 @@ export function ProfileCompleteForm({ role, locale, userId, profile, roleData, d
                   );
                 })}
               </div>
+            ) : f.type === "dj-picker" ? (
+              <ResidentDjPicker value={values[f.key]} onChange={(ids) => setValue(f.key, ids)} t={t} />
             ) : f.type === "select" ? (
               <select
                 id={f.key}

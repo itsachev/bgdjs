@@ -112,6 +112,13 @@
       "errorPhoto": "A profile photo is required.",
       "errorGenre": "Pick at least one genre for your sound profile.",
       "errorRequired": "Please complete all required fields.",
+      "residentDjPlaceholder": "Select resident DJs",
+      "residentDjSearchPlaceholder": "Search by name or city...",
+      "residentDjNoResults": "No DJs found.",
+      "residentDjAddPrefix": "Add",
+      "residentDjAddHint": "Not registered yet? Add them by name.",
+      "residentDjSelected": "selected",
+      "residentDjDone": "Done",
       "fields": {
         "stage_name": "Stage name",
         "genre": "Genre",
@@ -136,7 +143,7 @@
         "venueRooftop": "Rooftop",
         "venueBeachClub": "Beach Club",
         "venueFestival": "Festival ground",
-        "resident_dj": "Resident DJ",
+        "resident_djs": "Resident DJs",
         "capacity": "Capacity",
         "reservation_contact": "Reservation contact"
       }

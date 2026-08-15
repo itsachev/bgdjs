@@ -31,7 +31,7 @@ const clubFields = {
     city: "city",
     location: "location",
     website: "website",
-    resident_dj: "resident_dj",
+    resident_djs: "resident_djs",
     sound_profile: {
         title: "sound profile",
         mandatory: true,

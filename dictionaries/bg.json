@@ -112,6 +112,13 @@
       "errorPhoto": "Профилна снимка е задължителна.",
       "errorGenre": "Избери поне един стил за музикалния си профил.",
       "errorRequired": "Моля, попълни всички задължителни полета.",
+      "residentDjPlaceholder": "Избери резидентни DJ-и",
+      "residentDjSearchPlaceholder": "Търси по име или град...",
+      "residentDjNoResults": "Няма намерени DJ-и.",
+      "residentDjAddPrefix": "Добави",
+      "residentDjAddHint": "Още не е регистриран? Добави го по име.",
+      "residentDjSelected": "избрани",
+      "residentDjDone": "Готово",
       "fields": {
         "stage_name": "Сценично име",
         "genre": "Жанр",
@@ -136,7 +143,7 @@
         "venueRooftop": "Rooftop",
         "venueBeachClub": "Плажен клуб",
         "venueFestival": "Фестивална зона",
-        "resident_dj": "Резидентен DJ",
+        "resident_djs": "Резидентни DJ-и",
         "capacity": "Капацитет",
         "reservation_contact": "Контакт за резервации"
       }

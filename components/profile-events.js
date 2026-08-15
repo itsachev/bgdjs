@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { gsap } from "gsap";
 import { createClient } from "@/lib/supabase/client";
-import { CalendarIcon, CloseIcon } from "@/components/icons";
+import { CalendarIcon, CloseIcon, PlusIcon } from "@/components/icons";
 
 function formatCompactDate(isoString, locale) {
   const date = new Date(isoString);
@@ -16,9 +16,20 @@ function formatCompactDate(isoString, locale) {
   };
 }
 
-export function ProfileEvents({ events: initialEvents, locale, title, isOwner, removeLabel }) {
+export function ProfileEvents({
+  events: initialEvents,
+  locale,
+  title,
+  isOwner,
+  removeLabel,
+  confirmLabel,
+  createEventHref,
+  createEventLabel,
+}) {
   const [events, setEvents] = useState(initialEvents || []);
+  const [confirmingId, setConfirmingId] = useState(null);
   const listRef = useRef(null);
+  const confirmTimeout = useRef(null);
 
   useEffect(() => {
     if (!listRef.current) return;
@@ -35,7 +46,24 @@ export function ProfileEvents({ events: initialEvents, locale, title, isOwner, r
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => () => clearTimeout(confirmTimeout.current), []);
+
   if (events.length === 0) return null;
+
+  // First click arms the button (red, asks to confirm) instead of deleting
+  // straight away; a second click within the window actually removes it.
+  function handleDeleteClick(id, e) {
+    if (confirmingId !== id) {
+      setConfirmingId(id);
+      gsap.fromTo(e.currentTarget, { scale: 1.15 }, { scale: 1, duration: 0.35, ease: "back.out(3)" });
+      clearTimeout(confirmTimeout.current);
+      confirmTimeout.current = setTimeout(() => setConfirmingId(null), 3000);
+      return;
+    }
+    clearTimeout(confirmTimeout.current);
+    setConfirmingId(null);
+    handleRemove(id);
+  }
 
   async function handleRemove(id) {
     setEvents((current) => current.filter((e) => e.id !== id));
@@ -45,7 +73,20 @@ export function ProfileEvents({ events: initialEvents, locale, title, isOwner, r
 
   return (
     <div>
-      {title && <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-foreground-muted">{title}</p>}
+      {(title || (isOwner && createEventHref)) && (
+        <div className="mb-3 flex items-center gap-3">
+          {title && <p className="text-xs font-semibold uppercase tracking-wide text-foreground-muted">{title}</p>}
+          {isOwner && createEventHref && (
+            <Link
+              href={createEventHref}
+              className="flex shrink-0 items-center gap-1.5 text-xs font-semibold text-accent transition-colors hover:text-accent-2"
+            >
+              <PlusIcon className="h-3.5 w-3.5" />
+              {createEventLabel}
+            </Link>
+          )}
+        </div>
+      )}
       <ul ref={listRef} className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {events.map((event) => {
           const { day, month, time } = formatCompactDate(event.starts_at, locale);
@@ -72,9 +113,13 @@ export function ProfileEvents({ events: initialEvents, locale, title, isOwner, r
               {isOwner && (
                 <button
                   type="button"
-                  onClick={() => handleRemove(event.id)}
-                  aria-label={removeLabel}
-                  className="shrink-0 rounded-full p-1.5 text-foreground-muted transition-colors hover:bg-red-500/10 hover:text-red-500"
+                  onClick={(e) => handleDeleteClick(event.id, e)}
+                  aria-label={confirmingId === event.id ? confirmLabel : removeLabel}
+                  className={`shrink-0 rounded-full p-1.5 transition-colors ${
+                    confirmingId === event.id
+                      ? "bg-red-500 text-white"
+                      : "text-foreground-muted hover:bg-red-500/10 hover:text-red-500"
+                  }`}
                 >
                   <CloseIcon className="h-4 w-4" />
                 </button>

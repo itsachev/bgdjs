@@ -299,6 +299,9 @@ export default async function ClubProfilePage({ params }) {
               title={t.events}
               isOwner={isOwner}
               removeLabel={t.removeEvent}
+              confirmLabel={t.confirmRemoveEvent}
+              createEventHref={`/${locale}/events/create`}
+              createEventLabel={dict.nav.addEvent}
             />
           </div>
         )}

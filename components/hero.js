@@ -45,7 +45,7 @@ export function Hero({ dict, locale, hero }) {
   return (
     <section
       ref={rootRef}
-      className="relative flex min-h-[85vh] flex-col items-center justify-center overflow-hidden px-6 text-center"
+      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 text-center"
     >
       {/* -z-10 keeps this behind the (non-positioned) text below regardless of DOM order */}
       <div data-hero-bg aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">

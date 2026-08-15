@@ -72,7 +72,7 @@ export function MixesSection({ mixes, title }) {
   return (
     <div>
       {title && <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-foreground-muted">{title}</p>}
-      <ul className="flex flex-col gap-3">
+      <ul className="grid grid-cols-1 items-start gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {mixes.map((mix) => (
           <MixRow
             key={mix.id}

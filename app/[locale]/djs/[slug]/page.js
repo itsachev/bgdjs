@@ -232,6 +232,7 @@ export default async function DjProfilePage({ params }) {
               title={t.events}
               isOwner={isOwner}
               removeLabel={t.removeEvent}
+              confirmLabel={t.confirmRemoveEvent}
             />
           </div>
         )}

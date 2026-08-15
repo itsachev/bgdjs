@@ -246,6 +246,7 @@ create policy "Admins can delete signup media"
 create table public.site_audio (
   id smallint primary key default 1,
   title text,
+  author_info text,
   media_url text,
   media_path text,
   updated_at timestamptz not null default now(),

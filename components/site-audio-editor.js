@@ -10,6 +10,7 @@ function extFromFile(file) {
 
 export function SiteAudioEditor({ initial }) {
   const [title, setTitle] = useState(initial?.title ?? "");
+  const [authorInfo, setAuthorInfo] = useState(initial?.author_info ?? "");
   const [mediaUrl, setMediaUrl] = useState(initial?.media_url ?? null);
   const [mediaPath, setMediaPath] = useState(initial?.media_path ?? null);
 
@@ -27,7 +28,7 @@ export function SiteAudioEditor({ initial }) {
     const supabase = createClient();
     const { error } = await supabase
       .from("site_audio")
-      .update({ title: title || null })
+      .update({ title: title || null, author_info: authorInfo || null })
       .eq("id", 1);
 
     setSavingTitle(false);
@@ -118,27 +119,42 @@ export function SiteAudioEditor({ initial }) {
 
   return (
     <div className="mt-6 flex flex-col gap-6">
-      <div className="flex flex-col gap-1.5">
-        <label className="text-sm text-foreground-muted" htmlFor="audioTitle">
-          Song title
-        </label>
-        <div className="flex gap-2">
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-1.5">
+          <label className="text-sm text-foreground-muted" htmlFor="audioTitle">
+            Song title
+          </label>
           <input
             id="audioTitle"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Track name shown next to the player"
-            className="flex-1 rounded-lg border border-border bg-background-elevated px-4 py-2.5 outline-none focus:border-accent"
+            className="rounded-lg border border-border bg-background-elevated px-4 py-2.5 outline-none focus:border-accent"
           />
-          <button
-            type="button"
-            onClick={saveTitle}
-            disabled={savingTitle}
-            className="rounded-lg bg-accent px-5 py-2 text-sm font-semibold text-white transition-opacity disabled:opacity-60"
-          >
-            {savingTitle ? "Saving..." : "Save"}
-          </button>
         </div>
+
+        <div className="flex flex-col gap-1.5">
+          <label className="text-sm text-foreground-muted" htmlFor="audioAuthorInfo">
+            Song author info
+          </label>
+          <textarea
+            id="audioAuthorInfo"
+            value={authorInfo}
+            onChange={(e) => setAuthorInfo(e.target.value)}
+            placeholder="A line or two about the author, shown after the title when a visitor hovers the player"
+            rows={3}
+            className="resize-none rounded-lg border border-border bg-background-elevated px-4 py-2.5 outline-none focus:border-accent"
+          />
+        </div>
+
+        <button
+          type="button"
+          onClick={saveTitle}
+          disabled={savingTitle}
+          className="self-start rounded-lg bg-accent px-5 py-2 text-sm font-semibold text-white transition-opacity disabled:opacity-60"
+        >
+          {savingTitle ? "Saving..." : "Save"}
+        </button>
       </div>
 
       <div className="flex flex-col gap-3">

@@ -27,22 +27,28 @@ export default async function AdminPage() {
         Content management for DJs, clubs, events, and mixes goes here.
       </p>
 
-      <section className="mt-12">
+      <section className="mt-16">
         <h2 className="font-display text-xl font-semibold tracking-tight">Hero section</h2>
         <HeroEditor initial={hero} />
       </section>
 
-      <section className="mt-12">
+      <hr className="mt-16 border-border" />
+
+      <section className="mt-16">
         <h2 className="font-display text-xl font-semibold tracking-tight">Login page background</h2>
         <LoginBackgroundEditor initial={loginBackground} />
       </section>
 
-      <section className="mt-12">
+      <hr className="mt-16 border-border" />
+
+      <section className="mt-16">
         <h2 className="font-display text-xl font-semibold tracking-tight">Signup page background</h2>
         <SignupBackgroundEditor initial={signupBackground} />
       </section>
 
-      <section className="mt-12">
+      <hr className="mt-16 border-border" />
+
+      <section className="mt-16">
         <h2 className="font-display text-xl font-semibold tracking-tight">Site audio</h2>
         <SiteAudioEditor initial={siteAudio} />
       </section>

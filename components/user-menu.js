@@ -22,7 +22,6 @@ export function UserMenu({
   canMessage,
   accountLabel,
   messagesLabel,
-  viewProfileLabel,
 }) {
   const router = useRouter();
   const { count: unreadCount } = useUnreadMessages();
@@ -78,14 +77,25 @@ export function UserMenu({
     <div className="flex items-center gap-3">
       {hasDropdown ? (
         <div className="relative hidden sm:block" onMouseEnter={openMenu} onMouseLeave={scheduleClose}>
-          <span className={`${nameClassName} text-white`}>
-            {accountLabel}
-            {canMessage && unreadCount > 0 && (
-              <span className="absolute -right-3 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent-2 px-1 text-[0.6rem] font-bold text-black">
-                {unreadCount > 9 ? "9+" : unreadCount}
-              </span>
-            )}
-          </span>
+          {profileHref ? (
+            <Link href={profileHref} className={`${nameClassName} text-white`}>
+              {accountLabel}
+              {canMessage && unreadCount > 0 && (
+                <span className="absolute -right-3 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent-2 px-1 text-[0.6rem] font-bold text-black">
+                  {unreadCount > 9 ? "9+" : unreadCount}
+                </span>
+              )}
+            </Link>
+          ) : (
+            <span className={`${nameClassName} text-white`}>
+              {accountLabel}
+              {canMessage && unreadCount > 0 && (
+                <span className="absolute -right-3 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent-2 px-1 text-[0.6rem] font-bold text-black">
+                  {unreadCount > 9 ? "9+" : unreadCount}
+                </span>
+              )}
+            </span>
+          )}
 
           <div
             ref={menuRef}
@@ -93,11 +103,6 @@ export function UserMenu({
             className={`absolute right-0 top-full z-50 w-52 pt-3 ${menuOpen ? "pointer-events-auto" : "pointer-events-none"}`}
           >
             <div className="overflow-hidden rounded-xl border border-border bg-background-elevated p-1.5 shadow-2xl">
-              {profileHref && (
-                <Link href={profileHref} className={itemClassName}>
-                  {viewProfileLabel}
-                </Link>
-              )}
               {canMessage && (
                 <Link href={`/${locale}/messages`} className={itemClassName}>
                   <MessageIcon className="h-4 w-4" />

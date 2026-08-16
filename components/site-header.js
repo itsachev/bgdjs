@@ -39,7 +39,6 @@ export function SiteHeader({ locale, dict, profile, canMessage }) {
                 canMessage={canMessage}
                 accountLabel={dict.nav.myAccount}
                 messagesLabel={dict.nav.messages}
-                viewProfileLabel={dict.nav.viewProfile}
               />
             ) : (
               <div className="flex items-center gap-2">

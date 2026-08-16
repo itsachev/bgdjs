@@ -206,6 +206,7 @@
     },
     "view": {
       "editProfile": "Edit profile",
+      "message": "Message",
       "djBadge": "DJ",
       "clubBadge": "Club",
       "city": "City",
@@ -259,6 +260,24 @@
         }
       }
     }
+  },
+  "messages": {
+    "title": "Messages",
+    "subtitle": "Conversations with DJs and clubs.",
+    "empty": "No conversations yet.",
+    "ineligible": "Messaging is available for DJ and club accounts.",
+    "loginPrompt": "Log in to view your messages.",
+    "unreadLabel": "unread"
+  },
+  "messageThread": {
+    "backToInbox": "← All messages",
+    "me": "Me",
+    "placeholder": "Write a message...",
+    "send": "Send",
+    "sending": "Sending...",
+    "empty": "No messages yet — say hello.",
+    "errorGeneric": "Something went wrong. Please try again.",
+    "ineligible": "Messaging is available for DJ and club accounts."
   },
   "eventCreate": {
     "title": "Create an event",

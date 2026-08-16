@@ -23,6 +23,8 @@ import { ProfileEvents } from "@/components/profile-events";
 import { ProfileParallaxBg } from "@/components/profile-parallax-bg";
 import { RatingSection } from "@/components/rating-section";
 import { AmbientGlow } from "@/components/ambient-glow";
+import { MessageButton } from "@/components/message-button";
+import { getCurrentProfile, canUseMessaging } from "@/lib/auth";
 
 const SOCIAL_PLATFORMS = [
   { key: "instagram_url", label: "Instagram", icon: InstagramIcon, color: "text-pink-500" },
@@ -164,12 +166,21 @@ export default async function ClubProfilePage({ params }) {
 
   const isOwner = user?.id === profile.id;
 
+  const currentProfile = await getCurrentProfile();
+  // Logged-out visitors still see the button (routed through login first);
+  // logged-in fans don't, since messaging is DJ/club-to-DJ/club only.
+  const canViewerMessage = !currentProfile || canUseMessaging(currentProfile.role);
+  const messageTargetPath = `/${locale}/messages/new?with=${profile.id}`;
+  const messageHref = currentProfile
+    ? messageTargetPath
+    : `/${locale}/login?next=${encodeURIComponent(messageTargetPath)}`;
+
   return (
     <div className="relative flex-1 overflow-hidden">
       <AmbientGlow variant="profile" />
 
       {profile.avatar_url && (
-        <ProfileParallaxBg src={profile.avatar_url} position={profile.avatar_position} />
+        <ProfileParallaxBg src={profile.avatar_url} position={profile.avatar_position} align="left" />
       )}
 
       <div className="relative mx-auto max-w-7xl px-6 py-16">
@@ -193,6 +204,8 @@ export default async function ClubProfilePage({ params }) {
                 {t.editProfile}
               </a>
             )}
+
+            {!isOwner && canViewerMessage && <MessageButton href={messageHref} label={t.message} />}
           </div>
 
           <div className="mt-10 lg:mt-0">

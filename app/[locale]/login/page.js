@@ -11,13 +11,14 @@ export async function generateMetadata({ params }) {
   return { title: dict.auth.login.title, description: dict.auth.login.metaDescription };
 }
 
-export default async function LoginPage({ params }) {
+export default async function LoginPage({ params, searchParams }) {
   const { locale } = await params;
   if (!hasLocale(locale)) notFound();
   const dict = await getDictionary(locale);
+  const { next } = await searchParams;
 
   const supabase = await createClient();
   const { data: background } = await supabase.from("login_content").select("*").eq("id", 1).maybeSingle();
 
-  return <LoginForm dict={dict} locale={locale} background={background} />;
+  return <LoginForm dict={dict} locale={locale} background={background} next={next} />;
 }

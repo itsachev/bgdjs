@@ -5,8 +5,12 @@ import { SmoothScrollProvider } from "@/components/smooth-scroll-provider";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteAudio } from "@/components/site-audio";
+import { UnreadMessagesProvider } from "@/components/unread-messages-provider";
 import { getDictionary, hasLocale, locales } from "./dictionaries";
 import { notFound } from "next/navigation";
+import { getCurrentProfile, canUseMessaging } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
+import { getUnreadMessageCount } from "@/lib/messaging";
 
 const bodyFont = Inter({
   variable: "--font-body",
@@ -42,6 +46,16 @@ export default async function RootLayout({ children, params }) {
   if (!hasLocale(locale)) notFound();
   const dict = await getDictionary(locale);
 
+  // Computed once here (not inside SiteHeader) so the same profile/count
+  // feed both the header's badge and the live context that page content
+  // (e.g. an open message thread) needs to resync that same badge —
+  // UnreadMessagesProvider has to wrap the whole layout, not just the
+  // header, or anything under {children} sees only the default no-op
+  // context instead of the header's real one.
+  const profile = await getCurrentProfile();
+  const canMessage = profile ? canUseMessaging(profile.role) : false;
+  const unreadCount = canMessage ? await getUnreadMessageCount(await createClient(), profile.id) : 0;
+
   return (
     <html
       lang={locale}
@@ -51,12 +65,14 @@ export default async function RootLayout({ children, params }) {
       <body className="min-h-full antialiased">
         <ThemeProvider>
           <SmoothScrollProvider>
-            <div aria-hidden="true" className="bg-grain" />
-            <div className="flex min-h-screen flex-col">
-              <SiteHeader locale={locale} dict={dict} />
-              <main className="flex flex-1 flex-col">{children}</main>
-              <SiteFooter locale={locale} dict={dict} />
-            </div>
+            <UnreadMessagesProvider viewerId={profile?.id ?? null} enabled={canMessage} initialCount={unreadCount}>
+              <div aria-hidden="true" className="bg-grain" />
+              <div className="flex min-h-screen flex-col">
+                <SiteHeader locale={locale} dict={dict} profile={profile} canMessage={canMessage} />
+                <main className="flex flex-1 flex-col">{children}</main>
+                <SiteFooter locale={locale} dict={dict} />
+              </div>
+            </UnreadMessagesProvider>
             <SiteAudio />
           </SmoothScrollProvider>
         </ThemeProvider>

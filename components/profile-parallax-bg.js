@@ -7,8 +7,16 @@ import Image from "next/image";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export function ProfileParallaxBg({ src, position }) {
+export function ProfileParallaxBg({ src, position, align = "right" }) {
   const rootRef = useRef(null);
+  const sideClass = align === "left" ? "left-0" : "right-0";
+  // The edge mask always fades toward the content column in the center of
+  // the page, so it has to point the opposite way from whichever side the
+  // panel itself sits on.
+  const edgeMaskClass =
+    align === "left"
+      ? "mask-[linear-gradient(to_right,black_40%,transparent)]"
+      : "mask-[linear-gradient(to_left,black_40%,transparent)]";
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -34,12 +42,9 @@ export function ProfileParallaxBg({ src, position }) {
     <div
       ref={rootRef}
       aria-hidden="true"
-      className="pointer-events-none absolute top-0 right-0 -z-10 hidden h-screen w-1/2 md:block"
+      className={`pointer-events-none absolute top-0 -z-10 hidden h-screen w-1/2 md:block ${sideClass}`}
     >
-      {/* Opacity + left mask live on this inner layer only, so the bottom-fade
-          overlay below isn't dimmed along with the photo and can reach a fully
-          opaque match with the page background instead of a faint 30% tint. */}
-      <div className="absolute inset-0 opacity-30 mask-[linear-gradient(to_left,black_40%,transparent)]">
+      <div className={`absolute inset-0 opacity-30 ${edgeMaskClass}`}>
         <Image
           src={src}
           alt=""
@@ -49,7 +54,6 @@ export function ProfileParallaxBg({ src, position }) {
           style={{ objectPosition: position || "50% 50%" }}
         />
       </div>
-      <div className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-background to-transparent" />
     </div>
   );
 }

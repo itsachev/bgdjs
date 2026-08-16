@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 import { gsap } from "gsap";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import { resolvePostAuthPath } from "@/lib/post-auth-redirect";
+import { resolvePostAuthPath, isSafeNextPath } from "@/lib/post-auth-redirect";
 import { AuthLayout } from "@/components/auth-layout";
 
-export function LoginForm({ dict, locale, embedded = false, background = null }) {
+export function LoginForm({ dict, locale, embedded = false, background = null, next = null }) {
   const t = dict.auth.login;
   const router = useRouter();
   const mediaUrl = background?.media_url;
@@ -50,7 +50,7 @@ export function LoginForm({ dict, locale, embedded = false, background = null })
       return;
     }
 
-    const path = await resolvePostAuthPath(supabase, locale);
+    const path = isSafeNextPath(next) ? next : await resolvePostAuthPath(supabase, locale);
     setLoading(false);
     router.push(path);
     router.refresh();
@@ -89,7 +89,11 @@ export function LoginForm({ dict, locale, embedded = false, background = null })
 
       <p className="mt-6 text-center text-sm text-foreground-muted">
         {t.noAccount}{" "}
-        <Link href={`/${locale}/signup`} replace className="text-accent hover:text-accent-2">
+        <Link
+          href={`/${locale}/signup${isSafeNextPath(next) ? `?next=${encodeURIComponent(next)}` : ""}`}
+          replace
+          className="text-accent hover:text-accent-2"
+        >
           {t.signupLink}
         </Link>
       </p>

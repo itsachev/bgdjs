@@ -335,3 +335,19 @@ export function ArrowUpRightIcon(props) {
     </Icon>
   );
 }
+
+export function MessageIcon(props) {
+  return (
+    <Icon {...props}>
+      <path d="M4 5.5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H9l-5 4v-4a2 2 0 0 1-2-2z" />
+    </Icon>
+  );
+}
+
+export function SendIcon(props) {
+  return (
+    <Icon {...props}>
+      <path d="M21 3 3 10.5l7.5 3M21 3l-7.5 18-3-7.5M21 3 10.5 13.5" />
+    </Icon>
+  );
+}

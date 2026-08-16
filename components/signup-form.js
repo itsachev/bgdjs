@@ -6,7 +6,7 @@ import { gsap } from "gsap";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { PasswordInput } from "@/components/password-input";
-import { resolvePostAuthPath } from "@/lib/post-auth-redirect";
+import { resolvePostAuthPath, isSafeNextPath } from "@/lib/post-auth-redirect";
 import { AuthLayout } from "@/components/auth-layout";
 import { MicIcon, BuildingIcon, HeartIcon, CheckIcon, CloseIcon, MailIcon } from "@/components/icons";
 
@@ -38,7 +38,7 @@ function FieldStatus({ status, t }) {
   return null;
 }
 
-export function SignupForm({ dict, locale, embedded = false, background = null }) {
+export function SignupForm({ dict, locale, embedded = false, background = null, next = null }) {
   const router = useRouter();
   const t = dict.auth.signup;
   const mediaUrl = background?.media_url;
@@ -167,7 +167,7 @@ export function SignupForm({ dict, locale, embedded = false, background = null }
     }
 
     if (data.session) {
-      const path = await resolvePostAuthPath(supabase, locale);
+      const path = isSafeNextPath(next) ? next : await resolvePostAuthPath(supabase, locale);
       setLoading(false);
       router.push(path);
       router.refresh();
@@ -319,7 +319,11 @@ export function SignupForm({ dict, locale, embedded = false, background = null }
 
       <p className="mt-6 text-center text-sm text-foreground-muted">
         {t.haveAccount}{" "}
-        <Link href={`/${locale}/login`} replace className="text-accent hover:text-accent-2">
+        <Link
+          href={`/${locale}/login${isSafeNextPath(next) ? `?next=${encodeURIComponent(next)}` : ""}`}
+          replace
+          className="text-accent hover:text-accent-2"
+        >
           {t.loginLink}
         </Link>
       </p>

@@ -1,5 +1,5 @@
 import { redirect, notFound } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { getAuthUser } from "@/lib/supabase/server";
 import { getDictionary, hasLocale } from "../../dictionaries";
 import { EventCreateForm } from "@/components/event-create-form";
 
@@ -19,11 +19,7 @@ export default async function EventCreatePage({ params }) {
   if (!hasLocale(locale)) notFound();
   const dict = await getDictionary(locale);
 
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getAuthUser();
 
   if (!user) redirect(`/${locale}/login`);
 

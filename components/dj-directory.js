@@ -55,8 +55,8 @@ function useSectionReveal(ref, deps) {
       // Some sections (the results grid) only have cards, no header — only
       // queue a tween for a target set that actually exists, since gsap
       // warns on an empty NodeList.
-      if (headers.length > 0) tl.to(headers, { opacity: 1, y: 0, duration: 0.5 });
-      if (cards.length > 0) tl.to(cards, { opacity: 1, y: 0, duration: 0.6, stagger: 0.06 }, "-=0.25");
+      if (headers.length > 0) tl.to(headers, { opacity: 1, duration: 0.5 });
+      if (cards.length > 0) tl.to(cards, { opacity: 1, duration: 0.6, stagger: 0.06 }, "-=0.25");
     }, ref);
 
     return () => ctx.revert();
@@ -74,7 +74,7 @@ function GenreLeaderboard({ title, djs, locale, votesLabel }) {
     <div ref={rootRef} className="my-20">
       <h2
         data-reveal-header
-        className="transform-[translateY(20px)] font-display text-display-3 font-bold tracking-tight opacity-0"
+        className="font-display text-display-3 font-bold tracking-tight opacity-0"
       >
         {title}
       </h2>
@@ -88,8 +88,17 @@ function GenreLeaderboard({ title, djs, locale, votesLabel }) {
               key={id}
               data-reveal-card
               href={`/${locale}/djs/${encodeURIComponent(display_name)}`}
-              className="group flex transform-[translateY(28px)] flex-col items-center gap-3 rounded-2xl border border-border bg-background-elevated p-5 text-center opacity-0 transition-colors hover:border-accent"
+              className="group relative flex flex-col items-center gap-3 overflow-hidden rounded-2xl border border-border bg-background-elevated p-5 text-center opacity-0 transition-transform duration-300"
             >
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute -top-16 -right-16 -z-10 h-40 w-40 rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent)_30%,transparent),transparent_70%)] opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-100"
+              />
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute -bottom-16 -left-16 -z-10 h-40 w-40 rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent-2)_25%,transparent),transparent_70%)] opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-80"
+              />
+
               <div className="relative">
                 <div className={`relative shrink-0 overflow-hidden rounded-full ring-2 ${medal.ring} ${medal.avatar}`}>
                   {avatar_url ? (
@@ -138,7 +147,7 @@ function DjCard({ display_name, avatar_url, avatar_position, last_seen_at, dj, l
     <Link
       data-reveal-card
       href={`/${locale}/djs/${encodeURIComponent(display_name)}`}
-      className="group relative flex aspect-3/4 transform-[translateY(32px)] flex-col justify-end overflow-hidden rounded-2xl border border-border bg-background-elevated opacity-0 transition-[translate,border-color] duration-500 [@media(hover:hover)]:hover:-translate-y-1 [@media(hover:hover)]:hover:border-accent/60"
+      className="group relative flex aspect-3/4 flex-col justify-end overflow-hidden rounded-2xl border border-border bg-background-elevated opacity-0 transition-transform duration-300"
     >
       <div className="absolute inset-0" aria-hidden="true">
         {avatar_url ? (
@@ -147,7 +156,7 @@ function DjCard({ display_name, avatar_url, avatar_position, last_seen_at, dj, l
             alt=""
             fill
             sizes="(min-width: 1024px) 24vw, (min-width: 640px) 32vw, 48vw"
-            className="object-cover transition-transform duration-700 [@media(hover:hover)]:group-hover:scale-105"
+            className="object-cover"
             style={{ objectPosition: avatar_position || "50% 50%" }}
           />
         ) : (
@@ -197,6 +206,7 @@ export function DjDirectory({
   topPopFolkTitle,
   topPopFolkVotesLabel,
   pageDjs,
+  allDjsTitle,
   locale,
   onlineLabel,
   emptyMessage,
@@ -212,7 +222,7 @@ export function DjDirectory({
         <div
           key="sponsored-slot"
           data-reveal-card
-          className="transform-[translateY(32px)] opacity-0"
+          className="opacity-0"
         >
           <AdSlot
             variant="card"
@@ -235,8 +245,16 @@ export function DjDirectory({
       {pageDjs.length === 0 ? (
         <p className="mt-16 text-foreground-muted">{emptyMessage}</p>
       ) : (
-        <div ref={gridRef} className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-          {cards}
+        <div ref={gridRef} id="all-djs" className="mt-16 scroll-mt-24">
+          <h2
+            data-reveal-header
+            className="font-display text-display-3 font-bold tracking-tight opacity-0"
+          >
+            {allDjsTitle}
+          </h2>
+          <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+            {cards}
+          </div>
         </div>
       )}
     </>

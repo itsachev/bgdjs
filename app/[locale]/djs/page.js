@@ -10,7 +10,11 @@ import { Kicker } from "@/components/kicker";
 import { DjDirectory } from "@/components/dj-directory";
 import { AdSlot } from "@/components/ad-slot";
 
-const PAGE_SIZE = 20;
+// The sponsored card is inserted into the results grid alongside real DJ
+// cards (not swapped in for one), so the page size is trimmed by one
+// whenever an ad is shown to keep the total tile count consistent.
+const PAGE_SIZE_WITH_AD = 11;
+const PAGE_SIZE_WITHOUT_AD = 12;
 
 // Genre names are kept in Latin script for both locales, matching the
 // sound-profile pills on the profile-completion form.
@@ -47,13 +51,13 @@ function cityMatches(location, needle) {
   return labels.some((label) => label.includes(needle));
 }
 
-function pageHref(locale, { page, q, genre }) {
+function pageHref(locale, { page, q, genre, hash }) {
   const search = new URLSearchParams();
   if (q) search.set("q", q);
   if (genre) search.set("genre", genre);
   if (page > 1) search.set("page", String(page));
   const qs = search.toString();
-  return `/${locale}/djs${qs ? `?${qs}` : ""}`;
+  return `/${locale}/djs${qs ? `?${qs}` : ""}${hash ? `#${hash}` : ""}`;
 }
 
 export async function generateMetadata({ params }) {
@@ -76,16 +80,14 @@ export default async function DjsPage({ params, searchParams }) {
 
   const supabase = await createClient();
 
-  const { data: profiles } = await supabase
-    .from("profiles")
-    .select("id, display_name, avatar_url, avatar_position, bio, last_seen_at")
-    .eq("role", "dj");
-
-  const { data: djProfiles } = await supabase
-    .from("dj_profiles")
-    .select("id, stage_name, gender, location, sound_profile");
-
-  const { data: voteCounts } = await supabase.from("profile_vote_counts").select("target_id, votes");
+  const [{ data: profiles }, { data: djProfiles }, { data: voteCounts }] = await Promise.all([
+    supabase
+      .from("profiles")
+      .select("id, display_name, avatar_url, avatar_position, bio, last_seen_at")
+      .eq("role", "dj"),
+    supabase.from("dj_profiles").select("id, stage_name, gender, location, sound_profile"),
+    supabase.from("profile_vote_counts").select("target_id, votes"),
+  ]);
   const voteCountById = new Map((voteCounts || []).map((v) => [v.target_id, v.votes]));
 
   const djById = new Map((djProfiles || []).map((d) => [d.id, d]));
@@ -119,6 +121,9 @@ export default async function DjsPage({ params, searchParams }) {
       dj?.sound_profile?.split(",").map((g) => g.trim()).includes(genre)
     );
   }
+
+  const hasAd = Boolean(dict.ads);
+  const PAGE_SIZE = hasAd ? PAGE_SIZE_WITH_AD : PAGE_SIZE_WITHOUT_AD;
 
   const totalPages = Math.max(1, Math.ceil(djs.length / PAGE_SIZE));
   const currentPage = Math.min(Math.max(1, Number(pageParam) || 1), totalPages);
@@ -181,6 +186,7 @@ export default async function DjsPage({ params, searchParams }) {
           topPopFolkTitle={t.topPopFolk.title}
           topPopFolkVotesLabel={t.topPopFolk.votes}
           pageDjs={pageDjs}
+          allDjsTitle={t.allDjs}
           locale={locale}
           onlineLabel={t.online}
           emptyMessage={query || genre ? t.noResults : t.empty}
@@ -190,7 +196,7 @@ export default async function DjsPage({ params, searchParams }) {
         {totalPages > 1 && (
           <div className="mt-16 flex items-center justify-center gap-4">
             <Link
-              href={pageHref(locale, { page: currentPage - 1, q: query, genre })}
+              href={pageHref(locale, { page: currentPage - 1, q: query, genre, hash: "all-djs" })}
               aria-disabled={currentPage <= 1}
               aria-label={t.prev}
               className={`flex h-10 w-10 items-center justify-center rounded-full border border-border transition-colors ${
@@ -203,7 +209,7 @@ export default async function DjsPage({ params, searchParams }) {
               {t.page} {currentPage} / {totalPages}
             </p>
             <Link
-              href={pageHref(locale, { page: currentPage + 1, q: query, genre })}
+              href={pageHref(locale, { page: currentPage + 1, q: query, genre, hash: "all-djs" })}
               aria-disabled={currentPage >= totalPages}
               aria-label={t.next}
               className={`flex h-10 w-10 items-center justify-center rounded-full border border-border transition-colors ${

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, getAuthUser } from "@/lib/supabase/server";
 import { getDictionary, hasLocale } from "../../dictionaries";
 import { CalendarIcon, MapPinIcon, TicketIcon, UserIcon } from "@/components/icons";
 import { EventCoverParallax } from "@/components/event-cover-parallax";
@@ -40,11 +40,10 @@ export default async function EventDetailPage({ params }) {
 
   const supabase = await createClient();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  const { data: event } = await supabase.from("events").select("*").eq("id", id).maybeSingle();
+  const [user, { data: event }] = await Promise.all([
+    getAuthUser(),
+    supabase.from("events").select("*").eq("id", id).maybeSingle(),
+  ]);
   if (!event) notFound();
 
   const isOwner = user?.id === event.organizer_id;

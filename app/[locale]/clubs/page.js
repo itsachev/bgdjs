@@ -69,14 +69,13 @@ export default async function ClubsPage({ params, searchParams }) {
 
   const supabase = await createClient();
 
-  const { data: profiles } = await supabase
-    .from("profiles")
-    .select("id, display_name, avatar_url, avatar_position")
-    .eq("role", "club");
-
-  const { data: clubProfiles } = await supabase
-    .from("club_profiles")
-    .select("id, name, location, sound_profile");
+  const [{ data: profiles }, { data: clubProfiles }] = await Promise.all([
+    supabase
+      .from("profiles")
+      .select("id, display_name, avatar_url, avatar_position")
+      .eq("role", "club"),
+    supabase.from("club_profiles").select("id, name, location, sound_profile"),
+  ]);
 
   const clubById = new Map((clubProfiles || []).map((c) => [c.id, c]));
 
@@ -157,7 +156,7 @@ export default async function ClubsPage({ params, searchParams }) {
                 <Link
                   key={id}
                   href={`/${locale}/clubs/${encodeURIComponent(display_name)}`}
-                  className="group relative flex flex-col items-center gap-3 overflow-hidden rounded-2xl border border-border bg-[linear-gradient(135deg,color-mix(in_oklch,var(--color-accent)_7%,var(--color-background-elevated)),color-mix(in_oklch,var(--color-accent-2)_7%,var(--color-background-elevated)))] p-6 text-center transition-all duration-300 hover:-translate-y-1 hover:border-accent"
+                  className="group relative flex flex-col items-center gap-3 overflow-hidden rounded-2xl border border-border bg-[linear-gradient(135deg,color-mix(in_oklch,var(--color-accent)_7%,var(--color-background-elevated)),color-mix(in_oklch,var(--color-accent-2)_7%,var(--color-background-elevated)))] p-6 text-center transition-transform duration-300 hover:-translate-y-1"
                 >
                   <div
                     aria-hidden="true"

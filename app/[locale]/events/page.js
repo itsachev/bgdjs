@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, getAuthUser } from "@/lib/supabase/server";
 import { getDictionary, hasLocale } from "../dictionaries";
 import { PlusIcon } from "@/components/icons";
 import { EventCard } from "@/components/event-card";
@@ -28,15 +28,14 @@ export default async function EventsPage({ params }) {
 
   const supabase = await createClient();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  const { data: events } = await supabase
-    .from("events")
-    .select("id, title, cover_url, starts_at, city, venue_name, price_info")
-    .gte("starts_at", new Date().toISOString())
-    .order("starts_at", { ascending: true });
+  const [user, { data: events }] = await Promise.all([
+    getAuthUser(),
+    supabase
+      .from("events")
+      .select("id, title, cover_url, starts_at, city, venue_name, price_info")
+      .gte("starts_at", new Date().toISOString())
+      .order("starts_at", { ascending: true }),
+  ]);
 
   return (
     <div className="relative flex-1 overflow-hidden">

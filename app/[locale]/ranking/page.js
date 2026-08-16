@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, getAuthUser } from "@/lib/supabase/server";
 import { getDictionary, hasLocale } from "../dictionaries";
 import { RankingBoard } from "@/components/ranking-board";
 
@@ -32,10 +32,7 @@ export default async function RankingPage({ params }) {
   const dict = await getDictionary(locale);
 
   const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getAuthUser();
 
   const [
     { data: djProfiles },

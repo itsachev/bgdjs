@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, getAuthUser } from "@/lib/supabase/server";
 import { getDictionary, hasLocale } from "../../dictionaries";
 import {
   MapPinIcon,
@@ -24,7 +24,7 @@ import { ContactSection } from "@/components/contact-section";
 import { AmbientGlow } from "@/components/ambient-glow";
 import { AdSlot } from "@/components/ad-slot";
 import { MessageButton } from "@/components/message-button";
-import { getCurrentProfile, canUseMessaging } from "@/lib/auth";
+import { canUseMessaging } from "@/lib/auth";
 
 const SOCIAL_PLATFORMS = [
   { key: "instagram_url", label: "Instagram", icon: InstagramIcon, color: "text-pink-500" },
@@ -68,49 +68,62 @@ export default async function DjProfilePage({ params }) {
 
   const supabase = await createClient();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("id, role, display_name, avatar_url, avatar_position, bio, city")
-    .eq("display_name", decodeURIComponent(slug))
-    .single();
+  const [user, { data: profile }] = await Promise.all([
+    getAuthUser(),
+    supabase
+      .from("profiles")
+      .select("id, role, display_name, avatar_url, avatar_position, bio, city")
+      .eq("display_name", decodeURIComponent(slug))
+      .single(),
+  ]);
 
   if (!profile || profile.role !== "dj") notFound();
 
-  const { data: dj } = await supabase.from("dj_profiles").select("*").eq("id", profile.id).maybeSingle();
+  const isOwner = user?.id === profile.id;
+
+  const [
+    { data: dj },
+    { data: galleryPhotos },
+    { data: mixes },
+    { data: events },
+    { data: reviewRows },
+    { data: viewerProfile },
+  ] = await Promise.all([
+    supabase.from("dj_profiles").select("*").eq("id", profile.id).maybeSingle(),
+    supabase
+      .from("profile_gallery")
+      .select("id, url, width, height")
+      .eq("profile_id", profile.id)
+      .order("created_at", { ascending: true }),
+    supabase
+      .from("dj_mixes")
+      .select("id, title, url, platform")
+      .eq("profile_id", profile.id)
+      .order("created_at", { ascending: true }),
+    supabase
+      .from("events")
+      .select("id, title, cover_url, starts_at, city, venue_name, price_info")
+      .eq("organizer_id", profile.id)
+      .gte("starts_at", new Date().toISOString())
+      .order("starts_at", { ascending: true }),
+    supabase
+      .from("profile_reviews")
+      .select("id, reviewer_id, criteria, body, created_at")
+      .eq("target_id", profile.id)
+      .order("created_at", { ascending: false }),
+    user && !isOwner
+      ? supabase
+          .from("profiles")
+          .select("id, role, display_name, avatar_url, avatar_position")
+          .eq("id", user.id)
+          .maybeSingle()
+      : Promise.resolve({ data: null }),
+  ]);
 
   const genres = dj?.sound_profile
     ? dj.sound_profile.split(",").map((g) => g.trim()).filter(Boolean)
     : [];
   const socialLinks = SOCIAL_PLATFORMS.filter((p) => dj?.[p.key]);
-
-  const { data: galleryPhotos } = await supabase
-    .from("profile_gallery")
-    .select("id, url, width, height")
-    .eq("profile_id", profile.id)
-    .order("created_at", { ascending: true });
-
-  const { data: mixes } = await supabase
-    .from("dj_mixes")
-    .select("id, title, url, platform")
-    .eq("profile_id", profile.id)
-    .order("created_at", { ascending: true });
-
-  const { data: events } = await supabase
-    .from("events")
-    .select("id, title, cover_url, starts_at, city, venue_name, price_info")
-    .eq("organizer_id", profile.id)
-    .gte("starts_at", new Date().toISOString())
-    .order("starts_at", { ascending: true });
-
-  const { data: reviewRows } = await supabase
-    .from("profile_reviews")
-    .select("id, reviewer_id, criteria, body, created_at")
-    .eq("target_id", profile.id)
-    .order("created_at", { ascending: false });
 
   const reviewerIds = [...new Set((reviewRows || []).map((r) => r.reviewer_id))];
   const { data: reviewerProfiles } = reviewerIds.length
@@ -132,30 +145,19 @@ export default async function DjProfilePage({ params }) {
     };
   });
 
-  let viewer = null;
-  if (user && user.id !== profile.id) {
-    const { data: viewerProfile } = await supabase
-      .from("profiles")
-      .select("display_name, avatar_url, avatar_position")
-      .eq("id", user.id)
-      .maybeSingle();
-    if (viewerProfile) {
-      viewer = {
+  const viewer = viewerProfile
+    ? {
         name: viewerProfile.display_name,
         avatarUrl: viewerProfile.avatar_url,
         avatarPosition: viewerProfile.avatar_position,
-      };
-    }
-  }
+      }
+    : null;
 
-  const isOwner = user?.id === profile.id;
-
-  const currentProfile = await getCurrentProfile();
   // Logged-out visitors still see the button (routed through login first);
   // logged-in fans don't, since messaging is DJ/club-to-DJ/club only.
-  const canViewerMessage = !currentProfile || canUseMessaging(currentProfile.role);
+  const canViewerMessage = !viewerProfile || canUseMessaging(viewerProfile.role);
   const messageTargetPath = `/${locale}/messages/new?with=${profile.id}`;
-  const messageHref = currentProfile
+  const messageHref = viewerProfile
     ? messageTargetPath
     : `/${locale}/login?next=${encodeURIComponent(messageTargetPath)}`;
 

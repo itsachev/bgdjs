@@ -1,5 +1,5 @@
 import { redirect, notFound } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, getAuthUser } from "@/lib/supabase/server";
 import { getDictionary, hasLocale } from "../../dictionaries";
 import { ProfileCompleteForm } from "@/components/profile-complete-form";
 
@@ -20,10 +20,7 @@ export default async function ProfileCompletePage({ params }) {
   const dict = await getDictionary(locale);
 
   const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getAuthUser();
 
   if (!user) redirect(`/${locale}/login`);
 
@@ -38,22 +35,22 @@ export default async function ProfileCompletePage({ params }) {
   }
 
   const table = profile.role === "dj" ? "dj_profiles" : "club_profiles";
-  const { data: roleData } = await supabase.from(table).select("*").eq("id", user.id).maybeSingle();
-  const { data: galleryPhotos } = await supabase
-    .from("profile_gallery")
-    .select("id, url, path, width, height")
-    .eq("profile_id", user.id)
-    .order("created_at", { ascending: true });
-
-  let mixes = [];
-  if (profile.role === "dj") {
-    const { data } = await supabase
-      .from("dj_mixes")
-      .select("id, title, url, platform")
+  const [{ data: roleData }, { data: galleryPhotos }, { data: mixData }] = await Promise.all([
+    supabase.from(table).select("*").eq("id", user.id).maybeSingle(),
+    supabase
+      .from("profile_gallery")
+      .select("id, url, path, width, height")
       .eq("profile_id", user.id)
-      .order("created_at", { ascending: true });
-    mixes = data || [];
-  }
+      .order("created_at", { ascending: true }),
+    profile.role === "dj"
+      ? supabase
+          .from("dj_mixes")
+          .select("id, title, url, platform")
+          .eq("profile_id", user.id)
+          .order("created_at", { ascending: true })
+      : Promise.resolve({ data: [] }),
+  ]);
+  const mixes = mixData || [];
 
   return (
     <ProfileCompleteForm

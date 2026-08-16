@@ -106,7 +106,18 @@ function PodiumCard({ item, rank, href, dict, userId, onVote }) {
   const isSelf = userId === item.id;
 
   return (
-    <div className={`flex flex-1 flex-col items-center ${style.order}`}>
+    <div
+      className={`group relative flex flex-1 flex-col items-center transition-transform duration-300 hover:-translate-y-1 ${style.order}`}
+    >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-4 -right-4 -z-10 h-32 w-32 rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent)_30%,transparent),transparent_70%)] opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-100"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-4 -left-4 -z-10 h-32 w-32 rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--color-accent-2)_25%,transparent),transparent_70%)] opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-80"
+      />
+
       <div className="relative">
         {rank === 1 && (
           <CrownIcon className="absolute -top-7 left-1/2 h-7 w-7 -translate-x-1/2 text-yellow-400" />
@@ -134,7 +145,7 @@ function PodiumCard({ item, rank, href, dict, userId, onVote }) {
 
       <Link
         href={href}
-        className="mt-3 max-w-36 truncate text-center font-display font-semibold tracking-tight hover:text-accent"
+        className="mt-3 max-w-36 truncate text-center font-display font-semibold tracking-tight group-hover:text-accent"
       >
         {item.name}
       </Link>

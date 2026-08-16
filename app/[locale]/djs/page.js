@@ -8,7 +8,6 @@ import { EntitySearch } from "@/components/entity-search";
 import { AmbientGlow } from "@/components/ambient-glow";
 import { Kicker } from "@/components/kicker";
 import { DjDirectory } from "@/components/dj-directory";
-import { AdSlot } from "@/components/ad-slot";
 
 // The sponsored card is inserted into the results grid alongside real DJ
 // cards (not swapped in for one), so the page size is trimmed by one
@@ -168,15 +167,6 @@ export default async function DjsPage({ params, searchParams }) {
             className="w-full sm:w-72"
           />
         </div>
-
-        <AdSlot
-          className="mt-10"
-          label={dict.ads.label}
-          brand={dict.ads.djsDirectory.brand}
-          headline={dict.ads.djsDirectory.headline}
-          body={dict.ads.djsDirectory.body}
-          ctaLabel={dict.ads.cta}
-        />
 
         <DjDirectory
           topHouseDjs={topHouseDjs}

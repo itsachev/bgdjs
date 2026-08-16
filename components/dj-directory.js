@@ -240,6 +240,17 @@ export function DjDirectory({
   return (
     <>
       <GenreLeaderboard title={topHouseTitle} djs={topHouseDjs} locale={locale} votesLabel={topHouseVotesLabel} />
+
+      {ad && (
+        <AdSlot
+          label={ad.label}
+          brand={ad.djsDirectory.brand}
+          headline={ad.djsDirectory.headline}
+          body={ad.djsDirectory.body}
+          ctaLabel={ad.cta}
+        />
+      )}
+
       <GenreLeaderboard title={topPopFolkTitle} djs={topPopFolkDjs} locale={locale} votesLabel={topPopFolkVotesLabel} />
 
       {pageDjs.length === 0 ? (

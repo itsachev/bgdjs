@@ -14,6 +14,7 @@ import {
   SoundcloudIcon,
   MixcloudIcon,
   YoutubeIcon,
+  EditIcon,
 } from "@/components/icons";
 import { ProfileGallery } from "@/components/profile-gallery";
 import { ProfileParallaxBg } from "@/components/profile-parallax-bg";
@@ -183,8 +184,9 @@ export default async function DjProfilePage({ params }) {
             {isOwner && (
               <a
                 href={`/${locale}/profile/complete`}
-                className="mt-4 inline-block text-sm text-accent hover:text-accent-2"
+                className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-accent px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90"
               >
+                <EditIcon className="h-4 w-4" />
                 {t.editProfile}
               </a>
             )}

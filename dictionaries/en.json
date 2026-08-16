@@ -12,7 +12,10 @@
     "signup": "Sign up",
     "logout": "Log out",
     "admin": "Admin",
-    "addEvent": "Add event"
+    "addEvent": "Add event",
+    "messages": "Messages",
+    "myAccount": "My account",
+    "viewProfile": "View profile"
   },
   "hero": {
     "eyebrow": "Bulgarian DJ Community",

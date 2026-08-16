@@ -5,13 +5,27 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { gsap } from "gsap";
 import { createClient } from "@/lib/supabase/client";
-import { PlusIcon } from "@/components/icons";
+import { PlusIcon, MessageIcon } from "@/components/icons";
+import { useUnreadMessages } from "./unread-messages-provider";
 
-// `addEventLabel` gates the hover dropdown entirely — the desktop header
-// passes it, the mobile panel doesn't (it already lists "Add event" among
-// the main nav links there instead, since hover has no touch equivalent).
-export function UserMenu({ profile, logoutLabel, locale, addEventLabel }) {
+// `accountLabel` swaps the trigger text from the raw display name to a
+// generic "My account" label — both the desktop header and mobile panel
+// pass it. Only the desktop header additionally passes `addEventLabel`,
+// which is what turns the trigger into a hover dropdown (gathering
+// profile/messages/add-event links); see the `hasDropdown` comment below
+// for why the mobile panel deliberately doesn't get one.
+export function UserMenu({
+  profile,
+  logoutLabel,
+  locale,
+  addEventLabel,
+  canMessage,
+  accountLabel,
+  messagesLabel,
+  viewProfileLabel,
+}) {
   const router = useRouter();
+  const { count: unreadCount } = useUnreadMessages();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const closeTimer = useRef(null);
@@ -50,19 +64,28 @@ export function UserMenu({ profile, logoutLabel, locale, addEventLabel }) {
         ? `/${locale}/clubs/${encodeURIComponent(profile.display_name)}`
         : null;
 
-  const nameClassName = "uppercase hidden text-sm font-medium transition-colors hover:text-accent sm:inline-block";
+  const nameClassName = "relative uppercase hidden text-sm font-medium transition-colors hover:text-accent sm:inline-block";
+  const itemClassName =
+    "flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-foreground-muted transition-colors hover:bg-accent/10 hover:text-accent";
+
+  // Only the desktop header passes `addEventLabel`, so it alone decides
+  // whether the hover dropdown is rendered — the mobile panel never gets
+  // one, since onMouseEnter/onMouseLeave never fire on a touchscreen and
+  // would strand dj/club users unable to tap through to their profile.
+  const hasDropdown = Boolean(addEventLabel);
 
   return (
     <div className="flex items-center gap-3">
-      {addEventLabel ? (
+      {hasDropdown ? (
         <div className="relative hidden sm:block" onMouseEnter={openMenu} onMouseLeave={scheduleClose}>
-          {profileHref ? (
-            <Link href={profileHref} className={nameClassName}>
-              {profile.display_name}
-            </Link>
-          ) : (
-            <span className={`${nameClassName} text-white`}>{profile.display_name}</span>
-          )}
+          <span className={`${nameClassName} text-white`}>
+            {accountLabel}
+            {canMessage && unreadCount > 0 && (
+              <span className="absolute -right-3 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent-2 px-1 text-[0.6rem] font-bold text-black">
+                {unreadCount > 9 ? "9+" : unreadCount}
+              </span>
+            )}
+          </span>
 
           <div
             ref={menuRef}
@@ -70,10 +93,23 @@ export function UserMenu({ profile, logoutLabel, locale, addEventLabel }) {
             className={`absolute right-0 top-full z-50 w-52 pt-3 ${menuOpen ? "pointer-events-auto" : "pointer-events-none"}`}
           >
             <div className="overflow-hidden rounded-xl border border-border bg-background-elevated p-1.5 shadow-2xl">
-              <Link
-                href={`/${locale}/events/create`}
-                className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-foreground-muted transition-colors hover:bg-accent/10 hover:text-accent"
-              >
+              {profileHref && (
+                <Link href={profileHref} className={itemClassName}>
+                  {viewProfileLabel}
+                </Link>
+              )}
+              {canMessage && (
+                <Link href={`/${locale}/messages`} className={itemClassName}>
+                  <MessageIcon className="h-4 w-4" />
+                  {messagesLabel}
+                  {unreadCount > 0 && (
+                    <span className="ml-auto flex h-4 min-w-4 items-center justify-center rounded-full bg-accent-2 px-1 text-[0.6rem] font-bold text-black">
+                      {unreadCount > 9 ? "9+" : unreadCount}
+                    </span>
+                  )}
+                </Link>
+              )}
+              <Link href={`/${locale}/events/create`} className={itemClassName}>
                 <PlusIcon className="h-4 w-4" />
                 {addEventLabel}
               </Link>
@@ -82,10 +118,10 @@ export function UserMenu({ profile, logoutLabel, locale, addEventLabel }) {
         </div>
       ) : profileHref ? (
         <Link href={profileHref} className={nameClassName}>
-          {profile.display_name}
+          {accountLabel}
         </Link>
       ) : (
-        <span className={`${nameClassName} text-white`}>{profile.display_name}</span>
+        <span className={`${nameClassName} text-white`}>{accountLabel}</span>
       )}
 
       <button

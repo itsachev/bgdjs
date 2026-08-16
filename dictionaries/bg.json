@@ -12,7 +12,10 @@
     "signup": "Регистрация",
     "logout": "Изход",
     "admin": "Админ",
-    "addEvent": "Добави събитие"
+    "addEvent": "Добави събитие",
+    "messages": "Съобщения",
+    "myAccount": "Моят акаунт",
+    "viewProfile": "Виж профила"
   },
   "hero": {
     "eyebrow": "Българска DJ Общност",

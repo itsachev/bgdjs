@@ -8,9 +8,11 @@ import { gsap } from "gsap";
 import { LocaleSwitcher } from "./locale-switcher";
 import { ThemeToggle } from "./theme-toggle";
 import { UserMenu } from "./user-menu";
+import { useUnreadMessages } from "./unread-messages-provider";
 
-export function MobileNav({ locale, dict, isAdmin, profile }) {
+export function MobileNav({ locale, dict, isAdmin, profile, canMessage }) {
   const pathname = usePathname();
+  const { count: unreadCount } = useUnreadMessages();
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const panelRef = useRef(null);
@@ -28,6 +30,9 @@ export function MobileNav({ locale, dict, isAdmin, profile }) {
     { href: `/${locale}/events`, label: dict.nav.events },
     { href: `/${locale}/ranking`, label: dict.nav.ranking },
   ];
+  if (canMessage) {
+    links.push({ href: `/${locale}/messages`, label: dict.nav.messages, badge: unreadCount });
+  }
   if (isAdmin) {
     links.push({ href: `/${locale}/admin`, label: dict.nav.admin, admin: true });
   }
@@ -115,11 +120,16 @@ export function MobileNav({ locale, dict, isAdmin, profile }) {
                   key={link.href}
                   data-mobile-link
                   href={link.href}
-                  className={`font-display text-3xl font-bold uppercase tracking-tight ${
+                  className={`relative font-display text-3xl font-bold uppercase tracking-tight ${
                     isActive(link.href) ? (link.admin ? "text-accent-2" : "text-accent") : "text-foreground"
                   }`}
                 >
                   {link.label}
+                  {link.badge > 0 && (
+                    <span className="absolute -right-4 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-accent-2 px-1 text-xs font-bold text-black">
+                      {link.badge > 9 ? "9+" : link.badge}
+                    </span>
+                  )}
                 </Link>
               ))}
 
@@ -130,7 +140,12 @@ export function MobileNav({ locale, dict, isAdmin, profile }) {
                 <LocaleSwitcher locale={locale} />
                 <ThemeToggle />
                 {profile ? (
-                  <UserMenu profile={profile} logoutLabel={dict.nav.logout} locale={locale} />
+                  <UserMenu
+                    profile={profile}
+                    logoutLabel={dict.nav.logout}
+                    locale={locale}
+                    accountLabel={dict.nav.myAccount}
+                  />
                 ) : (
                   <div className="flex items-center gap-3">
                     <Link

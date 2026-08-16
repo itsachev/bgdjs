@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { getCurrentProfile } from "@/lib/auth";
 import { ThemeToggle } from "./theme-toggle";
 import { LocaleSwitcher } from "./locale-switcher";
 import { UserMenu } from "./user-menu";
@@ -9,8 +8,11 @@ import { PresenceHeartbeat } from "./presence-heartbeat";
 import { HeaderShrink } from "./header-shrink";
 import { ScrollProgress } from "./scroll-progress";
 
-export async function SiteHeader({ locale, dict }) {
-  const profile = await getCurrentProfile();
+// `profile` and `canMessage` come from the root layout (not computed here)
+// so the same values also seed UnreadMessagesProvider up there — that
+// provider has to wrap page content too, not just this header, for a page
+// like an open message thread to be able to resync the badge below.
+export function SiteHeader({ locale, dict, profile, canMessage }) {
   const isAdmin = profile?.role === "admin";
 
   return (
@@ -34,6 +36,10 @@ export async function SiteHeader({ locale, dict }) {
                 logoutLabel={dict.nav.logout}
                 locale={locale}
                 addEventLabel={dict.nav.addEvent}
+                canMessage={canMessage}
+                accountLabel={dict.nav.myAccount}
+                messagesLabel={dict.nav.messages}
+                viewProfileLabel={dict.nav.viewProfile}
               />
             ) : (
               <div className="flex items-center gap-2">
@@ -52,7 +58,7 @@ export async function SiteHeader({ locale, dict }) {
               </div>
             )}
           </div>
-          <MobileNav locale={locale} dict={dict} isAdmin={isAdmin} profile={profile} />
+          <MobileNav locale={locale} dict={dict} isAdmin={isAdmin} profile={profile} canMessage={canMessage} />
         </div>
       </HeaderShrink>
       <ScrollProgress />

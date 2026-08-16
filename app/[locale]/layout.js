@@ -66,8 +66,8 @@ export default async function RootLayout({ children, params }) {
         <ThemeProvider>
           <SmoothScrollProvider>
             <UnreadMessagesProvider viewerId={profile?.id ?? null} enabled={canMessage} initialCount={unreadCount}>
-              <div aria-hidden="true" className="bg-grain" />
-              <div className="flex min-h-screen flex-col">
+              <div className="relative flex min-h-screen flex-col">
+                <div aria-hidden="true" className="bg-grain" />
                 <SiteHeader locale={locale} dict={dict} profile={profile} canMessage={canMessage} />
                 <main className="flex flex-1 flex-col">{children}</main>
                 <SiteFooter locale={locale} dict={dict} />

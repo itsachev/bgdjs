@@ -77,12 +77,17 @@ h1 {
   line-height: 1.2;
 }
 
-/* Fixed film-grain texture over the whole viewport — a cheap but effective
-   way to keep large flat gradient/glow areas from looking sterile. Opacity is
+/* Film-grain texture layered over the page — a cheap but effective way to
+   keep large flat gradient/glow areas from looking sterile. Opacity is
    intentionally subtle; mix-blend-mode lets it read on both themes without
-   separate light/dark variants. */
+   separate light/dark variants. Scrolls with the page (absolute, not fixed)
+   so the browser can rasterize the blend once instead of recompositing it
+   against the moving backdrop on every scroll frame — a fixed full-viewport
+   blend layer is a classic scroll-jank source, especially paired with Lenis's
+   own rAF-driven scroll updates competing for the same frame budget.
+   Requires a `position: relative` ancestor spanning the full page height. */
 .bg-grain {
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: 30;
   pointer-events: none;

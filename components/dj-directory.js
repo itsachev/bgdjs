@@ -6,6 +6,11 @@ import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { MapPinIcon, CrownIcon, HeartIcon } from "@/components/icons";
+import { AdSlot } from "@/components/ad-slot";
+
+// Where in the results grid the in-feed sponsored card is inserted (0-based,
+// after this many real DJ cards) — mirrors a typical in-feed native ad slot.
+const AD_CARD_POSITION = 7;
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -195,9 +200,32 @@ export function DjDirectory({
   locale,
   onlineLabel,
   emptyMessage,
+  ad,
 }) {
   const gridRef = useRef(null);
   useSectionReveal(gridRef, [pageDjs]);
+
+  const cards = pageDjs.flatMap((profile, i) => {
+    const items = [<DjCard key={profile.id} {...profile} locale={locale} onlineLabel={onlineLabel} />];
+    if (ad && i === AD_CARD_POSITION) {
+      items.push(
+        <div
+          key="sponsored-slot"
+          data-reveal-card
+          className="transform-[translateY(32px)] opacity-0"
+        >
+          <AdSlot
+            variant="card"
+            label={ad.sponsoredLabel}
+            brand={ad.djsCard.brand}
+            headline={ad.djsCard.headline}
+            ctaLabel={ad.cta}
+          />
+        </div>
+      );
+    }
+    return items;
+  });
 
   return (
     <>
@@ -208,9 +236,7 @@ export function DjDirectory({
         <p className="mt-16 text-foreground-muted">{emptyMessage}</p>
       ) : (
         <div ref={gridRef} className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-          {pageDjs.map((profile) => (
-            <DjCard key={profile.id} {...profile} locale={locale} onlineLabel={onlineLabel} />
-          ))}
+          {cards}
         </div>
       )}
     </>

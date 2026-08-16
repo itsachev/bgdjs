@@ -8,6 +8,7 @@ import { EntitySearch } from "@/components/entity-search";
 import { AmbientGlow } from "@/components/ambient-glow";
 import { Kicker } from "@/components/kicker";
 import { DjDirectory } from "@/components/dj-directory";
+import { AdSlot } from "@/components/ad-slot";
 
 const PAGE_SIZE = 20;
 
@@ -163,6 +164,15 @@ export default async function DjsPage({ params, searchParams }) {
           />
         </div>
 
+        <AdSlot
+          className="mt-10"
+          label={dict.ads.label}
+          brand={dict.ads.djsDirectory.brand}
+          headline={dict.ads.djsDirectory.headline}
+          body={dict.ads.djsDirectory.body}
+          ctaLabel={dict.ads.cta}
+        />
+
         <DjDirectory
           topHouseDjs={topHouseDjs}
           topHouseTitle={t.topHouse.title}
@@ -174,6 +184,7 @@ export default async function DjsPage({ params, searchParams }) {
           locale={locale}
           onlineLabel={t.online}
           emptyMessage={query || genre ? t.noResults : t.empty}
+          ad={dict.ads}
         />
 
         {totalPages > 1 && (

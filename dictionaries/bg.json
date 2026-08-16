@@ -29,6 +29,54 @@
     "events": "Предстоящи събития",
     "viewAll": "Виж всички"
   },
+  "ads": {
+    "label": "Реклама",
+    "sponsoredLabel": "Спонсорирано",
+    "cta": "Научи повече",
+    "homeTop": {
+      "brand": "Nova Pulse",
+      "headline": "Гориво за нощта.",
+      "body": "Енергия без захар, за последния сет."
+    },
+    "homeBottom": {
+      "brand": "Sofia Nights Fest",
+      "headline": "3 сцени, 1 нощ.",
+      "body": "Ранните билети свършват в петък."
+    },
+    "djsDirectory": {
+      "brand": "ClubPass",
+      "headline": "Прескочи всяка опашка в София.",
+      "body": "Едно приложение, всеки гост лист."
+    },
+    "djsCard": {
+      "brand": "Deckhouse",
+      "headline": "Контролери, създадени за DJ будката."
+    },
+    "djProfile": {
+      "brand": "Afterglow",
+      "headline": "Студийно звучене, на сцената.",
+      "body": "DJ слушалки, на които сцената вярва."
+    },
+    "ranking": {
+      "brand": "Venue One",
+      "headline": "Пусни своя клуб. Напълни дансинга.",
+      "body": "Билетна система за българското nightlife."
+    },
+    "eventsDirectory": {
+      "brand": "NightRide",
+      "headline": "Прибери се безопасно. Прибери се бързо.",
+      "body": "20% отстъпка за първото пътуване до всяко клубно място."
+    },
+    "eventsCard": {
+      "brand": "GlowCo",
+      "headline": "Освети тълпата."
+    },
+    "eventDetail": {
+      "brand": "BarFly",
+      "headline": "Прескочи входа. Спести от питиетата.",
+      "body": "Покажи BarFly пропуск на вратата."
+    }
+  },
   "home": {
     "stats": {
       "djs": "DJ-и",

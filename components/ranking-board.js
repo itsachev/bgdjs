@@ -10,6 +10,7 @@ import { CrownIcon, HeartIcon } from "@/components/icons";
 import { useLenis } from "./smooth-scroll-provider";
 import { AmbientGlow } from "./ambient-glow";
 import { Kicker } from "./kicker";
+import { AdSlot } from "./ad-slot";
 
 gsap.registerPlugin(Flip);
 
@@ -337,7 +338,7 @@ function rankSort(a, b) {
   return b.votes - a.votes || a.tiebreak - b.tiebreak;
 }
 
-export function RankingBoard({ djs, clubs, locale, userId, dict }) {
+export function RankingBoard({ djs, clubs, locale, userId, dict, ad }) {
   const [tab, setTab] = useState("dj");
   const [djItems, setDjItems] = useState(djs);
   const [clubItems, setClubItems] = useState(clubs);
@@ -397,6 +398,17 @@ export function RankingBoard({ djs, clubs, locale, userId, dict }) {
               {dict.loginToVote}
             </Link>
           </p>
+        )}
+
+        {ad && (
+          <AdSlot
+            className="mt-10"
+            label={ad.label}
+            brand={ad.ranking.brand}
+            headline={ad.ranking.headline}
+            body={ad.ranking.body}
+            ctaLabel={ad.cta}
+          />
         )}
 
         <div className="mt-12">

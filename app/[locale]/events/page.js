@@ -6,6 +6,11 @@ import { PlusIcon } from "@/components/icons";
 import { EventCard } from "@/components/event-card";
 import { AmbientGlow } from "@/components/ambient-glow";
 import { Kicker } from "@/components/kicker";
+import { AdSlot } from "@/components/ad-slot";
+
+// Where in the results grid the in-feed sponsored card is inserted (0-based,
+// after this many real event cards) — mirrors the DJs directory's in-feed slot.
+const AD_CARD_POSITION = 3;
 
 export async function generateMetadata({ params }) {
   const { locale } = await params;
@@ -55,13 +60,35 @@ export default async function EventsPage({ params }) {
           )}
         </div>
 
+        <AdSlot
+          className="mt-10"
+          label={dict.ads.label}
+          brand={dict.ads.eventsDirectory.brand}
+          headline={dict.ads.eventsDirectory.headline}
+          body={dict.ads.eventsDirectory.body}
+          ctaLabel={dict.ads.cta}
+        />
+
         {!events || events.length === 0 ? (
           <p className="mt-16 text-foreground-muted">{t.empty}</p>
         ) : (
           <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {events.map((event) => (
-              <EventCard key={event.id} event={event} locale={locale} />
-            ))}
+            {events.flatMap((event, i) => {
+              const items = [<EventCard key={event.id} event={event} locale={locale} />];
+              if (i === AD_CARD_POSITION) {
+                items.push(
+                  <AdSlot
+                    key="sponsored-slot"
+                    variant="event"
+                    label={dict.ads.sponsoredLabel}
+                    brand={dict.ads.eventsCard.brand}
+                    headline={dict.ads.eventsCard.headline}
+                    ctaLabel={dict.ads.cta}
+                  />
+                );
+              }
+              return items;
+            })}
           </div>
         )}
       </div>

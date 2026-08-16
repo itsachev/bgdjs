@@ -22,6 +22,7 @@ import { ProfileEvents } from "@/components/profile-events";
 import { RatingSection } from "@/components/rating-section";
 import { ContactSection } from "@/components/contact-section";
 import { AmbientGlow } from "@/components/ambient-glow";
+import { AdSlot } from "@/components/ad-slot";
 import { MessageButton } from "@/components/message-button";
 import { getCurrentProfile, canUseMessaging } from "@/lib/auth";
 
@@ -307,6 +308,16 @@ export default async function DjProfilePage({ params }) {
             />
           </div>
         )}
+
+        <div className="mt-28">
+          <AdSlot
+            label={dict.ads.label}
+            brand={dict.ads.djProfile.brand}
+            headline={dict.ads.djProfile.headline}
+            body={dict.ads.djProfile.body}
+            ctaLabel={dict.ads.cta}
+          />
+        </div>
 
         <div className="mt-28">
           <RatingSection

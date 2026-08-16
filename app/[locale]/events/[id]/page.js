@@ -6,6 +6,7 @@ import { getDictionary, hasLocale } from "../../dictionaries";
 import { CalendarIcon, MapPinIcon, TicketIcon, UserIcon } from "@/components/icons";
 import { EventCoverParallax } from "@/components/event-cover-parallax";
 import { EventOwnerActions } from "@/components/event-owner-actions";
+import { AdSlot } from "@/components/ad-slot";
 
 function formatFullEventDate(isoString, locale) {
   const date = new Date(isoString);
@@ -159,6 +160,15 @@ export default async function EventDetailPage({ params }) {
         {event.description && (
           <p className="mt-8 whitespace-pre-wrap text-foreground-muted">{event.description}</p>
         )}
+
+        <AdSlot
+          className="mt-8"
+          label={dict.ads.label}
+          brand={dict.ads.eventDetail.brand}
+          headline={dict.ads.eventDetail.headline}
+          body={dict.ads.eventDetail.body}
+          ctaLabel={dict.ads.cta}
+        />
 
         {event.ticket_url && (
           <a

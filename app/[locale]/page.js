@@ -10,6 +10,7 @@ import { FeaturedEntities } from "@/components/featured-entities";
 import { RankingTeaser } from "@/components/ranking-teaser";
 import { CtaBanner } from "@/components/cta-banner";
 import { Kicker } from "@/components/kicker";
+import { AdSlot } from "@/components/ad-slot";
 
 const UPCOMING_EVENTS_LIMIT = 4;
 const FEATURED_LIMIT = 5;
@@ -144,6 +145,16 @@ export default async function HomePage({ params }) {
     <>
       <Hero dict={dict} locale={locale} hero={hero} />
 
+      <div className="mx-auto max-w-7xl px-6 py-6">
+        <AdSlot
+          label={dict.ads.label}
+          brand={dict.ads.homeTop.brand}
+          headline={dict.ads.homeTop.headline}
+          body={dict.ads.homeTop.body}
+          ctaLabel={dict.ads.cta}
+        />
+      </div>
+
       <StatsBar
         stats={[
           { label: dict.home.stats.djs, value: djCount || 0 },
@@ -193,6 +204,16 @@ export default async function HomePage({ params }) {
         locale={locale}
         items={topDjs.slice(0, 3)}
       />
+
+      <div className="mx-auto max-w-7xl px-6 py-6">
+        <AdSlot
+          label={dict.ads.label}
+          brand={dict.ads.homeBottom.brand}
+          headline={dict.ads.homeBottom.headline}
+          body={dict.ads.homeBottom.body}
+          ctaLabel={dict.ads.cta}
+        />
+      </div>
 
       <CtaBanner
         kicker={dict.home.ctaKicker}

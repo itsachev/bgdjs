@@ -95,5 +95,14 @@ export default async function RankingPage({ params }) {
     })
     .sort(rankSort);
 
-  return <RankingBoard djs={djs} clubs={clubs} locale={locale} userId={user?.id ?? null} dict={dict.ranking} />;
+  return (
+    <RankingBoard
+      djs={djs}
+      clubs={clubs}
+      locale={locale}
+      userId={user?.id ?? null}
+      dict={dict.ranking}
+      ad={dict.ads}
+    />
+  );
 }

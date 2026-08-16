@@ -29,6 +29,54 @@
     "events": "Upcoming Events",
     "viewAll": "View all"
   },
+  "ads": {
+    "label": "Advertisement",
+    "sponsoredLabel": "Sponsored",
+    "cta": "Learn more",
+    "homeTop": {
+      "brand": "Nova Pulse",
+      "headline": "Fuel the night.",
+      "body": "Zero-sugar energy, made for last call."
+    },
+    "homeBottom": {
+      "brand": "Sofia Nights Fest",
+      "headline": "3 stages, 1 night.",
+      "body": "Early-bird tickets end Friday."
+    },
+    "djsDirectory": {
+      "brand": "ClubPass",
+      "headline": "Skip every line in Sofia.",
+      "body": "One app, every guest list."
+    },
+    "djsCard": {
+      "brand": "Deckhouse",
+      "headline": "Controllers built for the booth."
+    },
+    "djProfile": {
+      "brand": "Afterglow",
+      "headline": "Studio sound, on stage.",
+      "body": "DJ headphones trusted by the scene."
+    },
+    "ranking": {
+      "brand": "Venue One",
+      "headline": "List your club. Fill the floor.",
+      "body": "Ticketing built for Bulgarian nightlife."
+    },
+    "eventsDirectory": {
+      "brand": "NightRide",
+      "headline": "Get home safe. Get home fast.",
+      "body": "20% off your first ride to any listed venue."
+    },
+    "eventsCard": {
+      "brand": "GlowCo",
+      "headline": "Light up the crowd."
+    },
+    "eventDetail": {
+      "brand": "BarFly",
+      "headline": "Skip the cover. Save on drinks.",
+      "body": "Show the BarFly pass at the door."
+    }
+  },
   "home": {
     "stats": {
       "djs": "DJs",

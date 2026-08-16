@@ -117,6 +117,7 @@ export function LoginForm({ dict, locale, embedded = false, background = null, n
       kicker={t.heroKicker}
       title={t.heroTitle}
       subtitle={t.heroSubtitle}
+      imageMaskDirection="right"
     >
       <div ref={rootRef}>
         <h1 data-auth-reveal className="translate-y-3 font-display text-display-3 font-bold tracking-tight opacity-0">

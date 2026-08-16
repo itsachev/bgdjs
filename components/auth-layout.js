@@ -1,11 +1,22 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Waveform } from "@/components/waveform";
+import { GradientMask } from "@/components/gradient-mask";
 
 // Shared split-screen shell for the login/signup pages — a full-height brand
 // panel (CMS media when set, otherwise an ambient glow + waveform) alongside
 // the actual form. Kept content-agnostic so each form supplies its own copy.
-export function AuthLayout({ locale, mediaUrl, mediaType, kicker, title, subtitle, benefits, children }) {
+export function AuthLayout({
+  locale,
+  mediaUrl,
+  mediaType,
+  kicker,
+  title,
+  subtitle,
+  benefits,
+  imageMaskDirection,
+  children,
+}) {
   return (
     <div className="relative flex min-h-screen flex-1">
       <div className="relative hidden w-[44%] shrink-0 overflow-hidden lg:block">
@@ -14,6 +25,10 @@ export function AuthLayout({ locale, mediaUrl, mediaType, kicker, title, subtitl
             <>
               {mediaType === "video" ? (
                 <video src={mediaUrl} className="h-full w-full object-cover" autoPlay muted loop playsInline />
+              ) : imageMaskDirection ? (
+                <GradientMask direction={imageMaskDirection} className="h-full w-full">
+                  <Image src={mediaUrl} alt="" fill sizes="44vw" className="object-cover" />
+                </GradientMask>
               ) : (
                 <Image src={mediaUrl} alt="" fill sizes="44vw" className="object-cover" />
               )}

@@ -199,6 +199,7 @@ export function SignupForm({ dict, locale, embedded = false, background = null, 
         kicker={t.heroKicker}
         title={t.heroTitle}
         benefits={t.benefits}
+        imageMaskDirection="right"
       >
         {content}
       </AuthLayout>
@@ -347,6 +348,7 @@ export function SignupForm({ dict, locale, embedded = false, background = null, 
       kicker={t.heroKicker}
       title={t.heroTitle}
       benefits={t.benefits}
+      imageMaskDirection="right"
     >
       <div ref={rootRef}>
         <h1 data-auth-reveal className="translate-y-3 font-display text-display-3 font-bold tracking-tight opacity-0">
